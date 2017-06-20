@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Hello Page</title>
+</head>
+<body>
+    <p th:text="${msg}">please wait...</p>
+    <form method="post" action="/">
+        <input type="text" name="name" th:value="${value}" />
+        <input type="submit" value="Click" />
+    </form>
+</body>
+</html>
