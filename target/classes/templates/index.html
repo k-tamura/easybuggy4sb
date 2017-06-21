@@ -1,14 +1,269 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Hello Page</title>
-</head>
-<body>
-    <p th:text="${msg}">please wait...</p>
-    <form method="post" action="/">
-        <input type="text" name="name" th:value="${value}" />
-        <input type="submit" value="Click" />
-    </form>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:include="head"></div>
+<body style="margin-top: 20px; margin-left: 20px; margin-right: 20px;">
+	<header>
+		<table style="width: 720px;">
+			<tr>
+				<td><img src="images/easybuggy.png" /></td>
+				<td><span class="glyphicon glyphicon-warning-sign" th:text="#{description.all}"></span></td>
+			</tr>
+		</table>
+	</header>
+	<hr />
+	<h2>
+		<span class="glyphicon glyphicon-knight" th:text="' '+#{section.troubles}"></span>
+	</h2>
+	<p th:text="#{description.troubles}"></p>
+	<ul>
+		<li><a href="deadlock" th:text="#{function.name.dead.lock}"></a>: <span th:text="#{function.description.dead.lock}"></span></li>
+		<li><a href="deadlock2" th:text="#{function.name.dead.lock2}"></a>: <span th:text="#{function.description.dead.lock2}"></span></li>
+		<li><a href="endlesswaiting" th:text="#{function.name.endless.waiting.process}"></a>: <span th:text="#{function.description.endless.waiting.process}"></span></li>
+		<li><a href="infiniteloop" target="_blank" th:text="#{function.name.infinite.loop}"></a>: <span th:text="#{function.description.infinite.loop}"></span></li>
+		<li><a href="redirectloop" target="_blank" th:text="#{function.name.redirect.loop}"></a>: <span th:text="#{function.description.redirect.loop}"></span></li>
+		<li><a href="forwardloop" target="_blank" th:text="#{function.name.forward.loop}"></a>: <span th:text="#{function.description.forward.loop}"></span></li>
+		<li><a href="jvmcrasheav" target="_blank" th:text="#{function.name.jvm.crash.eav}"></a>: <span th:text="#{function.description.jvm.crash.eav}"></span></li>
+		<li><a href="memoryleak" th:text="#{function.name.memory.leak}"></a>: <span th:text="#{function.description.memory.leak}"></span></li>
+		<li><a href="memoryleak2" th:text="#{function.name.memory.leak2}"></a>: <span th:text="#{function.description.memory.leak2}"></span></li>
+		<li><a href="memoryleak3" th:text="#{function.name.memory.leak3}"></a>: <span th:text="#{function.description.memory.leak3}"></span></li>
+		<li><a href="netsocketleak" th:text="#{function.name.network.socket.leak}"></a>: <span th:text="#{function.description.network.socket.leak}"></span></li>
+		<li><a href="dbconnectionleak " th:text="#{function.name.database.connection.leak}"></a> :<span th:text="#{function.description.database.connection.leak}"></span></li>
+		<li><a href="filedescriptorleak " th:text="#{function.name.file.descriptor.leak}"></a> :<span th:text="#{function.description.file.descriptor.leak}"></span></li>
+		<li><a href="threadleak" th:text="#{function.name.thread.leak}"></a>: <span th:text="#{function.description.thread.leak}"></span></li>
+		<li><a href="mojibake" th:text="#{function.name.mojibake}"></a>: <span th:text="#{function.description.mojibake}"></span></li>
+		<li><a href="iof" th:text="#{function.name.int.overflow}"></a>: <span th:text="#{function.description.int.overflow}"></span></li>
+		<li><a href="roe" th:text="#{function.name.round.off.error}"></a>: <span th:text="#{function.description.round.off.error}"></span></li>
+		<li><a href="te" th:text="#{function.name.truncation.error}"></a>: <span th:text="#{function.description.truncation.error}"></span></li>
+		<li><a href="lotd" th:text="#{function.name.loss.of.trailing.digits}"></a>: <span th:text="#{function.description.loss.of.trailing.digits}"></span></li>
+	</ul>
+
+	<h2>
+		<span class="glyphicon glyphicon-knight" th:text="' '+#{section.vulnerabilities}"></span>
+	</h2>
+	<p th:text="#{description.vulnerabilities}"></p>
+	<ul>
+		<li><a href="xss" th:text="#{function.name.xss}"></a>: <span th:text="#{function.description.xss}"></span></li>
+		<li><a href="sqlijc" th:text="#{function.name.sql.injection}"></a>: <span th:text="#{function.description.sql.injection}"></span></li>
+		<li><a href="admins/main?logintype=ldapijc" th:text="#{function.name.ldap.injection}"></a>: <span th:text="#{function.description.ldap.injection}"></span></li>
+		<li><a href="codeijc" th:text="#{function.name.code.injection}"></a>: <span th:text="#{function.description.code.injection}"></span></li>
+		<li><a href="ognleijc" th:text="#{function.name.os.command.injection}"></a>: <span th:text="#{function.description.os.command.injection}"></span></li>
+		<li><a href="mailheaderijct" th:text="#{function.name.mail.header.injection}"></a>: <span th:text="#{function.description.mail.header.injection}"></span></li>
+		<li><a href="nullbyteijct" th:text="#{function.name.null.byte.injection}"></a>: <span th:text="#{function.description.null.byte.injection}"></span></li>
+		<li><a href="ursupload" th:text="#{function.name.unrestricted.size.upload}"></a>: <span th:text="#{function.description.unrestricted.size.upload}"></span></li>
+		<li><a href="ureupload" th:text="#{function.name.unrestricted.ext.upload}"></a>: <span th:text="#{function.description.unrestricted.ext.upload}"></span></li>
+		<li><a href="admins/main?logintype=openredirect" th:text="#{function.name.open.redirect}"></a>: <span th:text="#{function.description.open.redirect}"></span></li>
+		<li><a href="admins/main?logintype=bruteforce" th:text="#{function.name.brute.force}"></a>: <span th:text="#{function.description.brute.force}"></span></li>
+		<!-- TODO URLencode -->
+		<li><a href="admins/main?logintype=sessionfixation" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></li>
+		<li><a href="admins/main?logintype=verbosemsg" th:text="#{function.name.verbose.error.message}"></a>: <span th:text="#{function.description.verbose.error.message}"></span></li>
+		<li><a href="/dfi/includable.jsp?template=style_bootstrap.html" th:text="#{function.name.dangerous.file.inclusion}"></a>: <span th:text="#{function.description.dangerous.file.inclusion}"></span></li>
+		<li><a href="/dt/includable.jsp?template=basic" th:text="#{function.name.path.traversal}"></a>: <span th:text="#{function.description.path.traversal}"></span></li>
+		<li><a href="/uid/clientinfo.jsp" th:text="#{function.name.unintended.file.disclosure}"></a>: <span th:text="#{function.description.unintended.file.disclosure}"></span></li>
+		<li><a href="/admins/csrf" th:text="#{function.name.csrf}"></a>: <span th:text="#{function.description.csrf}"></span></li>
+		<li><a href="/admins/clickjacking" th:text="#{function.name.clickjacking}"></a>: <span th:text="#{function.description.clickjacking}"></span></li>
+		<li><a href="xee" th:text="#{function.name.xee}"></a>: <span th:text="#{function.description.xee}"></span></li>
+		<li><a href="xxe" th:text="#{function.name.xxe}"></a>: <span th:text="#{function.description.xxe}"></span></li>
+	</ul>
+
+	<h2>
+		<span class="glyphicon glyphicon-knight" th:text="' '+#{section.performance.issue}"></span>
+	</h2>
+	<p th:text="#{description.performance.issue}"></p>
+	<ul>
+		<li><a href="slowre" th:text="#{function.name.slow.regular.expression}"></a>: <span th:text="#{function.description.slow.regular.expression}"></span></li>
+		<li><a href="strplusopr" th:text="#{function.name.slow.string.plus.operation}"></a>: <span th:text="#{function.description.slow.string.plus.operation}"></span></li>
+		<li><a href="createobjects" th:text="#{function.name.slow.unnecessary.object.creation}"></a>: <span th:text="#{function.description.slow.unnecessary.object.creation}"></span></li>
+	</ul>
+
+	<h2>
+		<span class="glyphicon glyphicon-knight" th:text="' '+#{section.errors}"></span>
+	</h2>
+	<p th:text="#{description.errors}"></p>
+	<ul>
+		<li><p>
+				<a href="asserr" target="_blank">AssertionError</a>:
+				このリンクをクリックすると、AssertionErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="eie" target="_blank">ExceptionInInitializerError / NoClassDefFoundError</a>:
+				このリンクをクリックすると、初回はExceptionInInitializerErrorが、その後はNoClassDefFoundErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="fce" target="_blank">FactoryConfigurationError</a>:
+				このリンクをクリックすると、FactoryConfigurationErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="gsfe" target="_blank">GenericSignatureFormatError</a>:
+				このリンクをクリックすると、GenericSignatureFormatErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ncdfe" target="_blank">NoClassDefFoundError</a>:
+				このリンクをクリックすると、NoClassDefFoundErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome" target="_blank">OutOfMemoryError (Java heap
+					space)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome2" target="_blank">OutOfMemoryError (Requested
+					array size exceeds VM limit)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome3" target="_blank">OutOfMemoryError (unable to
+					create new native thread)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome4" target="_blank">OutOfMemoryError (GC overhead
+					limit exceeded)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome5" target="_blank">OutOfMemoryError (PermGen space)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="oome6" target="_blank">OutOfMemoryError (Direct buffer
+					memory)</a>:
+				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="sofe" target="_blank">StackOverflowError</a>:
+				このリンクをクリックすると、StackOverflowErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>:
+				このリンクをクリックすると、TransformerFactoryConfigurationErrorがスローされます。
+			</p></li>
+		<li><p>
+				<a href="jnicall" target="_blank">UnsatisfiedLinkError</a>:
+				このリンクをクリックすると、UnsatisfiedLinkErrorがスローされます。
+			</p></li>
+	</ul>
+
+	<h2>
+		<span class="glyphicon glyphicon-knight" th:text="' '+#{section.exceptions}"></span>
+	</h2>
+	<p th:text="#{description.section.exceptions}"></p>
+	<ul>
+		<li><p>
+				<a href="ae" target="_blank">ArithmeticException</a>:
+				このリンクをクリックすると、ArithmeticExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="aioobe" target="_blank">ArrayIndexOutOfBoundsException</a>:
+				このリンクをクリックすると、ArrayIndexOutOfBoundsExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ase" target="_blank">ArrayStoreException</a>:
+				このリンクをクリックすると、ArrayStoreExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="boe" target="_blank">BufferOverflowException</a>:
+				このリンクをクリックすると、BufferOverflowExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="bue" target="_blank">BufferUnderflowException</a>:
+				このリンクをクリックすると、BufferUnderflowExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="cre" target="_blank">CannotRedoException</a>:
+				このリンクをクリックすると、CannotRedoExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="cue" target="_blank">CannotUndoException</a>:
+				このリンクをクリックすると、CannotUndoExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="cce" target="_blank">ClassCastException</a>:
+				このリンクをクリックすると、ClassCastExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="cme" target="_blank">ConcurrentModificationException</a>:
+				このリンクをクリックすると、ConcurrentModificationExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ese" target="_blank">EmptyStackException</a>:
+				このリンクをクリックすると、EmptyStackExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="iae" target="_blank">IllegalArgumentException</a>:
+				このリンクをクリックすると、IllegalArgumentExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="imse" target="_blank">IllegalMonitorStateException</a>:
+				このリンクをクリックすると、IllegalMonitorStateExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ipse" target="_blank">IllegalPathStateException</a>:
+				このリンクをクリックすると、IllegalPathStateExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="iase" target="_blank">IllegalStateException</a>:
+				このリンクをクリックすると、IllegalStateExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="itse" target="_blank">IllegalThreadStateException</a>:
+				このリンクをクリックすると、IllegalThreadStateExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="imoe" target="_blank">ImagingOpException</a>:
+				このリンクをクリックすると、ImagingOpExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ioobe" target="_blank">IndexOutOfBoundsException</a>:
+				このリンクをクリックすると、IndexOutOfBoundsExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="ime" target="_blank">InputMismatchException</a>:
+				このリンクをクリックすると、InputMismatchExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="mpte" target="_blank">MalformedParameterizedTypeException</a>:
+				このリンクをクリックすると、MalformedParameterizedTypeExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="mre" target="_blank">MissingResourceException</a>:
+				このリンクをクリックすると、MissingResourceExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="nase" target="_blank">NegativeArraySizeException</a>:
+				このリンクをクリックすると、NegativeArraySizeExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="nsee" target="_blank">NoSuchElementException</a>:
+				このリンクをクリックすると、NoSuchElementExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="npe" target="_blank">NullPointerException</a>:
+				このリンクをクリックすると、NullPointerExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="nfe" target="_blank">NumberFormatException</a>:
+				このリンクをクリックすると、NumberFormatExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="se" target="_blank">SecurityException</a>:
+				このリンクをクリックすると、SecurityExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="uce" target="_blank">UnsupportedCharsetException</a>:
+				このリンクをクリックすると、UnsupportedCharsetExceptionがスローされます。
+			</p></li>
+		<li><p>
+				<a href="uoe" target="_blank">UnsupportedOperationException</a>:
+				このリンクをクリックすると、UnsupportedOperationExceptionがスローされます。
+			</p></li>
+	</ul>
+
+	<hr />
+	<footer>
+		<img src="images/easybuggyL.png" />Copyright &copy; 2016-17 T246
+		OSS Lab, all rights reserved.
+	</footer>
 </body>
 </html>

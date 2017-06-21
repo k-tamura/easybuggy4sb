@@ -19,7 +19,7 @@ public class MojibakeController {
     MessageSource msg;
 
     @RequestMapping(value = "/mojibake", method = RequestMethod.GET)
-    public ModelAndView index(ModelAndView mav, Locale locale) {
+    public ModelAndView init(ModelAndView mav, Locale locale) {
         mav.setViewName("mojibake");
         mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
         mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
@@ -27,7 +27,7 @@ public class MojibakeController {
     }
 
     @RequestMapping(value = "/mojibake", method = RequestMethod.POST)
-    public ModelAndView send(@RequestParam("string") String string, ModelAndView mav, Locale locale) {
+    public ModelAndView submit(@RequestParam("string") String string, ModelAndView mav, Locale locale) {
 		String message = null;
 		mav.setViewName("mojibake");
 		mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));

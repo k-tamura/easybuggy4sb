@@ -18,7 +18,7 @@ public class XSSController {
     MessageSource msg;
 
     @RequestMapping(value = "/xss", method = RequestMethod.GET)
-    public ModelAndView index(ModelAndView mav, Locale locale) {
+    public ModelAndView init(ModelAndView mav, Locale locale) {
         mav.setViewName("xss");
         mav.addObject("title", msg.getMessage("title.xss.page", null, locale));
         mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
@@ -26,7 +26,7 @@ public class XSSController {
     }
 
     @RequestMapping(value = "/xss", method = RequestMethod.POST)
-    public ModelAndView send(@RequestParam("string") String string, ModelAndView mav, Locale locale) {
+    public ModelAndView submit(@RequestParam("string") String string, ModelAndView mav, Locale locale) {
         String message = null;
         mav.setViewName("xss");
         mav.addObject("title", msg.getMessage("title.xss.page", null, locale));

@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class HelloController {
     
     @RequestMapping(value="/hello", method=RequestMethod.GET)
-    public ModelAndView index(ModelAndView mav) {
-        mav.setViewName("index");
+    public ModelAndView hello(ModelAndView mav) {
+        mav.setViewName("hello");
         mav.addObject("msg", "input your name :");
         return mav;
     }
@@ -19,7 +19,7 @@ public class HelloController {
     @RequestMapping(value="/hello", method=RequestMethod.POST)
     public ModelAndView send(@RequestParam("name")String name, 
             ModelAndView mav) {
-        mav.setViewName("index");
+        mav.setViewName("hello");
         mav.addObject("msg", "Hello " + name + " !");
         mav.addObject("value", name);
         return mav;
