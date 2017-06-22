@@ -30,14 +30,7 @@ public class SlowRegularExpressionController {
 		mav.setViewName("slowregex");
 		mav.addObject("title", msg.getMessage("title.slow.regular.expression.page", null, locale));
 		if (!StringUtils.isBlank(word)) {
-			Date startDate = new Date();
-			log.info("Start Date: {}", startDate.toString());
-			Pattern compile = Pattern.compile("^([a-z0-9]+[-]{0,1}){1,100}$");
-			Matcher matcher = compile.matcher(word);
-			boolean matches = matcher.matches();
-			Date endDate = new Date();
-			log.info("End Date: {}", endDate.toString());
-			if (matches) {
+			if (isMatched(word)) {
 				message = msg.getMessage("msg.match.regular.expression", null, locale);
 			} else {
 				message = msg.getMessage("msg.not.match.regular.expression", null, locale);
@@ -47,5 +40,16 @@ public class SlowRegularExpressionController {
 		}
 		mav.addObject("msg", message);
 		return mav;
+	}
+
+	private boolean isMatched(String word) {
+		Date startDate = new Date();
+		log.info("Start Date: {}", startDate.toString());
+		Pattern compile = Pattern.compile("^([a-z0-9]+[-]{0,1}){1,100}$");
+		Matcher matcher = compile.matcher(word);
+		boolean matches = matcher.matches();
+		Date endDate = new Date();
+		log.info("End Date: {}", endDate.toString());
+		return matches;
 	}
 }

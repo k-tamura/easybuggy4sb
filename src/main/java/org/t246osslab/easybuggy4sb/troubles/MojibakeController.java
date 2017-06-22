@@ -24,7 +24,7 @@ public class MojibakeController {
 		mav.setViewName("mojibake");
 		mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
 		if (!StringUtils.isBlank(string)) {
-			// Reverse the given string
+			// Capitalize the given string
 			String capitalizedName = WordUtils.capitalize(string);
 			message = msg.getMessage("label.capitalized.string", null, locale) + " : " + capitalizedName;
 		} else {
