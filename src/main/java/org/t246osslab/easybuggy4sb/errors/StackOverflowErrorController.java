@@ -4,13 +4,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class OutOfMemoryErrorController {
+public class StackOverflowErrorController {
 
-	@RequestMapping(value = "/oome")
+	@RequestMapping(value = "/sofe")
 	public void process() {
-		StringBuilder sb = new StringBuilder();
-		while (true) {
-			sb.append("OutOfMemoryError!");
+		new S().toString();
+	}
+
+	public class S {
+		@Override
+		public String toString() {
+			return "" + this;
 		}
 	}
 }

@@ -1,9 +1,11 @@
 package org.t246osslab.easybuggy4sb.errors;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javassist.ClassPool;
 
+@Controller
 public class OutOfMemoryErrorController5 {
 
 	@RequestMapping(value = "/oome5")
