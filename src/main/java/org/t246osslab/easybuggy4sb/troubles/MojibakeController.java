@@ -8,26 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MojibakeController {
 
-    @Autowired
-    MessageSource msg;
+	@Autowired
+	MessageSource msg;
 
-    @RequestMapping(value = "/mojibake", method = RequestMethod.GET)
-    public ModelAndView init(ModelAndView mav, Locale locale) {
-        mav.setViewName("mojibake");
-        mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
-        mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
-        return mav;
-    }
-
-    @RequestMapping(value = "/mojibake", method = RequestMethod.POST)
-    public ModelAndView submit(@RequestParam("string") String string, ModelAndView mav, Locale locale) {
+	@RequestMapping(value = "/mojibake")
+	public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
+			Locale locale) {
 		String message = null;
 		mav.setViewName("mojibake");
 		mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
@@ -40,5 +32,5 @@ public class MojibakeController {
 		}
 		mav.addObject("msg", message);
 		return mav;
-    }
+	}
 }
