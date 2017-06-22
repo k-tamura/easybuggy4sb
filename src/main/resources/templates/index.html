@@ -82,67 +82,20 @@
 	</h2>
 	<p th:text="#{description.errors}"></p>
 	<ul>
-		<li><p>
-				<a href="asserr" target="_blank">AssertionError</a>:
-				このリンクをクリックすると、AssertionErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="eie" target="_blank">ExceptionInInitializerError / NoClassDefFoundError</a>:
-				このリンクをクリックすると、初回はExceptionInInitializerErrorが、その後はNoClassDefFoundErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="fce" target="_blank">FactoryConfigurationError</a>:
-				このリンクをクリックすると、FactoryConfigurationErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="gsfe" target="_blank">GenericSignatureFormatError</a>:
-				このリンクをクリックすると、GenericSignatureFormatErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ncdfe" target="_blank">NoClassDefFoundError</a>:
-				このリンクをクリックすると、NoClassDefFoundErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome" target="_blank">OutOfMemoryError (Java heap
-					space)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome2" target="_blank">OutOfMemoryError (Requested
-					array size exceeds VM limit)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome3" target="_blank">OutOfMemoryError (unable to
-					create new native thread)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome4" target="_blank">OutOfMemoryError (GC overhead
-					limit exceeded)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome5" target="_blank">OutOfMemoryError (PermGen space)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="oome6" target="_blank">OutOfMemoryError (Direct buffer
-					memory)</a>:
-				このリンクをクリックすると、OutOfMemoryErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="sofe" target="_blank">StackOverflowError</a>:
-				このリンクをクリックすると、StackOverflowErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>:
-				このリンクをクリックすると、TransformerFactoryConfigurationErrorがスローされます。
-			</p></li>
-		<li><p>
-				<a href="jnicall" target="_blank">UnsatisfiedLinkError</a>:
-				このリンクをクリックすると、UnsatisfiedLinkErrorがスローされます。
-			</p></li>
+		<li><a href="asserr" target="_blank">AssertionError</a>: <span th:text="#{function.description.throwable(${'AssertionError'})}"></span></li>
+		<li><a href="eie" target="_blank">ExceptionInInitializerError / NoClassDefFoundError</a>: <span th:text="#{function.description.ei.error}"></span></li>
+		<li><a href="fce" target="_blank">FactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'FactoryConfigurationError'})}"></span></li>
+		<li><a href="gsfe" target="_blank">GenericSignatureFormatError</a>: <span th:text="#{function.description.throwable(${'GenericSignatureFormatError'})}"></span></li>
+		<li><a href="ncdfe" target="_blank">NoClassDefFoundError</a>: <span th:text="#{function.description.throwable(${'NoClassDefFoundError'})}"></span></li>
+		<li><a href="oome" target="_blank">OutOfMemoryError (Java heap	space)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="oome2" target="_blank">OutOfMemoryError (Requested	array size exceeds VM limit)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="oome3" target="_blank">OutOfMemoryError (unable to	create new native thread)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="oome4" target="_blank">OutOfMemoryError (GC overhead	limit exceeded)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="oome5" target="_blank">OutOfMemoryError (PermGen space)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="oome6" target="_blank">OutOfMemoryError (Direct buffer	memory)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></li>
+		<li><a href="sofe" target="_blank">StackOverflowError</a>: <span th:text="#{function.description.throwable(${'StackOverflowError'})}"></span></li>
+		<li><a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'TransformerFactoryConfigurationError'})}"></span></li>
+		<li><a href="jnicall" target="_blank">UnsatisfiedLinkError</a>: <span th:text="#{function.description.throwable(${'UnsatisfiedLinkError'})}"></span></li>
 	</ul>
 
 	<h2>
@@ -150,114 +103,33 @@
 	</h2>
 	<p th:text="#{description.section.exceptions}"></p>
 	<ul>
-		<li><p>
-				<a href="ae" target="_blank">ArithmeticException</a>:
-				このリンクをクリックすると、ArithmeticExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="aioobe" target="_blank">ArrayIndexOutOfBoundsException</a>:
-				このリンクをクリックすると、ArrayIndexOutOfBoundsExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ase" target="_blank">ArrayStoreException</a>:
-				このリンクをクリックすると、ArrayStoreExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="boe" target="_blank">BufferOverflowException</a>:
-				このリンクをクリックすると、BufferOverflowExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="bue" target="_blank">BufferUnderflowException</a>:
-				このリンクをクリックすると、BufferUnderflowExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="cre" target="_blank">CannotRedoException</a>:
-				このリンクをクリックすると、CannotRedoExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="cue" target="_blank">CannotUndoException</a>:
-				このリンクをクリックすると、CannotUndoExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="cce" target="_blank">ClassCastException</a>:
-				このリンクをクリックすると、ClassCastExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="cme" target="_blank">ConcurrentModificationException</a>:
-				このリンクをクリックすると、ConcurrentModificationExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ese" target="_blank">EmptyStackException</a>:
-				このリンクをクリックすると、EmptyStackExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="iae" target="_blank">IllegalArgumentException</a>:
-				このリンクをクリックすると、IllegalArgumentExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="imse" target="_blank">IllegalMonitorStateException</a>:
-				このリンクをクリックすると、IllegalMonitorStateExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ipse" target="_blank">IllegalPathStateException</a>:
-				このリンクをクリックすると、IllegalPathStateExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="iase" target="_blank">IllegalStateException</a>:
-				このリンクをクリックすると、IllegalStateExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="itse" target="_blank">IllegalThreadStateException</a>:
-				このリンクをクリックすると、IllegalThreadStateExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="imoe" target="_blank">ImagingOpException</a>:
-				このリンクをクリックすると、ImagingOpExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ioobe" target="_blank">IndexOutOfBoundsException</a>:
-				このリンクをクリックすると、IndexOutOfBoundsExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="ime" target="_blank">InputMismatchException</a>:
-				このリンクをクリックすると、InputMismatchExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="mpte" target="_blank">MalformedParameterizedTypeException</a>:
-				このリンクをクリックすると、MalformedParameterizedTypeExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="mre" target="_blank">MissingResourceException</a>:
-				このリンクをクリックすると、MissingResourceExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="nase" target="_blank">NegativeArraySizeException</a>:
-				このリンクをクリックすると、NegativeArraySizeExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="nsee" target="_blank">NoSuchElementException</a>:
-				このリンクをクリックすると、NoSuchElementExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="npe" target="_blank">NullPointerException</a>:
-				このリンクをクリックすると、NullPointerExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="nfe" target="_blank">NumberFormatException</a>:
-				このリンクをクリックすると、NumberFormatExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="se" target="_blank">SecurityException</a>:
-				このリンクをクリックすると、SecurityExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="uce" target="_blank">UnsupportedCharsetException</a>:
-				このリンクをクリックすると、UnsupportedCharsetExceptionがスローされます。
-			</p></li>
-		<li><p>
-				<a href="uoe" target="_blank">UnsupportedOperationException</a>:
-				このリンクをクリックすると、UnsupportedOperationExceptionがスローされます。
-			</p></li>
+		<li><a href="ae" target="_blank">ArithmeticException </a>: <span th:text="#{function.description.throwable(${'ArithmeticException'})}"></span></li>
+		<li><a href="aioobe" target="_blank">ArrayIndexOutOfBoundsException </a>: <span th:text="#{function.description.throwable(${'ArrayIndexOutOfBoundsException'})}"></span></li>
+		<li><a href="ase" target="_blank">ArrayStoreException </a>: <span th:text="#{function.description.throwable(${'ArrayStoreException'})}"></span></li>
+		<li><a href="boe" target="_blank">BufferOverflowException </a>: <span th:text="#{function.description.throwable(${'BufferOverflowException'})}"></span></li>
+		<li><a href="bue" target="_blank">BufferUnderflowException </a>: <span th:text="#{function.description.throwable(${'BufferUnderflowException'})}"></span></li>
+		<li><a href="cre" target="_blank">CannotRedoException </a>: <span th:text="#{function.description.throwable(${'CannotRedoException'})}"></span></li>
+		<li><a href="cue" target="_blank">CannotUndoException </a>: <span th:text="#{function.description.throwable(${'CannotUndoException'})}"></span></li>
+		<li><a href="cce" target="_blank">ClassCastException </a>: <span th:text="#{function.description.throwable(${'ClassCastException'})}"></span></li>
+		<li><a href="cme" target="_blank">ConcurrentModificationException </a>: <span th:text="#{function.description.throwable(${'ConcurrentModificationException'})}"></span></li>
+		<li><a href="ese" target="_blank">EmptyStackException </a>: <span th:text="#{function.description.throwable(${'EmptyStackException'})}"></span></li>
+		<li><a href="iae" target="_blank">IllegalArgumentException </a>: <span th:text="#{function.description.throwable(${'IllegalArgumentException'})}"></span></li>
+		<li><a href="imse" target="_blank">IllegalMonitorStateException </a>: <span th:text="#{function.description.throwable(${'IllegalMonitorStateException'})}"></span></li>
+		<li><a href="ipse" target="_blank">IllegalPathStateException </a>: <span th:text="#{function.description.throwable(${'IllegalPathStateException'})}"></span></li>
+		<li><a href="iase" target="_blank">IllegalStateException </a>: <span th:text="#{function.description.throwable(${'IllegalStateException'})}"></span></li>
+		<li><a href="itse" target="_blank">IllegalThreadStateException </a>: <span th:text="#{function.description.throwable(${'IllegalThreadStateException'})}"></span></li>
+		<li><a href="imoe" target="_blank">ImagingOpException </a>: <span th:text="#{function.description.throwable(${'ImagingOpException'})}"></span></li>
+		<li><a href="ioobe" target="_blank">IndexOutOfBoundsException </a>: <span th:text="#{function.description.throwable(${'IndexOutOfBoundsException'})}"></span></li>
+		<li><a href="ime" target="_blank">InputMismatchException </a>: <span th:text="#{function.description.throwable(${'InputMismatchException'})}"></span></li>
+		<li><a href="mpte" target="_blank">MalformedParameterizedTypeException </a>: <span th:text="#{function.description.throwable(${'MalformedParameterizedTypeException'})}"></span></li>
+		<li><a href="mre" target="_blank">MissingResourceException </a>: <span th:text="#{function.description.throwable(${'MissingResourceException'})}"></span></li>
+		<li><a href="nase" target="_blank">NegativeArraySizeException </a>: <span th:text="#{function.description.throwable(${'NegativeArraySizeException'})}"></span></li>
+		<li><a href="nsee" target="_blank">NoSuchElementException </a>: <span th:text="#{function.description.throwable(${'NoSuchElementException'})}"></span></li>
+		<li><a href="npe" target="_blank">NullPointerException </a>: <span th:text="#{function.description.throwable(${'NullPointerException'})}"></span></li>
+		<li><a href="nfe" target="_blank">NumberFormatException </a>: <span th:text="#{function.description.throwable(${'NumberFormatException'})}"></span></li>
+		<li><a href="se" target="_blank">SecurityException </a>: <span th:text="#{function.description.throwable(${'SecurityException'})}"></span></li>
+		<li><a href="uce" target="_blank">UnsupportedCharsetException </a>: <span th:text="#{function.description.throwable(${'UnsupportedCharsetException'})}"></span></li>
+		<li><a href="uoe" target="_blank">UnsupportedOperationException </a>: <span th:text="#{function.description.throwable(${'UnsupportedOperationException'})}"></span></li>
 	</ul>
 
 	<hr />
