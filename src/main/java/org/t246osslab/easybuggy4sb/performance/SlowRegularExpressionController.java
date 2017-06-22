@@ -30,7 +30,6 @@ public class SlowRegularExpressionController {
 		mav.setViewName("slowregex");
 		mav.addObject("title", msg.getMessage("title.slow.regular.expression.page", null, locale));
 		if (!StringUtils.isBlank(word)) {
-			// Reverse the given string
 			Date startDate = new Date();
 			log.info("Start Date: {}", startDate.toString());
 			Pattern compile = Pattern.compile("^([a-z0-9]+[-]{0,1}){1,100}$");
