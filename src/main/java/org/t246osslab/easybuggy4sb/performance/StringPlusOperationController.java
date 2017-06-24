@@ -38,47 +38,51 @@ public class StringPlusOperationController {
 			Locale locale) {
 		try {
 			int length = NumberUtils.toInt(strLength, 0);
-			StringBuilder html = new StringBuilder();
 			mav.setViewName("strplusopr");
 			mav.addObject("title", msg.getMessage("title.random.string.generator", null, locale));
-
-			html.append("<p>" + msg.getMessage("label.available.characters", null, locale) + "</p>");
-
-			appendCheckBox(characters, locale, html, ALL_NUMBERS, "label.numbers");
-			appendCheckBox(characters, locale, html, ALL_UPPER_CHARACTERS, "label.uppercase.characters");
-			appendCheckBox(characters, locale, html, ALL_LOWER_CHARACTERS, "label.lowercase.characters");
-			appendCheckBox(characters, locale, html, ALL_SIGNS, "label.signs");
-
-			html.append("<input type=\"submit\" value=\"" + msg.getMessage("label.submit", null, locale) + "\">");
-			html.append("<br><br>");
-
-			if (length > 0) {
-				mav.addObject("length", length);
-				// StringBuilder builder = new StringBuilder();
-				String s = "";
-				if (characters != null) {
-					java.util.Random rand = new java.util.Random();
-					Date startDate = new Date();
-					log.info("Start Date: {}", startDate.toString());
-					for (int i = 0; i < length && i < MAX_LENGTH; i++) {
-						s = s + characters[rand.nextInt(characters.length)];
-						// builder.append(characters[rand.nextInt(characters.length)]);
-					}
-					Date endDate = new Date();
-					log.info("End Date: {}", endDate.toString());
-				}
-				html.append(msg.getMessage("label.execution.result", null, locale));
-				html.append("<br><br>");
-				// message.append(ESAPI.encoder().encodeForHTML(builder.toString()));
-				html.append(ESAPI.encoder().encodeForHTML(s));
-			} else {
-				html.append(msg.getMessage("msg.enter.positive.number", null, locale));
-			}
+			StringBuilder html = createMainContent(characters, mav, locale, length);
 			mav.addObject("html", html.toString());
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);
 		}
 		return mav;
+	}
+
+	private StringBuilder createMainContent(String[] characters, ModelAndView mav, Locale locale, int length) {
+		StringBuilder html = new StringBuilder();
+		html.append("<p>" + msg.getMessage("label.available.characters", null, locale) + "</p>");
+
+		appendCheckBox(characters, locale, html, ALL_NUMBERS, "label.numbers");
+		appendCheckBox(characters, locale, html, ALL_UPPER_CHARACTERS, "label.uppercase.characters");
+		appendCheckBox(characters, locale, html, ALL_LOWER_CHARACTERS, "label.lowercase.characters");
+		appendCheckBox(characters, locale, html, ALL_SIGNS, "label.signs");
+
+		html.append("<input type=\"submit\" value=\"" + msg.getMessage("label.submit", null, locale) + "\">");
+		html.append("<br /><br />");
+
+		if (length > 0) {
+			mav.addObject("length", length);
+			// StringBuilder builder = new StringBuilder();
+			String s = "";
+			if (characters != null) {
+				java.util.Random rand = new java.util.Random();
+				Date startDate = new Date();
+				log.info("Start Date: {}", startDate.toString());
+				for (int i = 0; i < length && i < MAX_LENGTH; i++) {
+					s = s + characters[rand.nextInt(characters.length)];
+					// builder.append(characters[rand.nextInt(characters.length)]);
+				}
+				Date endDate = new Date();
+				log.info("End Date: {}", endDate.toString());
+			}
+			html.append(msg.getMessage("label.execution.result", null, locale));
+			html.append("<br /><br />");
+			// message.append(ESAPI.encoder().encodeForHTML(builder.toString()));
+			html.append(ESAPI.encoder().encodeForHTML(s));
+		} else {
+			html.append(msg.getMessage("msg.enter.positive.number", null, locale));
+		}
+		return html;
 	}
 
 	private void appendCheckBox(String[] characters, Locale locale, StringBuilder message, String[] allCharacters,
