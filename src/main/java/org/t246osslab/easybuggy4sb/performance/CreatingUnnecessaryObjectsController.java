@@ -31,8 +31,6 @@ public class CreatingUnnecessaryObjectsController {
 
 			if (number > 0) {
 				mav.addObject("number", number);
-			}
-			if (number > 0) {
 				switch (number) {
 				case 1:
 					break;
@@ -76,10 +74,16 @@ public class CreatingUnnecessaryObjectsController {
 		return sum;
 	}
 	/*
-	 * private long calcSum2(int number) { long sum = 0L; for (int i = 1; i <=
-	 * number; i++) { sum += i; } return sum; }
-	 * 
-	 * private long calcSum3(int number) { return (long) number * (number + 1) /
-	 * 2; }
+    private long calcSum2(int number) {
+        long sum = 0L;
+        for (int i = 1; i <= number; i++) {
+            sum += i;
+        }
+        return sum;
+    }
+
+    private long calcSum3(int number) {
+        return (long) number * (number + 1) / 2;
+	}
 	 */
 }
