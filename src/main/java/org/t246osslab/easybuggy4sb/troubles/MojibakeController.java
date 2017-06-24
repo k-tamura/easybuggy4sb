@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.owasp.esapi.ESAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,8 @@ public class MojibakeController {
 		if (!StringUtils.isBlank(string)) {
 			// Capitalize the given string
 			String capitalizedName = WordUtils.capitalize(string);
-			mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : " + capitalizedName);
+			mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : "
+					+ ESAPI.encoder().encodeForHTML(capitalizedName));
 		} else {
 			mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
 		}
