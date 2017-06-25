@@ -48,6 +48,32 @@
 		</dependency>
 
 		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.directory.server</groupId>
+			<artifactId>apacheds-all</artifactId>
+			<version>1.5.5</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.directory.shared</groupId>
+					<artifactId>shared-ldap</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
 			<groupId>org.owasp.esapi</groupId>
 			<artifactId>esapi</artifactId>
 			<version>2.1.0.1</version>
@@ -56,9 +82,9 @@
 		<dependency>
 			<groupId>javax.mail</groupId>
 			<artifactId>javax.mail-api</artifactId>
-			<version>1.5.1</version>
+			<version>1.5.1</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
@@ -95,7 +121,8 @@
 						<!-- -XX:OnOutOfMemoryError="kill -9 %p" -->
 						<!-- Auto kill JVM when OOME occurs: For Windows -->
 						<!-- -XX:OnOutOfMemoryError=taskkill /F /PID %p -->
-						<!-- UnlockCommercialFeatures/FlightRecorder: For Oracle Java commercial use -->
+						<!-- UnlockCommercialFeatures/FlightRecorder: For Oracle Java commercial 
+							use -->
 						<!-- -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -->
 						<!-- -agentpath:/root/eclipse/plugins/org.zeroturnaround.eclipse.embedder_7.0.8.RELEASE/jrebel/lib/libjrebel64.so -->
 						-agentlib:jdwp=transport=dt_socket,server=y,address=9009,suspend=n
