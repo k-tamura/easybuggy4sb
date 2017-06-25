@@ -32,8 +32,7 @@ public final class DBClient {
         } catch (SQLException e) {
             log.error("SQLException occurs: ", e);
         } finally {
-            Closer.close(stmt);
-            Closer.close(conn);
+            Closer.close(stmt, conn);
         }
     }
 
