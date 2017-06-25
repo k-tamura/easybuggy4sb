@@ -1,0 +1,29 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:include="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<p th:utext="#{description.response.time}" />
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<td th:text="#{label.ping.url}"></td>
+			<td th:text="${pingURL}"></td>
+		</tr>
+		<tr>
+			<td th:text="#{label.response.code}"></td>
+			<td th:text="${responseCode}"></td>
+		</tr>
+		<tr>
+			<td th:text="#{label.response.time}"></td>
+			<td th:text="${responseTime}"></td>
+		</tr>
+	</table>
+	<p th:utext="${errmsg}" /><br />
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.socket.leak.occur}"></span>
+	</div>
+</body>
+</html>
