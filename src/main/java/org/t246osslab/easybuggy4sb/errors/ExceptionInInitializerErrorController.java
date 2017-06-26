@@ -15,7 +15,7 @@ public class ExceptionInInitializerErrorController {
 	@RequestMapping(value = "/eie")
 	public void process() {
         try {
-            Class<?> cl = Class.forName("org.t246osslab.easybuggy.errors.InitializerErrorThrower");
+            Class<?> cl = Class.forName("org.t246osslab.easybuggy4sb.errors.InitializerErrorThrower");
             Constructor<?> cunstructor = cl.getConstructor();
             cunstructor.newInstance(new Object[] { null });
         } catch (Exception e) {
