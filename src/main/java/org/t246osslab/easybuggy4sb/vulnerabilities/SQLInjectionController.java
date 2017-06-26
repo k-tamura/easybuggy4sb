@@ -25,48 +25,48 @@ public class SQLInjectionController {
 
     private static final Logger log = LoggerFactory.getLogger(SQLInjectionController.class);
 
-	@Autowired
-	MessageSource msg;
-	
-	@RequestMapping(value = "/sqlijc")
-	public ModelAndView process(@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "password", required = false) String password, ModelAndView mav, Locale locale) {
-		mav.setViewName("sqlijc");
-		mav.addObject("title", msg.getMessage("title.sql.injection.page", null, locale));
-		name = StringUtils.trim(name);
-		name = StringUtils.trim(password);
+    @Autowired
+    MessageSource msg;
+
+    @RequestMapping(value = "/sqlijc")
+    public ModelAndView process(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "password", required = false) String password, ModelAndView mav, Locale locale) {
+        mav.setViewName("sqlijc");
+        mav.addObject("title", msg.getMessage("title.sql.injection.page", null, locale));
+        name = StringUtils.trim(name);
+        name = StringUtils.trim(password);
         if (!StringUtils.isBlank(name) && !StringUtils.isBlank(password) && password.length() >= 8) {
-			try {
-				List<User> users = selectUsers(name, password);
-				if (users == null || users.isEmpty()) {
-					mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
-				} else {
-					mav.addObject("userList", users);
-				}
-			} catch (SQLException se) {
-				log.error("SQLException occurs: ", se);
-				mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
-			}
+            try {
+                List<User> users = selectUsers(name, password);
+                if (users == null || users.isEmpty()) {
+                    mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
+                } else {
+                    mav.addObject("userList", users);
+                }
+            } catch (SQLException se) {
+                log.error("SQLException occurs: ", se);
+                mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
+            }
         } else {
-    		mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
+            mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
         }
         return mav;
     }
 
-	private List<User> selectUsers(String name, String password) throws SQLException {
-		
-		ArrayList<User> userList = new ArrayList<>();
-		try (Connection conn = DBClient.getConnection();
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT name, secret FROM users WHERE ispublic = 'true' AND name='" + name
-						+ "' AND password='" + password + "'")) {
-			while (rs.next()) {
-				User user = new User();
-				user.setName(rs.getString("name"));
-				user.setSecret(rs.getString("secret"));
-				userList.add(user);
-			}
-		}
-		return userList;
-	}
+    private List<User> selectUsers(String name, String password) throws SQLException {
+
+        ArrayList<User> userList = new ArrayList<>();
+        try (Connection conn = DBClient.getConnection();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT name, secret FROM users WHERE ispublic = 'true' AND name='"
+                        + name + "' AND password='" + password + "'")) {
+            while (rs.next()) {
+                User user = new User();
+                user.setName(rs.getString("name"));
+                user.setSecret(rs.getString("secret"));
+                userList.add(user);
+            }
+        }
+        return userList;
+    }
 }

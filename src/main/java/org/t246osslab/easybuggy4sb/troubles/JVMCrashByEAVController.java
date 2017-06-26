@@ -17,11 +17,11 @@ import sun.misc.Unsafe;
 @Controller
 public class JVMCrashByEAVController {
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/jvmcrasheav")
-	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    @RequestMapping(value = "/jvmcrasheav")
+    public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         try {
             getUnsafe().getByte(0);
         } catch (Exception e) {

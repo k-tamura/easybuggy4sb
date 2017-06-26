@@ -13,21 +13,21 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class XSSController {
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/xss")
-	public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
-			Locale locale) {
-		mav.setViewName("xss");
-		mav.addObject("title", msg.getMessage("title.xss.page", null, locale));
-		if (!StringUtils.isBlank(string)) {
-			// Reverse the given string
-			String reversedName = StringUtils.reverse(string);
-			mav.addObject("msg", msg.getMessage("label.reversed.string", null, locale) + " : " + reversedName);
-		} else {
-			mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
-		}
-		return mav;
-	}
+    @RequestMapping(value = "/xss")
+    public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
+            Locale locale) {
+        mav.setViewName("xss");
+        mav.addObject("title", msg.getMessage("title.xss.page", null, locale));
+        if (!StringUtils.isBlank(string)) {
+            // Reverse the given string
+            String reversedName = StringUtils.reverse(string);
+            mav.addObject("msg", msg.getMessage("label.reversed.string", null, locale) + " : " + reversedName);
+        } else {
+            mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
+        }
+        return mav;
+    }
 }

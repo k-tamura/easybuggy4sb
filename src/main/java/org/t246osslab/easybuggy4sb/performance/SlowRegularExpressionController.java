@@ -38,7 +38,7 @@ public class SlowRegularExpressionController {
 		} else {
 			message = msg.getMessage("msg.enter.string", null, locale);
 		}
-		mav.addObject("msg", message);
+        mav.addObject("msg", message);
 		return mav;
 	}
 

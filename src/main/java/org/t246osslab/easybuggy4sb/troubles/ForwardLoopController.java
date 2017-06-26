@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ForwardLoopController {
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/forwardloop")
-	public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
-        RequestDispatcher dispatch = req.getRequestDispatcher( "/forwardloop");
+    @RequestMapping(value = "/forwardloop")
+    public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        RequestDispatcher dispatch = req.getRequestDispatcher("/forwardloop");
         dispatch.forward(req, res);
-	}
+    }
 }

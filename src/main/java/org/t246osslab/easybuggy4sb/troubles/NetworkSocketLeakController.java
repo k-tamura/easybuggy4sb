@@ -18,38 +18,38 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class NetworkSocketLeakController {
 
-	private static final Logger log = LoggerFactory.getLogger(NetworkSocketLeakController.class);
+    private static final Logger log = LoggerFactory.getLogger(NetworkSocketLeakController.class);
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/netsocketleak")
-	public ModelAndView process(@RequestParam(value = "pingurl", required = false) String pingURL,
-			HttpServletRequest req, ModelAndView mav, Locale locale) {
-		mav.setViewName("netsocketleak");
-		mav.addObject("title", msg.getMessage("title.response.time", null, locale));
-		HttpURLConnection connection = null;
-		URL url = null;
-		try {
-			if (pingURL == null) {
-				pingURL = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/ping";
-			}
-			url = new URL(pingURL);
-			long start = System.currentTimeMillis();
-			connection = (HttpURLConnection) url.openConnection();
-			connection.setRequestMethod("GET");
-			int responseCode = connection.getResponseCode();
-			long end = System.currentTimeMillis();
+    @RequestMapping(value = "/netsocketleak")
+    public ModelAndView process(@RequestParam(value = "pingurl", required = false) String pingURL,
+            HttpServletRequest req, ModelAndView mav, Locale locale) {
+        mav.setViewName("netsocketleak");
+        mav.addObject("title", msg.getMessage("title.response.time", null, locale));
+        HttpURLConnection connection = null;
+        URL url = null;
+        try {
+            if (pingURL == null) {
+                pingURL = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/ping";
+            }
+            url = new URL(pingURL);
+            long start = System.currentTimeMillis();
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+            long end = System.currentTimeMillis();
 
-			mav.addObject("pingURL", pingURL);
-			mav.addObject("responseCode", responseCode);
-			mav.addObject("responseTime", end - start);
+            mav.addObject("pingURL", pingURL);
+            mav.addObject("responseCode", responseCode);
+            mav.addObject("responseTime", end - start);
 
-		} catch (Exception e) {
-			log.error("Exception occurs: ", e);
-			mav.addObject("errmsg",
-					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-		}
-		return mav;
-	}
+        } catch (Exception e) {
+            log.error("Exception occurs: ", e);
+            mav.addObject("errmsg",
+                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+        }
+        return mav;
+    }
 }

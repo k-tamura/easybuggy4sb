@@ -15,22 +15,22 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MojibakeController {
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/mojibake")
-	public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
-			Locale locale) {
-		mav.setViewName("mojibake");
-		mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
-		if (!StringUtils.isBlank(string)) {
-			// Capitalize the given string
-			String capitalizedName = WordUtils.capitalize(string);
-			mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : "
-					+ ESAPI.encoder().encodeForHTML(capitalizedName));
-		} else {
-			mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
-		}
-		return mav;
-	}
+    @RequestMapping(value = "/mojibake")
+    public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
+            Locale locale) {
+        mav.setViewName("mojibake");
+        mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
+        if (!StringUtils.isBlank(string)) {
+            // Capitalize the given string
+            String capitalizedName = WordUtils.capitalize(string);
+            mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : "
+                    + ESAPI.encoder().encodeForHTML(capitalizedName));
+        } else {
+            mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
+        }
+        return mav;
+    }
 }

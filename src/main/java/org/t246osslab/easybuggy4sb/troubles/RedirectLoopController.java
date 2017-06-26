@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class RedirectLoopController {
 
-	@Autowired
-	MessageSource msg;
+    @Autowired
+    MessageSource msg;
 
-	@RequestMapping(value = "/redirectloop")
-	public void process(HttpServletResponse res) throws IOException {
-		res.sendRedirect("/redirectloop");
-	}
+    @RequestMapping(value = "/redirectloop")
+    public void process(HttpServletResponse res) throws IOException {
+        res.sendRedirect("/redirectloop");
+    }
 }
