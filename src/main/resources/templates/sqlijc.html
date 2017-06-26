@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:include="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<form action="sqlijc" method="post">
+		<p th:text="#{msg.enter.name.and.passwd}" /><br />
+		<label th:text="#{label.name}"></label> : <input type="text" name="name" size="20" maxlength="20" />
+		<label th:text="#{label.password}"></label> : <input type="password" name="password" size="20" maxlength="20" autocomplete="off" />
+		<br /><br /><input type="submit" /><br /><br />
+		<table th:if="${userList != null}"  class="table table-striped table-bordered table-hover" style="font-size: small;">
+			<tr>
+				<th th:text="#{label.name}"></th>
+				<th th:text="#{label.secret}"></th>
+			</tr>
+			<tr th:each="user : ${userList}">
+				<td th:text="${user.getName()}"></td>
+				<td th:text="${user.getSecret()}"></td>
+			</tr>
+		</table>
+		<p th:utext="${errmsg}" /><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign"
+				th:utext="#{msg.note.sql.injection}"></span>
+		</div>
+	</form>
+</body>
+</html>
