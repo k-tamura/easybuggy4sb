@@ -1,0 +1,25 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:include="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<p th:utext="#{description.access.history}" />
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.access.time}"></th>
+			<th th:text="#{label.ip.address}"></th>
+			<th th:text="#{label.session.id}"></th>
+		</tr>
+		<tr th:each="access : ${history}">
+			<td th:each="column : ${access}" th:text="${column}"></td>
+		</tr>
+	</table>
+	<p th:utext="${errmsg}" /><br />
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.file.descriptor.leak.occur}"></span>
+	</div>
+</body>
+</html>
