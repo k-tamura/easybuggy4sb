@@ -17,8 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy.core.dao.DBClient;
-import org.t246osslab.easybuggy.core.model.User;
+import org.t246osslab.easybuggy4sb.core.dao.DBClient;
+import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
 public class SQLInjectionController {

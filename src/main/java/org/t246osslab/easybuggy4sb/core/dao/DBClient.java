@@ -1,4 +1,4 @@
-package org.t246osslab.easybuggy.core.dao;
+package org.t246osslab.easybuggy4sb.core.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,7 +8,7 @@ import java.sql.Statement;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.t246osslab.easybuggy.core.utils.ApplicationUtils;
+import org.t246osslab.easybuggy4sb.core.utils.ApplicationUtils;
 
 /**
  * Database client to provide database connections.

@@ -1,4 +1,4 @@
-package org.t246osslab.easybuggy.core.utils;
+package org.t246osslab.easybuggy4sb.core.utils;
 
 import java.io.File;
 import java.io.IOException;

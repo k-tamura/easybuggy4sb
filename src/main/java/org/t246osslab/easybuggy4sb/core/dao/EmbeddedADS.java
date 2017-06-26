@@ -1,4 +1,4 @@
-package org.t246osslab.easybuggy.core.dao;
+package org.t246osslab.easybuggy4sb.core.dao;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.directory.server.constants.ServerDNConstants;
