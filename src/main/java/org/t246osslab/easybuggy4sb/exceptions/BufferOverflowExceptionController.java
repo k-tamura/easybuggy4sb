@@ -12,29 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.t246osslab.easybuggy.core.utils.Closer;
 
 @Controller
 public class BufferOverflowExceptionController {
 
-    private static final Logger log = LoggerFactory.getLogger(BufferOverflowExceptionController.class);
+	private static final Logger log = LoggerFactory.getLogger(BufferOverflowExceptionController.class);
 
 	@RequestMapping(value = "/boe")
 	public void process() {
-        RandomAccessFile raf = null;
-        try {
-            File f = new File("test.txt");
-            raf = new RandomAccessFile(f, "rw");
-            FileChannel ch = raf.getChannel();
-            MappedByteBuffer buf = ch.map(MapMode.READ_WRITE, 0, f.length());
-            final byte[] src = new byte[10];
-            buf.put(src);
-        } catch (FileNotFoundException e) {
-            log.error("FileNotFoundException occurs: ", e);
-        } catch (IOException e) {
-            log.error("IOException occurs: ", e);
-        } finally {
-            Closer.close(raf);
-        }
+		File f = new File("test.txt");
+		try (RandomAccessFile raf = new RandomAccessFile(f, "rw");) {
+			FileChannel ch = raf.getChannel();
+			MappedByteBuffer buf = ch.map(MapMode.READ_WRITE, 0, f.length());
+			final byte[] src = new byte[10];
+			buf.put(src);
+		} catch (FileNotFoundException e) {
+			log.error("FileNotFoundException occurs: ", e);
+		} catch (IOException e) {
+			log.error("IOException occurs: ", e);
+		}
 	}
 }

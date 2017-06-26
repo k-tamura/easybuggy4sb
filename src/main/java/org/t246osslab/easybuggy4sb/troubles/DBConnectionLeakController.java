@@ -75,23 +75,16 @@ public class DBConnectionLeakController {
 		Statement stmt = null;
 		ResultSet rs = null;
 		ArrayList<User> userList = new ArrayList<>();
-		try {
-			conn = DBClient.getConnection();
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");
-			while (rs.next()) {
-				User user = new User();
-				user.setUserId(rs.getString("id"));
-				user.setName(rs.getString("name"));
-				user.setPhone(rs.getString("phone"));
-				user.setMail(rs.getString("mail"));
-				userList.add(user);
-			}
-		} finally {
-			/*
-			 * A DB connection leaks because the following lines are commented out.
-			 * Closer.close(rs, stmt, conn);
-			 */
+		conn = DBClient.getConnection();
+		stmt = conn.createStatement();
+		rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");
+		while (rs.next()) {
+			User user = new User();
+			user.setUserId(rs.getString("id"));
+			user.setName(rs.getString("name"));
+			user.setPhone(rs.getString("phone"));
+			user.setMail(rs.getString("mail"));
+			userList.add(user);
 		}
 		return userList;
 	}

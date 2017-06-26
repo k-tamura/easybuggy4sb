@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.t246osslab.easybuggy.core.utils.ApplicationUtils;
-import org.t246osslab.easybuggy.core.utils.Closer;
 
 /**
  * Database client to provide database connections.
@@ -19,22 +18,13 @@ public final class DBClient {
 
     private static final Logger log = LoggerFactory.getLogger(DBClient.class);
 
-    static {
-        Statement stmt = null;
-        Connection conn= null;
-        try {
-            conn = getConnection();
-            stmt = conn.createStatement();
-
-            // create a user table and insert sample users
-            createUsersTable(stmt);
-
-        } catch (SQLException e) {
-            log.error("SQLException occurs: ", e);
-        } finally {
-            Closer.close(stmt, conn);
-        }
-    }
+	static {
+		try (Connection conn = getConnection(); Statement stmt = conn.createStatement()) {
+			createUsersTable(stmt);
+		} catch (SQLException e) {
+			log.error("SQLException occurs: ", e);
+		}
+	}
 
     // squid:S1118: Utility classes should not have public constructors
     private DBClient() {
