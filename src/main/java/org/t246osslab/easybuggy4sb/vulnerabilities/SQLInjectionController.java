@@ -34,6 +34,7 @@ public class SQLInjectionController {
 		mav.setViewName("sqlijc");
 		mav.addObject("title", msg.getMessage("title.sql.injection.page", null, locale));
 		name = StringUtils.trim(name);
+		name = StringUtils.trim(password);
         if (!StringUtils.isBlank(name) && !StringUtils.isBlank(password) && password.length() >= 8) {
 			try {
 				List<User> users = selectUsers(name, password);
