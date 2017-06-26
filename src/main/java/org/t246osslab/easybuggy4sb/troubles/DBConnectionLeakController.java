@@ -33,15 +33,6 @@ public class DBConnectionLeakController {
 		mav.setViewName("dbconnectionleak");
 		mav.addObject("title", msg.getMessage("title.user.list", null, locale));
 		try {
-			if (!StringUtils.isBlank(ApplicationUtils.getDatabaseDriver())) {
-				try {
-					Class.forName(ApplicationUtils.getDatabaseDriver());
-				} catch (Exception e) {
-					log.error("Exception occurs: ", e);
-					mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));
-					return mav;
-				}
-			}
 			if (StringUtils.isBlank(ApplicationUtils.getDatabaseURL())
 					|| ApplicationUtils.getDatabaseURL().startsWith("jdbc:derby:memory:")) {
 				mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));

@@ -16,9 +16,6 @@ public final class ApplicationUtils {
 	// default database url: derby in-memory
 	private static String databaseURL = "jdbc:derby:memory:demo;create=true";
 
-	// default database url: org.apache.derby.jdbc.EmbeddedDriver
-	private static String databaseDriver = "org.apache.derby.jdbc.EmbeddedDriver";
-
 	// default account lock time: 3600000 (1 hour)
 	private static long accountLockTime = 3600000;
 
@@ -50,7 +47,6 @@ public final class ApplicationUtils {
 		try {
 			ResourceBundle bundle = ResourceBundle.getBundle("application");
 			databaseURL = getProperty(bundle, "database.url", databaseURL);
-			databaseDriver = getProperty(bundle, "database.driver", databaseDriver);
 			accountLockTime = getProperty(bundle, "account.lock.time", accountLockTime);
 			accountLockCount = getProperty(bundle, "account.lock.count", accountLockCount);
 			smtpHost = getProperty(bundle, "mail.smtp.host", smtpHost);
@@ -77,15 +73,6 @@ public final class ApplicationUtils {
 	 */
 	public static String getDatabaseURL() {
 		return databaseURL;
-	}
-
-	/**
-	 * Return a Database driver of EasyBuggy.
-	 * 
-	 * @return Database driver of EasyBuggy
-	 */
-	public static String getDatabaseDriver() {
-		return databaseDriver;
 	}
 
 	/**
