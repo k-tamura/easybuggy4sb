@@ -1,0 +1,19 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<form action="te" method="post">
+		<p th:text="#{msg.enter.positive.number}" />
+		<span th:text="'10.0 ' + #{label.obelus}"></span>
+		<input type="text" name="number" size="1" maxlength="1" th:value="${number}" />
+			<span> = </span><span th:text="${result}"></span><br />
+			<br /> <input type="submit" th:value="#{label.calculate}" /><br /><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.specific.nembers}"></span>
+		</div>
+	</form>
+</body>
+</html>
