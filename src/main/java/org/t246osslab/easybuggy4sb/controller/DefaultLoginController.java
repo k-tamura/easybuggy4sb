@@ -45,7 +45,7 @@ public class DefaultLoginController {
     MessageSource msg;
     
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
+	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
 		
         mav.setViewName("login");
         mav.addObject("title", msg.getMessage("title.login.page", null, locale));
@@ -115,7 +115,7 @@ public class DefaultLoginController {
             admin.setLastLoginFailedTime(new Date());
             
             session.setAttribute("authNMsg", "msg.authentication.fail");
-            return doGet(mav, req, locale) ;
+            return doGet(mav, req, res, locale) ;
         }
         return null;
     }

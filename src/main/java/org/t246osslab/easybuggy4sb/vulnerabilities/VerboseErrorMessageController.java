@@ -36,9 +36,9 @@ public class VerboseErrorMessageController extends DefaultLoginController {
     MessageSource msg;
 
     @RequestMapping(value = "/verbosemsg/login", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         req.setAttribute("note", msg.getMessage("msg.note.verbose.errror.message", null, locale));
-        super.doGet(mav, req, locale);
+        super.doGet(mav, req, res, locale);
         return mav;
     }
 
@@ -51,13 +51,13 @@ public class VerboseErrorMessageController extends DefaultLoginController {
         HttpSession session = req.getSession(true);
         if (isAccountLocked(userid)) {
             session.setAttribute("authNMsg", "msg.account.locked");
-            doGet(mav, req, locale);
+            doGet(mav, req, res, locale);
         } else if (!isExistUser(userid)) {
             session.setAttribute("authNMsg", "msg.user.not.exist");
-            doGet(mav, req, locale);
+            doGet(mav, req, res, locale);
         } else if (!password.matches("[0-9a-z]{8}")) {
             session.setAttribute("authNMsg", "msg.low.alphnum8");
-            doGet(mav, req, locale);
+            doGet(mav, req, res, locale);
         } else if (authUser(userid, password)) {
             /* Reset account lock */
             User admin = userLoginHistory.get(userid);
@@ -97,7 +97,7 @@ public class VerboseErrorMessageController extends DefaultLoginController {
             admin.setLastLoginFailedTime(new Date());
 
             session.setAttribute("authNMsg", "msg.password.not.match");
-            doGet(mav, req, locale);
+            doGet(mav, req, res, locale);
         }
         return mav;
     }
