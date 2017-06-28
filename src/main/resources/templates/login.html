@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<form method="POST" th:action="${#httpServletRequest.getRequestURI()}">
+		<table  style="width:400px; height:150px">
+			<tr>
+				<td th:text="#{label.user.id} + ' : '"></td>
+				<td><input type="text" name="userid" size="20" /></td>
+			</tr>
+			<tr>
+				<td th:text="#{label.password} + ' : '"></td>
+				<td><input type="password" name="password" size="20" autocomplete="off" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" th:value="#{label.login}" /></td>
+			</tr>
+		</table>
+		<input type="hidden" name="loginquerystring" th:value="${#httpServletRequest.getQueryString()}" />
+		<th:block th:each="element : ${hiddenMap}">
+			<th:block th:each="elmvalue : ${element.value}">
+				<input type="hidden" th:attr="name=${element.key}" th:value="${elmvalue}" />
+			</th:block>
+		</th:block>
+
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+		</div>
+		<div th:if="${infomsg != null}" class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="${infomsg}"></span>
+		</div>
+	</form>
+</body>
+</html>
