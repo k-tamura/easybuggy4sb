@@ -31,8 +31,8 @@
 		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
 			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
 		</div>
-		<div th:if="${infomsg != null}" class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="${infomsg}"></span>
+		<div th:if="${note != null}" class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="${note}"></span>
 		</div>
 	</form>
 </body>
