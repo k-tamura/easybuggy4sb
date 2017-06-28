@@ -1,6 +1,12 @@
-	<table style="width: 100%;">
-		<tr>
-			<td><h2 class="glyphicon glyphicon-globe" th:text="${title}"></h2></td>
-			<td align="right"><a href="/" th:text="#{label.go.to.main}"></a></td>
-		</tr>
-	</table>
+
+<table style="width: 100%;">
+	<tr>
+		<td><h2 class="glyphicon glyphicon-globe" th:text="${title}"></h2></td>
+		<td align="right" th:if="${#httpSession == null or #httpSession.getAttribute('userid') == null}">
+			<a href="/" th:text="#{label.go.to.main}"></a></td>
+		<td align="right" th:if="${#httpSession != null and #httpSession.getAttribute('userid') != null}">
+			<p th:text="#{label.login.user.id} + ': ' + ${#httpSession.getAttribute('userid')}" />
+			<a href="/logout" th:text="#{label.logout}"></a>
+		</td>
+	</tr>
+</table>
