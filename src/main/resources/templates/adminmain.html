@@ -1,0 +1,16 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<p th:utext="#{msg.admin.page.top}" />
+	<ul>
+		<li><a th:href="@{'/uid/serverinfo.jsp'}"><th:block th:utext="#{section.server.info}" /></a></li>
+		<li><a th:href="@{'/admins/csrf'}"><th:block th:utext="#{section.change.password}" /></a></li>
+		<li><a th:href="@{'/admins/clickjacking'}"><th:block th:utext="#{section.change.mail}" /></a></li>
+	</ul>
+</body>
+</html>
