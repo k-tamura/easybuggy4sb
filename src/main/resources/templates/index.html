@@ -55,8 +55,7 @@
 		<li><a href="ureupload" th:text="#{function.name.unrestricted.ext.upload}"></a>: <span th:text="#{function.description.unrestricted.ext.upload}"></span></li>
 		<li><a href="admins/main?logintype=openredirect" th:text="#{function.name.open.redirect}"></a>: <span th:text="#{function.description.open.redirect}"></span></li>
 		<li><a href="admins/main?logintype=bruteforce" th:text="#{function.name.brute.force}"></a>: <span th:text="#{function.description.brute.force}"></span></li>
-		<!-- TODO URLencode -->
-		<li><a href="admins/main?logintype=sessionfixation" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></li>
+		<li><a th:href="@{'admins/main?logintype=sessionfixation'}" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></li>
 		<li><a href="admins/main?logintype=verbosemsg" th:text="#{function.name.verbose.error.message}"></a>: <span th:text="#{function.description.verbose.error.message}"></span></li>
 		<li><a href="/dfi/includable.jsp?template=style_bootstrap.html" th:text="#{function.name.dangerous.file.inclusion}"></a>: <span th:text="#{function.description.dangerous.file.inclusion}"></span></li>
 		<li><a href="/dt/includable.jsp?template=basic" th:text="#{function.name.path.traversal}"></a>: <span th:text="#{function.description.path.traversal}"></span></li>
