@@ -1,0 +1,18 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:include="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<hr style="margin-top: 0px" />
+	<p th:text="#{msg.download.file}" />
+	<ul>
+		<li><a href="nullbyteijct?fileName=AdminGuide">Admin Guide</a></li>
+		<li><a href="nullbyteijct?fileName=DeveloperGuide">Developer Guide</a></li>
+	</ul>
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.null.byte.injection}"></span>
+	</div>
+</body>
+</html>
