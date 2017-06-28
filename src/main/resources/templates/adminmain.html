@@ -5,7 +5,6 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<hr style="margin-top: 0px" />
 	<p th:utext="#{msg.admin.page.top}" />
 	<ul>
 		<li><a th:href="@{'/uid/serverinfo.jsp'}"><th:block th:utext="#{section.server.info}" /></a></li>
