@@ -7,8 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -19,8 +17,6 @@ import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
 
 @Controller
 public class SessionFixationController extends DefaultLoginController {
-
-    private static final Logger log = LoggerFactory.getLogger(SessionFixationController.class);
 
     @Autowired
     MessageSource msg;
