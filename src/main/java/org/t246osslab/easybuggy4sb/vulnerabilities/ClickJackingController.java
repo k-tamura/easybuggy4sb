@@ -46,12 +46,15 @@ public class ClickJackingController {
 	}
 
 	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.POST)
-	protected void doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
+	protected ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
 			throws IOException {
+        mav.setViewName("clickjacking");
+        mav.addObject("title", msg.getMessage("section.change.mail", null, locale));
+        
 		HttpSession session = req.getSession();
 		if (session == null) {
 			res.sendRedirect("/");
-			return;
+			return null;
 		}
 		String userid = (String) session.getAttribute("userid");
 		String mail = StringUtils.trim(req.getParameter("mail"));
@@ -72,12 +75,13 @@ public class ClickJackingController {
 			} catch (Exception e) {
 				log.error("Exception occurs: ", e);
 				mav.addObject("errmsg", msg.getMessage("msg.mail.change.failed", null, locale));
-				doGet(mav, req, res, locale);
+				return doGet(mav, req, res, locale);
 			}
 		} else {
 			mav.addObject("errmsg", msg.getMessage("msg.mail.format.is.invalid", null, locale));
-			doGet(mav, req, res, locale);
+			return doGet(mav, req, res, locale);
 		}
+		return mav;
 	}
 
 	public boolean isValidEmailAddress(String email) {
