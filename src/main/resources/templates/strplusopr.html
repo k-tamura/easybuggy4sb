@@ -7,8 +7,8 @@
 	<div th:include="header"></div>
 	<form action="strplusopr" method="post">
 		<p th:utext="#{description.random.string.generator}" />
-		<label th:text="#{label.character.count}"></label>
-			: <input type="text" name="length" size="6" maxlength="6" th:value="${length}" />
+		<label th:text="#{label.character.count}"></label><span>: </span>
+			<input type="text" name="length" size="6" maxlength="6" th:value="${length}" />
 			<p th:utext="${html}" /><br />
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.slow.string.plus.operation}"></span>

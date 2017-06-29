@@ -8,8 +8,8 @@
 	<form action="slowre" method="post">
 		<p th:utext="#{description.test.regular.expression}" /><br />
 		<img src="images/regular-expression.png" /><br />
-		<label th:text="#{label.string}"></label>
-			: <input type="text" name="word" size="50" maxlength="50" /><br />
+		<label th:text="#{label.string}"></label><span>: </span>
+			<input type="text" name="word" size="50" maxlength="50" /><br />
 			<br /> <input type="submit" /><br /><br />
 			<p th:utext="${msg}" /><br />
 		<div class="alert alert-info" role="alert">

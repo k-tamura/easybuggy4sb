@@ -7,8 +7,8 @@
 	<div th:include="header"></div>
 	<form action="codeijc" method="post">
 		<p th:text="#{description.parse.json}" />
-		<label th:text="#{label.json.string}"></label>
-			: <textarea name="jsonString" cols="80" rows="15" th:value="${jsonString}" ></textarea>
+		<label th:text="#{label.json.string}"></label><span>: </span>
+			<textarea name="jsonString" cols="80" rows="15" th:value="${jsonString}" ></textarea>
 			<br /><br /> <input type="submit" /><br /><br />
 			<p th:text="${msg}" /><br />
 		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
