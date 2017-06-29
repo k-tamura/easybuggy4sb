@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<th:block th:each="memoryPoolMXBean : ${memoryPoolMXBeans}">
+		<p th:utext="${memoryPoolMXBean.getName()}" />
+		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+			<tr>
+				<th />
+				<th width="18%" th:text="#{label.memory.init}" />
+				<th width="18%" th:text="#{label.memory.used}" />
+				<th width="18%" th:text="#{label.memory.committed}" />
+				<th width="18%" th:text="#{label.memory.max}" />
+			</tr>
+			<tr th:if="${memoryPoolMXBean.usage}" >
+				<td th:text="#{label.memory.usage}" />
+				<td th:text="${memoryPoolMXBean.usage.init}" />
+				<td th:text="${memoryPoolMXBean.usage.used}" />
+				<td th:text="${memoryPoolMXBean.usage.committed}" />
+				<th:block th:if="${memoryPoolMXBean.usage.max != -1}">
+					<td th:text="${memoryPoolMXBean.usage.max}" />
+				</th:block>
+				<th:block th:if="${memoryPoolMXBean.usage.max == -1}">
+					<td />
+				</th:block>
+			</tr>
+			<tr th:if="${memoryPoolMXBean.peakUsage}" >
+				<td th:text="#{label.memory.peak.usage}" />
+				<td th:text="${memoryPoolMXBean.peakUsage.init}" />
+				<td th:text="${memoryPoolMXBean.peakUsage.used}" />
+				<td th:text="${memoryPoolMXBean.peakUsage.committed}" />
+				<th:block th:if="${memoryPoolMXBean.peakUsage.max != -1}">
+					<td th:text="${memoryPoolMXBean.peakUsage.max}" />
+				</th:block>
+				<th:block th:if="${memoryPoolMXBean.peakUsage.max == -1}">
+					<td />
+				</th:block>
+			</tr>
+			<tr th:if="${memoryPoolMXBean.collectionUsage}" >
+				<td th:text="#{label.memory.collection.usage}" />
+				<td th:text="${memoryPoolMXBean.collectionUsage.init}" />
+				<td th:text="${memoryPoolMXBean.collectionUsage.used}" />
+				<td th:text="${memoryPoolMXBean.collectionUsage.committed}" />
+				<th:block th:if="${memoryPoolMXBean.collectionUsage.max != -1}">
+					<td th:text="${memoryPoolMXBean.collectionUsage.max}" />
+				</th:block>
+				<th:block th:if="${memoryPoolMXBean.collectionUsage.max == -1}">
+					<td />
+				</th:block>
+			</tr>
+		</table>
+	</th:block>
+	<p th:utext="${errmsg}" /><br />
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="${note}"></span>
+	</div>
+</body>
+</html>
