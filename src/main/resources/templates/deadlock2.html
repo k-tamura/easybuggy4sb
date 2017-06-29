@@ -1,0 +1,35 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<p th:text="#{msg.update.users}" />
+	<form action="deadlock2" method="post">
+		<input type="submit" th:value="#{label.update}" /><br /><br />
+		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+			<tr>
+				<th><a th:href="'/deadlock2?order=' + ${order}"><th:block th:text="#{label.user.id}"></th:block></a></th>
+				<th th:text="#{label.name}"></th>
+				<th th:text="#{label.phone}"></th>
+				<th th:text="#{label.mail}"></th>
+			</tr>
+			<tr th:each="user, stat : ${userList}">
+				<td><input type="hidden" th:attr="name='uid_' + ${stat.count}" th:value="${user.userId}" /><th:block th:text="${user.userId}" /></td>
+				<td><input type="text" th:attr="name=${user.userId} + '_name'" th:value="${user.name}" /></td>
+				<td><input type="text" th:attr="name=${user.userId} + '_phone'" th:value="${user.phone}" /></td>
+				<td><input type="text" th:attr="name=${user.userId} + '_mail'" th:value="${user.mail}" /></td>
+			</tr>
+		</table>
+	</form>
+	<p th:if="${msg != null}" th:utext="${msg}" /><br />
+	<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+		<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+	</div>
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign"
+			th:utext="#{msg.note.sql.deadlock}"></span>
+	</div>
+</body>
+</html>
