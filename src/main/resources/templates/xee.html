@@ -1,0 +1,76 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<th:block th:if="${resultList == null}" >
+	<form action="xee" method="post" enctype="multipart/form-data">
+		<p th:text="#{msg.add.users.by.xml}" />
+		<pre id="code" class="prettyprint lang-xml">
+&lt;&#x3f;xml version&#x3d;&quot;1.0&quot;&#x3f;&gt;
+&lt;users&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user11&quot; name&#x3d;&quot;Tommy&quot; password&#x3d;&quot;pasworld&quot; phone&#x3d;&quot;090-1004-5678&quot; mail&#x3d;&quot;user11&#x40;example.com&quot;&#x2f;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user12&quot; name&#x3d;&quot;Matt&quot; password&#x3d;&quot;PaSsWoRd&quot; phone&#x3d;&quot;090-9984-1118&quot; mail&#x3d;&quot;user12&#x40;example.com&quot;&#x2f;&gt;
+&lt;&#x2f;users&gt;</pre>
+		<input type="file" name="file" size="60" /><br />
+		<p th:text="#{msg.select.upload.file}" />  
+		<input type="submit" th:value="#{label.upload}" />
+		<p th:utext="${msg}" /><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xee}"></span>
+		</div>
+		<pre id="code" class="prettyprint lang-xml">
+&lt;&#x3f;xml version&#x3d;&quot;1.0&quot; encoding&#x3d;&quot;UTF-8&quot; &#x3f;&gt;
+&lt;&#x21;DOCTYPE s&#x5b;
+&lt;&#x21;ENTITY x0 &quot;ha&#x21;&quot;&gt;
+&lt;&#x21;ENTITY x1 &quot;&amp;x0&#x3b;&amp;x0&#x3b;&quot;&gt;
+&lt;&#x21;ENTITY x2 &quot;&amp;x1&#x3b;&amp;x1&#x3b;&quot;&gt;
+&lt;&#x21;ENTITY x3 &quot;&amp;x2&#x3b;&amp;x2&#x3b;&#x29;&quot;&gt;
+&lt;&#x21;-- Entities from x4 to x98... --&gt;
+&lt;&#x21;ENTITY x99 &quot;&amp;x98&#x3b;&amp;x98&#x3b;&quot;&gt;
+&lt;&#x21;ENTITY x100 &quot;&amp;x99&#x3b;&amp;x99&#x3b;&quot;&gt;
+&#x5d;&gt;
+&lt;soapenv&#x3a;Envelope xmlns&#x3a;soapenv&#x3d;&quot;...&quot; xmlns&#x3a;ns1&#x3d;&quot;...&quot;&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;soapenv&#x3a;Header&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;soapenv&#x3a;Header&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;soapenv&#x3a;Body&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ns1&#x3a;reverse&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s&gt;&amp;x100&#x3b;&lt;&#x2f;s&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;ns1&#x3a;reverse&gt;
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;soapenv&#x3a;Body&gt;
+&lt;&#x2f;soapenv&#x3a;Envelope&gt;</pre>
+	</form>
+	</th:block>
+	<th:block th:if="${resultList != null}">
+		<p th:text="${msg}" />
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+		</div>
+		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+			<tr>
+				<th th:text="#{label.user.id}"></th>
+				<th th:text="#{label.name}"></th>
+				<th th:text="#{label.password}"></th>
+				<th th:text="#{label.phone}"></th>
+				<th th:text="#{label.mail}"></th>
+			</tr>
+			<tr th:each="result : ${resultList}">
+				<th:block th:if="${result instanceof T(org.t246osslab.easybuggy4sb.core.model.User)}">
+					<td th:text="${result.userId}" ></td>
+					<td th:text="${result.password}" ></td>
+					<td th:text="${result.name}" ></td>
+					<td th:text="${result.phone}" ></td>
+					<td th:text="${result.mail}" ></td>
+				</th:block>
+				<th:block th:if="${result instanceof T(java.lang.String)}">
+						<td th:text="${#strings.arraySplit(result, ' :: ')[0]}" colspan="1"></td>
+						<td th:text="${#strings.arraySplit(result, ' :: ')[1]}" colspan="4"></td>
+				</th:block>
+			</tr>
+		</table>
+		<input type="button" onClick='history.back();'  th:value="#{label.history.back}" />
+	</th:block>
+</body>
+</html>
