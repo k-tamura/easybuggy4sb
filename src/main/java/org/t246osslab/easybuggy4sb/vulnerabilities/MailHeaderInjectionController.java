@@ -41,11 +41,8 @@ public class MailHeaderInjectionController {
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         mav.setViewName("mailheaderinjection");
         mav.addObject("title", msg.getMessage("title.mail.header.injection.page", null, locale));
-        if (!EmailUtils.isReadyToSendEmail()) {
-            mav.addObject("note", msg.getMessage("msg.smtp.server.not.setup", null, locale));
-        } else {
+        if (EmailUtils.isReadyToSendEmail()) {
             mav.addObject("isReady", "yes");
-            mav.addObject("note", msg.getMessage("msg.note.mail.header.injection", null, locale));
         }
         return mav;
     }

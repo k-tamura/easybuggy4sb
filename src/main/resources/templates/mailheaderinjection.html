@@ -5,50 +5,43 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<th:block th:if="${isReady != null" >
+	<th:block th:if="${isReady != null}">
 		<form action="mailheaderijct" method="post"
 			enctype="multipart/form-data">
 			<p th:text="#{description.send.mail}" />
-			<br />
-			<table>
+			<table class="table table-bordered" style="font-size: small;">
 				<tr>
-					<td th:text="#{label.your.name} + ': '"><br />
-					<br /></td>
-					<td><input type="text" name="name" size="50" /><br />
-					<br /></td>
+					<td th:text="#{label.your.name} + ': '"></td>
+					<td><input type="text" name="name" size="50" /></td>
 				</tr>
 				<tr>
-					<td th:text="#{label.your.mail} + ': '"><br />
-					<br /></td>
-					<td><input type="text" name="mail" size="50" /><br />
-					<br /></td>
+					<td th:text="#{label.your.mail} + ': '"></td>
+					<td><input type="text" name="mail" size="50" /></td>
 				</tr>
 				<tr>
-					<td th:text="#{label.subject} + ': '"><br />
-					<br /></td>
-					<td><input type="text" name="subject" size="50" /><br />
-					<br /></td>
+					<td th:text="#{label.subject} + ': '"></td>
+					<td><input type="text" name="subject" size="50" /></td>
 				</tr>
 				<tr>
-					<td th:text="#{label.content} + ': '"><br />
-					<br /></td>
-					<td><textarea rows="10" cols="39" name="content"></textarea> <br />
-					<br /></td>
+					<td th:text="#{label.content} + ': '"></td>
+					<td><textarea rows="10" cols="50" name="content"></textarea></td>
 				</tr>
 				<tr>
-					<td th:text="#{label.attach.file} + ': '"><br />
-					<br /></td>
-					<td><input type="file" name="file" size="50" /><br /></td>
+					<td th:text="#{label.attach.file} + ': '"></td>
+					<td><input type="file" name="file" size="50" /></td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center"><input type="submit" /></td>
 				</tr>
 			</table>
 		</form>
-	</th:block>
-	<th:block th:if="${isReady == null" >
 		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="${note}"></span>
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.mail.header.injection}"></span>
+		</div>
+	</th:block>
+	<th:block th:if="${isReady == null}">
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.smtp.server.not.setup}"></span>
 		</div>
 	</th:block>
 </body>
