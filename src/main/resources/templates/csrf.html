@@ -1,0 +1,24 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<th:block th:if="${complete == null}" >
+	<form action="/admins/csrf" method="post">
+		<p th:text="#{msg.enter.passwd}" /><br />
+		<label th:text="#{label.password}"></label><span>: </span>
+			<input type="password" name="password" size="30" maxlength="30" autocomplete="off" /><br />
+			<br /> <input type="submit" /><br /><br />
+			<p th:utext="${errmsg}" />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.csrf}"></span>
+		</div>
+	</form>
+	</th:block>
+	<th:block th:if="${complete != null}" >
+		<p th:text="#{msg.passwd.changed}" /><br /><br /><a href="/admins/main" th:text="#{label.goto.admin.page}"></a>
+	</th:block>
+</body>
+</html>
