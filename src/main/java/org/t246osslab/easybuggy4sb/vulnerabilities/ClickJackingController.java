@@ -37,11 +37,6 @@ public class ClickJackingController {
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
 		mav.setViewName("clickjacking");
 		mav.addObject("title", msg.getMessage("section.change.mail", null, locale));
-
-		String errorMessage = (String) req.getAttribute("errorMessage");
-		if (errorMessage != null) {
-			mav.addObject("errmsg", msg.getMessage("msg.note.clickjacking", null, locale));
-		}
 		return mav;
 	}
 
