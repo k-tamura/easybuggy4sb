@@ -32,7 +32,7 @@ import org.t246osslab.easybuggy4sb.core.utils.EmailUtils;
 @Controller
 public class MailHeaderInjectionController {
 
-    private static final Logger log = LoggerFactory.getLogger(LDAPInjectionController.class);
+    private static final Logger log = LoggerFactory.getLogger(MailHeaderInjectionController.class);
 
     @Autowired
     MessageSource msg;

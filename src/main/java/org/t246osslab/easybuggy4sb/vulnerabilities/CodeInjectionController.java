@@ -19,7 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CodeInjectionController {
 
-	private static final Logger log = LoggerFactory.getLogger(SQLInjectionController.class);
+	private static final Logger log = LoggerFactory.getLogger(CodeInjectionController.class);
 
 	@Autowired
 	MessageSource msg;
