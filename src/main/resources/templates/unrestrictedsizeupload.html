@@ -1,0 +1,32 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body STYLE="margin-left: 20px; margin-right: 20px;">
+	<div th:include="header"></div>
+	<th:block th:if="${upladFilePath == null}" >
+	<form action="ursupload" method="post" enctype="multipart/form-data">
+		<p th:text="#{msg.reverse.color}" />
+		<input type="file" name="file" size="60" /><br />
+		<p th:text="#{msg.select.upload.file}" />  
+		<input type="submit" th:value="#{label.upload}" />
+		<p th:text="${msg}" /><br />
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+		</div>
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.unrestricted.size.upload}"></span>
+		</div>
+	</form>
+	</th:block>
+	<th:block th:if="${upladFilePath != null}">
+		<img th:src="${upladFilePath}" />
+		<p th:text="${msg}" />
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+		</div>
+		<input type="button" onClick='history.back();'  th:value="#{label.history.back}" />
+	</th:block>
+</body>
+</html>
