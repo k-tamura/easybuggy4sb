@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE s[
+<!ENTITY x0 "ha!">
+<!ENTITY x1 "&x0;&x0;">
+<!ENTITY x2 "&x1;&x1;">
+<!ENTITY x3 "&x2;&x2;)">
+<!-- Entities from x4 to x98... -->
+<!ENTITY x99 "&x98;&x98;">
+<!ENTITY x100 "&x99;&x99;">
+]>
+<soapenv:Envelope xmlns:soapenv="..." xmlns:ns1="...">
+    <soapenv:Header>
+    </soapenv:Header>
+    <soapenv:Body>
+        <ns1:reverse>
+            <s>&x100;</s>
+        </ns1:reverse>
+    </soapenv:Body>
+</soapenv:Envelope>

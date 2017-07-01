@@ -22,12 +22,15 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,16 +53,24 @@ public class XEEandXXEController {
 
     @Autowired
     MessageSource msg;
-
+      
     @RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
     	
+        Resource resource = new ClassPathResource("/xml/sample_users.xml");
+        mav.addObject("sample_users_xml", FileUtils.readFileToString(resource.getFile()));
 		if ("/xee".equals(req.getServletPath())) {
 			mav.setViewName("xee");
 			mav.addObject("title", msg.getMessage("title.xee", null, locale));
+            resource = new ClassPathResource("/xml/xee.xml");
+            mav.addObject("xee_xml", FileUtils.readFileToString(resource.getFile()));
 		} else {
 			mav.setViewName("xxe");
 			mav.addObject("title", msg.getMessage("title.xxe", null, locale));
+            resource = new ClassPathResource("/xml/xxe.xml");
+            mav.addObject("xxe_xml", FileUtils.readFileToString(resource.getFile()));
+            resource = new ClassPathResource("/xml/xxe.dtd");
+            mav.addObject("xxe_dtd", FileUtils.readFileToString(resource.getFile()));
 		}
         if (req.getAttribute("errorMessage") != null) {
         	mav.addObject("msg", req.getAttribute("errorMessage"));

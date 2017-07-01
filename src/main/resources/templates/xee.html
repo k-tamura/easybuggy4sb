@@ -8,12 +8,7 @@
 	<th:block th:if="${resultList == null}" >
 	<form action="xee" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.add.users.by.xml}" />
-		<pre id="code" class="prettyprint lang-xml">
-&lt;&#x3f;xml version&#x3d;&quot;1.0&quot;&#x3f;&gt;
-&lt;users&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user11&quot; name&#x3d;&quot;Tommy&quot; password&#x3d;&quot;pasworld&quot; phone&#x3d;&quot;090-1004-5678&quot; mail&#x3d;&quot;user11&#x40;example.com&quot;&#x2f;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;user uid&#x3d;&quot;user12&quot; name&#x3d;&quot;Matt&quot; password&#x3d;&quot;PaSsWoRd&quot; phone&#x3d;&quot;090-9984-1118&quot; mail&#x3d;&quot;user12&#x40;example.com&quot;&#x2f;&gt;
-&lt;&#x2f;users&gt;</pre>
+		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
 		<input type="submit" th:value="#{label.upload}" />
@@ -21,26 +16,7 @@
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xee}"></span>
 		</div>
-		<pre id="code" class="prettyprint lang-xml">
-&lt;&#x3f;xml version&#x3d;&quot;1.0&quot; encoding&#x3d;&quot;UTF-8&quot; &#x3f;&gt;
-&lt;&#x21;DOCTYPE s&#x5b;
-&lt;&#x21;ENTITY x0 &quot;ha&#x21;&quot;&gt;
-&lt;&#x21;ENTITY x1 &quot;&amp;x0&#x3b;&amp;x0&#x3b;&quot;&gt;
-&lt;&#x21;ENTITY x2 &quot;&amp;x1&#x3b;&amp;x1&#x3b;&quot;&gt;
-&lt;&#x21;ENTITY x3 &quot;&amp;x2&#x3b;&amp;x2&#x3b;&#x29;&quot;&gt;
-&lt;&#x21;-- Entities from x4 to x98... --&gt;
-&lt;&#x21;ENTITY x99 &quot;&amp;x98&#x3b;&amp;x98&#x3b;&quot;&gt;
-&lt;&#x21;ENTITY x100 &quot;&amp;x99&#x3b;&amp;x99&#x3b;&quot;&gt;
-&#x5d;&gt;
-&lt;soapenv&#x3a;Envelope xmlns&#x3a;soapenv&#x3d;&quot;...&quot; xmlns&#x3a;ns1&#x3d;&quot;...&quot;&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;soapenv&#x3a;Header&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;soapenv&#x3a;Header&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;soapenv&#x3a;Body&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ns1&#x3a;reverse&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;s&gt;&amp;x100&#x3b;&lt;&#x2f;s&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;ns1&#x3a;reverse&gt;
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;&#x2f;soapenv&#x3a;Body&gt;
-&lt;&#x2f;soapenv&#x3a;Envelope&gt;</pre>
+		<pre id="code" class="prettyprint lang-xml" th:text="${xee_xml}"></pre>
 	</form>
 	</th:block>
 	<th:block th:if="${resultList != null}">
