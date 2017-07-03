@@ -1,51 +1,27 @@
-<%@ page pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<c:set var="language"
-	value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
-	scope="session" />
-<fmt:setLocale value="${language}" />
-<fmt:setBundle basename="messages" />
 <!DOCTYPE HTML>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <html>
 <head>
-<title><fmt:message key="section.server.info" /></title>
-<link rel="icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico">
-<c:import url="/dfi/style_bootstrap.html" />
+<title>Server Information</title>
+<link rel="icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<table style="width: 100%;">
 		<tr>
 			<td>
 				<h2>
-					<span class="glyphicon glyphicon-globe"></span>&nbsp;
-					<fmt:message key="section.server.info" />
+					<span class="glyphicon glyphicon-globe"></span>&nbsp;Server Information
 				</h2>
 			</td>
-			<td align="right"><fmt:message key="label.login.user.id" />: <%=session.getAttribute("userid")%>
-				<br> <a href="/logout"><fmt:message key="label.logout" /></a>
+			<td align="right">User ID: 
+				<br> <a href="/logout">Logout</a>
 			</td>
 		</tr>
 	</table>
 	<hr style="margin-top: 0px" />
-	<%
-	    request.setAttribute("systemProperties", java.lang.System.getProperties());
-	%>
-	<table style="width: 720px;"
-		class="table table-striped table-bordered table-hover"
-		style="font-size:small;">
-		<tr>
-			<th><fmt:message key="label.key" /></th>
-			<th><fmt:message key="label.value" /></th>
-		</tr>
-		<c:forEach var="entry" items="${systemProperties}">
-			<tr>
-				<td><c:out value="${entry.key}" /></td>
-				<td><c:out value="${entry.value}" /></td>
-			</tr>
-		</c:forEach>
-	</table>
+	<p>TODO: Under Constructing</p>
 </body>
 </html>
