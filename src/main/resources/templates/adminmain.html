@@ -7,7 +7,7 @@
 	<div th:include="header"></div>
 	<p th:utext="#{msg.admin.page.top}" />
 	<ul>
-		<li><a th:href="@{'/uid/serverinfo.jsp'}"><th:block th:utext="#{section.server.info}" /></a></li>
+		<li><a th:href="@{'/uid/serverinfo.html'}"><th:block th:utext="#{section.server.info}" /></a></li>
 		<li><a th:href="@{'/admins/csrf'}"><th:block th:utext="#{section.change.password}" /></a></li>
 		<li><a th:href="@{'/admins/clickjacking'}"><th:block th:utext="#{section.change.mail}" /></a></li>
 	</ul>
