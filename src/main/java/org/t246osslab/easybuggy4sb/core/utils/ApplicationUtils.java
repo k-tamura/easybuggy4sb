@@ -46,7 +46,7 @@ public final class ApplicationUtils {
 	static {
 		try {
 			ResourceBundle bundle = ResourceBundle.getBundle("application");
-			databaseURL = getProperty(bundle, "database.url", databaseURL);
+			databaseURL = getProperty(bundle, "spring.datasource.url", databaseURL);
 			accountLockTime = getProperty(bundle, "account.lock.time", accountLockTime);
 			accountLockCount = getProperty(bundle, "account.lock.count", accountLockCount);
 			smtpHost = getProperty(bundle, "mail.smtp.host", smtpHost);

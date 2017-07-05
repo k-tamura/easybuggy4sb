@@ -1,12 +1,7 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLTransactionRollbackException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DeadlockLoserDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.core.dao.DBClient;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
@@ -30,12 +31,18 @@ public class DeadlockController2 {
     @Autowired
     MessageSource msg;
 
+	@Autowired
+	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private PlatformTransactionManager txMgr;
+	
     @RequestMapping(value = "/deadlock2")
     public ModelAndView process(HttpServletRequest req, HttpSession ses, ModelAndView mav, Locale locale) {
         mav.setViewName("deadlock2");
         mav.addObject("title", msg.getMessage("title.xxe", null, locale));
 
-        ArrayList<User> users = null;
+        List<User> users = null;
         try {
             String order = getOrder(req);
             if ("POST".equals(req.getMethod())) {
@@ -77,67 +84,46 @@ public class DeadlockController2 {
         return order;
     }
 
-    private ArrayList<User> selectUsers(String order) {
+    private List<User> selectUsers(String order) {
 
-        ArrayList<User> users = new ArrayList<User>();
-		try (Connection conn = DBClient.getConnection();
-				Statement stmt = createStatement(conn);
-				ResultSet rs = stmt.executeQuery("select * from users where ispublic = 'true' order by id "
-						+ ("desc".equals(order) ? "desc" : "asc"));) {
-            while (rs.next()) {
-                User user = new User();
-                user.setUserId(rs.getString("id"));
-                user.setName(rs.getString("name"));
-                user.setPhone(rs.getString("phone"));
-                user.setMail(rs.getString("mail"));
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            log.error("SQLException occurs: ", e);
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-        }
-        return users;
+		return jdbcTemplate.query("select * from users where ispublic = 'true' order by id "
+				+ ("desc".equals(order) ? "desc" : "asc"), (rs, i) -> {
+	                User user = new User();
+	                user.setUserId(rs.getString("id"));
+	                user.setName(rs.getString("name"));
+	                user.setPhone(rs.getString("phone"));
+	                user.setMail(rs.getString("mail"));
+					return user;
+				});
     }
 
-	private Statement createStatement(Connection conn) throws SQLException {
-        conn.setAutoCommit(true);
-		return conn.createStatement();
-	}
+    @Transactional
+    private void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
+		DefaultTransactionDefinition dtDef = new DefaultTransactionDefinition();
 
-    private void updateUsers(ArrayList<User> users, Locale locale, ModelAndView mav) {
-
+		TransactionStatus trnStatus = txMgr.getTransaction(dtDef);
         int executeUpdate = 0;
-        try (Connection conn = DBClient.getConnection();PreparedStatement stmt = preparedStatement(conn)) {
-            
+        try {
             for (User user : users) {
-                stmt.setString(1, user.getName());
-                stmt.setString(2, user.getPhone());
-                stmt.setString(3, user.getMail());
-                stmt.setString(4, user.getUserId());
-                executeUpdate = executeUpdate + stmt.executeUpdate();
+            	executeUpdate = executeUpdate + jdbcTemplate.update("Update users set name = ?, phone = ?, mail = ? where id = ?", user.getName(),
+						user.getPhone(), user.getMail(), user.getUserId());
                 log.info(user.getUserId() +" is updated.");
                 Thread.sleep(500);
             }
-            conn.commit();
+            txMgr.commit(trnStatus);
             mav.addObject("msg", msg.getMessage("msg.update.records", new Object[] { executeUpdate }, null, locale));
-
-		} catch (SQLTransactionRollbackException e) {
+		} catch (DeadlockLoserDataAccessException e) {
 			mav.addObject("errmsg", msg.getMessage("msg.deadlock.occurs", null, locale));
-			log.error("SQLTransactionRollbackException occurs: ", e);
-		} catch (SQLException e) {
+			log.error("DeadlockLoserDataAccessException occurs: ", e);
+		} catch (DataAccessException e) {
 			mav.addObject("errmsg",
 					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-			log.error("SQLException occurs: ", e);
+			log.error("DataAccessException occurs: ", e);
 		} catch (Exception e) {
+			txMgr.rollback(trnStatus);
 			mav.addObject("errmsg",
 					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
 			log.error("Exception occurs: ", e);
 		}
     }
-
-	private PreparedStatement preparedStatement(Connection conn) throws SQLException {
-        conn.setAutoCommit(false);
-		return conn.prepareStatement("Update users set name = ?, phone = ?, mail = ? where id = ?");
-	}
 }

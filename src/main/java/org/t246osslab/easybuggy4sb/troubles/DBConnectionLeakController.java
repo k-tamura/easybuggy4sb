@@ -1,6 +1,7 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,7 +17,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.core.dao.DBClient;
 import org.t246osslab.easybuggy4sb.core.model.User;
 import org.t246osslab.easybuggy4sb.core.utils.ApplicationUtils;
 
@@ -66,7 +66,7 @@ public class DBConnectionLeakController {
         Statement stmt = null;
         ResultSet rs = null;
         ArrayList<User> userList = new ArrayList<>();
-        conn = DBClient.getConnection();
+        conn = DriverManager.getConnection(ApplicationUtils.getDatabaseURL());
         stmt = conn.createStatement();
         rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");
         while (rs.next()) {
