@@ -23,6 +23,7 @@ import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +31,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.core.dao.EmbeddedADS;
 import org.t246osslab.easybuggy4sb.core.model.User;
-import org.t246osslab.easybuggy4sb.core.utils.ApplicationUtils;
-
 
 @Controller
 public class DefaultLoginController {
+
+	@Value("${account.lock.time}")
+	long accountLockTime;
+
+	@Value("${account.lock.count}")
+	long accountLockCount;
 
     /* User's login history using in-memory account locking */
     protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<String, User>();
@@ -46,7 +51,7 @@ public class DefaultLoginController {
     
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-		
+		System.out.println(accountLockTime);
         mav.setViewName("login");
         mav.addObject("title", msg.getMessage("title.login.page", null, locale));
 
@@ -122,11 +127,9 @@ public class DefaultLoginController {
 
     protected boolean isAccountLocked(String userid) {
         User admin = userLoginHistory.get(userid);
-        if (admin != null
-                && admin.getLoginFailedCount() == ApplicationUtils.getAccountLockCount()
-                && (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < ApplicationUtils
-                        .getAccountLockTime())) {
-            return true;
+		if (admin != null && admin.getLoginFailedCount() == accountLockCount
+				&& (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime)) {
+			return true;
         }
         return false;
     }
