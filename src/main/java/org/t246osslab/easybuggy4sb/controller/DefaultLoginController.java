@@ -51,7 +51,6 @@ public class DefaultLoginController {
     
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-		System.out.println(accountLockTime);
         mav.setViewName("login");
         mav.addObject("title", msg.getMessage("title.login.page", null, locale));
 
