@@ -62,7 +62,7 @@ public class EndlessWaitingController {
         return mav;
     }
 
-    private File createBatchFile(int count, String tmpdir) throws IOException {
+    private File createBatchFile(int count, String tmpdir) {
 
         String osName = System.getProperty("os.name").toLowerCase();
         String batFileName = null;
@@ -75,7 +75,13 @@ public class EndlessWaitingController {
             firstLine = "#!/bin/sh";
         }
 
-        File batFile = new File(tmpdir, batFileName);
+        File batFile = null;
+        try{
+            batFile = new File(tmpdir, batFileName);
+        } catch (Exception e) {
+            log.error("Exception occurs: ", e);
+            return null;
+        }
         try (FileWriter fileWriter = new FileWriter(batFile); BufferedWriter buffwriter = new BufferedWriter(fileWriter);) {
             if (!batFile.setExecutable(true)) {
                 log.debug("batFile.setExecutable(true) returns false.");

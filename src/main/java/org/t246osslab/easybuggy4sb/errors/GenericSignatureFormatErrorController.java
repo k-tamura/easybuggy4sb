@@ -8,7 +8,7 @@ public class GenericSignatureFormatErrorController {
 
 	@RequestMapping(value = "/gsfe")
 	public void process() {
-		final TestClass<String> testClass1 = new TestClass<String>();
+		final TestClass<String> testClass1 = new TestClass<>();
 		TestClass<?> testClass2 = testClass1;
 		testClass2.new TestInnerClass() {
 		}.getClass().getGenericSuperclass();

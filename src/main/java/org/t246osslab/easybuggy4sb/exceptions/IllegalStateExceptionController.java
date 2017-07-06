@@ -13,7 +13,7 @@ public class IllegalStateExceptionController {
 
     @RequestMapping(value = "/iase")
     public void process() {
-        List<String> alphabet = new ArrayList<String>(Arrays.asList("a", "b, c"));
+        List<String> alphabet = new ArrayList<>(Arrays.asList("a", "b, c"));
         for (final Iterator<String> itr = alphabet.iterator(); itr.hasNext();) {
             itr.remove();
         }

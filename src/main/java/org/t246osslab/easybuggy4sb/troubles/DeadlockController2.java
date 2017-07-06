@@ -46,7 +46,7 @@ public class DeadlockController2 {
         try {
             String order = getOrder(req);
             if ("POST".equals(req.getMethod())) {
-                users = new ArrayList<User>();
+                users = new ArrayList<>();
                 for (int j = 0;; j++) {
                     String uid = req.getParameter("uid_" + (j + 1));
                     if (uid == null) {

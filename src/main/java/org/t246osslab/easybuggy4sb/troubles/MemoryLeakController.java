@@ -16,12 +16,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javassist.CannotCompileException;
-
 @Controller
 public class MemoryLeakController {
 
-    private HashMap<String, String> cache = new HashMap<String, String>();
+    private HashMap<String, String> cache = new HashMap<>();
 
 	private static final Logger log = LoggerFactory.getLogger(MemoryLeakController.class);
 
@@ -54,7 +52,7 @@ public class MemoryLeakController {
 		return mav;
 	}
 
-	private void toDoRemove() throws CannotCompileException {
+	private void toDoRemove() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 100000; i++) {
             sb.append("Memory leak occurs!");

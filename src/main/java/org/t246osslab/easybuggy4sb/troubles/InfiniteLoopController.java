@@ -1,7 +1,5 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -20,7 +18,7 @@ public class InfiniteLoopController {
     MessageSource msg;
 
     @RequestMapping(value = "/infiniteloop")
-    public void process(HttpServletRequest req) throws IOException {
+    public void process(HttpServletRequest req) {
         while (true) {
             String contextPath = req.getContextPath();
             int contentLength = req.getContentLength();

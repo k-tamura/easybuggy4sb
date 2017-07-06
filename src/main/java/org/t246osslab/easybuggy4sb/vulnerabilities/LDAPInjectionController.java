@@ -3,7 +3,6 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -16,8 +15,6 @@ import org.apache.directory.shared.ldap.message.AliasDerefMode;
 import org.apache.directory.shared.ldap.name.LdapDN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,9 +27,7 @@ public class LDAPInjectionController extends DefaultLoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LDAPInjectionController.class);
 
-    @Autowired
-    MessageSource msg;
-
+    @Override
     @RequestMapping(value = "/ldapijc/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         req.setAttribute("note", msg.getMessage("msg.note.ldap.injection", null, locale));
@@ -40,8 +35,9 @@ public class LDAPInjectionController extends DefaultLoginController {
         return mav;
     }
 
+    @Override
     @RequestMapping(value = "/ldapijc/login", method = RequestMethod.POST)
-    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, ServletException {
+    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
         return super.doPost(mav, req, res, locale);
     }
     

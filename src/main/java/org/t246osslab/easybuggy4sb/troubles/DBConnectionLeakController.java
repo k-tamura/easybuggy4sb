@@ -25,8 +25,8 @@ public class DBConnectionLeakController {
 
     private static final Logger log = LoggerFactory.getLogger(DBConnectionLeakController.class);
 
-	@Value("${spring.datasource.url}")
-	String datasourceUrl;
+    @Value("${spring.datasource.url}")
+    String datasourceUrl;
 
     @Autowired
     MessageSource msg;
@@ -36,23 +36,18 @@ public class DBConnectionLeakController {
         mav.setViewName("dbconnectionleak");
         mav.addObject("title", msg.getMessage("title.user.list", null, locale));
         try {
-			if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
+            if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
                 mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));
                 return mav;
             } else {
                 mav.addObject("note", msg.getMessage("msg.note.db.connection.leak.occur", null, locale));
             }
 
-            try {
-                List<User> users = selectUsers();
-                if (users == null || users.isEmpty()) {
-                    mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
-                } else {
-                    mav.addObject("userList", users);
-                }
-            } catch (SQLException se) {
-                log.error("SQLException occurs: ", se);
-                mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
+            List<User> users = selectUsers(mav, locale);
+            if (users.isEmpty()) {
+                mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
+            } else {
+                mav.addObject("userList", users);
             }
         } catch (Exception e) {
             log.error("Exception occurs: ", e);
@@ -62,23 +57,27 @@ public class DBConnectionLeakController {
         return mav;
     }
 
-    private List<User> selectUsers() throws SQLException {
-
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
-        ArrayList<User> userList = new ArrayList<>();
-        conn = DriverManager.getConnection(datasourceUrl);
-        stmt = conn.createStatement();
-        rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");
-        while (rs.next()) {
-            User user = new User();
-            user.setUserId(rs.getString("id"));
-            user.setName(rs.getString("name"));
-            user.setPhone(rs.getString("phone"));
-            user.setMail(rs.getString("mail"));
-            userList.add(user);
+    private List<User> selectUsers(ModelAndView mav, Locale locale) {
+        List<User> users = new ArrayList<>();
+        try {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rs = null;
+            conn = DriverManager.getConnection(datasourceUrl);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getString("id"));
+                user.setName(rs.getString("name"));
+                user.setPhone(rs.getString("phone"));
+                user.setMail(rs.getString("mail"));
+                users.add(user);
+            }
+        } catch (SQLException se) {
+            log.error("SQLException occurs: ", se);
+            mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
         }
-        return userList;
+        return users;
     }
 }

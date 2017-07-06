@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javassist.CannotCompileException;
-
 @Controller
 public class MemoryLeakController3 {
 
@@ -19,7 +17,7 @@ public class MemoryLeakController3 {
 	MessageSource msg;
 
 	@RequestMapping(value = "/memoryleak3")
-	public ModelAndView process(ModelAndView mav, Locale locale) throws CannotCompileException {
+	public ModelAndView process(ModelAndView mav, Locale locale) {
 		mav.setViewName("memoryleak3");
 		mav.addObject("title", msg.getMessage("title.timezone", null, locale));
         mav.addObject("timeZone", TimeZone.getDefault());
@@ -27,7 +25,7 @@ public class MemoryLeakController3 {
 		return mav;
 	}
 
-	private void toDoRemove() throws CannotCompileException {
+	private void toDoRemove() {
         String inputString = "inputString";
         byte[] input = inputString.getBytes();
         byte[] output = new byte[100];

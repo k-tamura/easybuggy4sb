@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class pingController {
+public class PingController {
 
 	@RequestMapping(value = "/ping")
 	public ModelAndView hello(ModelAndView mav) {

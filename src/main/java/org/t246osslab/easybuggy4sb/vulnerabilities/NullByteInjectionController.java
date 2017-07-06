@@ -17,7 +17,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -29,11 +28,11 @@ public class NullByteInjectionController {
 	MessageSource msg;
 
 	@RequestMapping(value = "/nullbyteijct")
-	public ModelAndView process(@RequestParam(value = "fileName", required = false) String fileName, ModelAndView mav,
-			Locale locale, HttpServletRequest req, HttpServletResponse res) {
+    public ModelAndView process(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
 		mav.setViewName("nullbyteinjection");
 		mav.addObject("title", msg.getMessage("title.guide.download", null, locale));
-
+		
+		String fileName = req.getParameter("fileName");
 		if (StringUtils.isBlank(fileName)) {
 			return mav;
 		} else {

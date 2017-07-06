@@ -39,7 +39,7 @@ public class UnrestrictedSizeUploadController {
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ursupload", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         
         mav.setViewName("unrestrictedsizeupload");
         mav.addObject("title", msg.getMessage("title.unrestricted.size.upload", null, locale));

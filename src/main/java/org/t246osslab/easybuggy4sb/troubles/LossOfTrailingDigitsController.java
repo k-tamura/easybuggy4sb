@@ -1,6 +1,5 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
-import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.commons.lang.math.NumberUtils;
@@ -19,7 +18,7 @@ public class LossOfTrailingDigitsController {
 
     @RequestMapping(value = "/lotd")
     public ModelAndView process(@RequestParam(value = "number", required = false) String strNumber, ModelAndView mav,
-            Locale locale) throws IOException {
+            Locale locale) {
         mav.setViewName("lossoftrailingdigits");
         mav.addObject("title", msg.getMessage("title.loss.of.trailing.digits.page", null, locale));
         double number = NumberUtils.toDouble(strNumber, -1);

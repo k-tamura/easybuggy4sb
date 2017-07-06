@@ -12,7 +12,7 @@ public class ConcurrentModificationExceptionController {
 
 	@RequestMapping(value = "/cme")
 	public void process() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         list.add("1");
         list.add("2");
 

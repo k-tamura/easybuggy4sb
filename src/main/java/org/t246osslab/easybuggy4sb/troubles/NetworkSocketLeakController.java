@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -24,12 +23,12 @@ public class NetworkSocketLeakController {
     MessageSource msg;
 
     @RequestMapping(value = "/netsocketleak")
-    public ModelAndView process(@RequestParam(value = "pingurl", required = false) String pingURL,
-            HttpServletRequest req, ModelAndView mav, Locale locale) {
+    public ModelAndView process(ModelAndView mav, HttpServletRequest req, Locale locale) {
         mav.setViewName("netsocketleak");
         mav.addObject("title", msg.getMessage("title.response.time", null, locale));
         HttpURLConnection connection = null;
         URL url = null;
+        String pingURL = req.getParameter("pingurl");
         try {
             if (pingURL == null) {
                 pingURL = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/ping";

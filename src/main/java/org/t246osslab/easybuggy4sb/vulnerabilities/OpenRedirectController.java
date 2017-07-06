@@ -11,8 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,9 +23,7 @@ public class OpenRedirectController extends DefaultLoginController {
 
     private static final Logger log = LoggerFactory.getLogger(OpenRedirectController.class);
 
-    @Autowired
-    MessageSource msg;
-
+    @Override
     @RequestMapping(value = "/openredirect/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         req.setAttribute("note", msg.getMessage("msg.note.open.redirect", null, locale));
@@ -35,6 +31,7 @@ public class OpenRedirectController extends DefaultLoginController {
         return mav;
     }
 
+    @Override
     @RequestMapping(value = "/openredirect/login", method = RequestMethod.POST)
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
 

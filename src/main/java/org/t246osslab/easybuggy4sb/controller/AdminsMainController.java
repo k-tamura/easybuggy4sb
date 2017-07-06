@@ -14,7 +14,7 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class AdminsMainController {
 
 	/* User's login history using in-memory account locking */
-	protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<String, User>();
+	protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
 	
 	@Autowired
 	MessageSource msg;

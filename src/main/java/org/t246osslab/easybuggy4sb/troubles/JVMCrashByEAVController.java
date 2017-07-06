@@ -1,9 +1,7 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,7 +19,7 @@ public class JVMCrashByEAVController {
     MessageSource msg;
 
     @RequestMapping(value = "/jvmcrasheav")
-    public void process(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    public void process(HttpServletRequest req, HttpServletResponse res) {
         try {
             getUnsafe().getByte(0);
         } catch (Exception e) {

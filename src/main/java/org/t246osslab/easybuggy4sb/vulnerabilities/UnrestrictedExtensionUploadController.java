@@ -39,7 +39,7 @@ public class UnrestrictedExtensionUploadController {
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         
         mav.setViewName("unrestrictedextupload");
         mav.addObject("title", msg.getMessage("title.unrestricted.extension.upload", null, locale));
@@ -119,7 +119,7 @@ public class UnrestrictedExtensionUploadController {
             // Convert the file into gray scale image.
             BufferedImage image = ImageIO.read(new File(fileName));
             if (image == null) {
-                log.warn("Cannot read upload file as image file, file name: " + fileName);
+                log.warn("Cannot read upload file as image file, file name: {}", fileName);
                 return false;
             }
 

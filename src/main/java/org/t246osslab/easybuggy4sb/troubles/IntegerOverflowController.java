@@ -1,6 +1,5 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Locale;
 
@@ -20,7 +19,7 @@ public class IntegerOverflowController {
 
     @RequestMapping(value = "/iof")
     public ModelAndView process(@RequestParam(value = "times", required = false) String strTimes, ModelAndView mav,
-            Locale locale) throws IOException {
+            Locale locale) {
         mav.setViewName("intoverflow");
         mav.addObject("title", msg.getMessage("title.integer.overflow.page", null, locale));
         BigDecimal thickness = null;

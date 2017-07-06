@@ -99,22 +99,19 @@ public class MailHeaderInjectionController {
 	}
 
 	private boolean isReadyToSendEmail() {
-		if (StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(adminAddress)) {
-			return false;
-		}
-		return true;
+	    return !(StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(adminAddress));
 	}
 
 	private void sendMail(String subject, String text, List<File> uploadedFiles) throws MessagingException {
-		MimeMessage msg = javaMailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		MimeMessage message = javaMailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, true);
 		helper.setText(text);
 		helper.setSubject(subject);
 		helper.setTo(adminAddress);
 		for (File uploadedFile : uploadedFiles) {
 			helper.addAttachment(uploadedFile.getName(), uploadedFile);
 		}
-		javaMailSender.send(msg);
+		javaMailSender.send(message);
 	}
 
 	/**
@@ -122,7 +119,7 @@ public class MailHeaderInjectionController {
 	 * which will be attached to the mail message.
 	 */
 	private List<File> saveUploadedFiles(HttpServletRequest request) throws IOException, ServletException {
-		List<File> listFiles = new ArrayList<File>();
+		List<File> listFiles = new ArrayList<>();
 		byte[] buffer = new byte[4096];
 		int bytesRead;
 		Collection<Part> multiparts = request.getParts();
@@ -175,7 +172,7 @@ public class MailHeaderInjectionController {
 		if (listFiles != null && !listFiles.isEmpty()) {
 			for (File aFile : listFiles) {
 				if (!aFile.delete()) {
-					log.debug("Cannot remove file: " + aFile);
+					log.debug("Cannot remove file: {}", aFile);
 				}
 			}
 		}

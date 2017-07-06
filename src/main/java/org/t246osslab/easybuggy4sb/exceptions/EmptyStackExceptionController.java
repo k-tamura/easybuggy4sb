@@ -14,10 +14,10 @@ public class EmptyStackExceptionController {
 
 	@RequestMapping(value = "/ese")
 	public void process() {
-        Stack<String> stack = new Stack<String>();
+        Stack<String> stack = new Stack<>();
         String tmp;
         while (null != (tmp = stack.pop())) {
-            log.debug("Stack.pop(): " + tmp);
+            log.debug("Stack.pop(): {}", tmp);
         }
 	}
 }

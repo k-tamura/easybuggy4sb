@@ -31,22 +31,10 @@ public class CodeInjectionController {
 		mav.addObject("title", msg.getMessage("title.parse.json", null, locale));
 		try {
 			if (!StringUtils.isBlank(jsonString)) {
-				jsonString = jsonString.replaceAll(" ", "");
-				jsonString = jsonString.replaceAll("\r\n", "");
-				jsonString = jsonString.replaceAll("\n", "");
-				try {
-					ScriptEngineManager manager = new ScriptEngineManager();
-					ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
-					scriptEngine.eval("JSON.parse('" + jsonString + "')");
-					mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
-				} catch (ScriptException e) {
-					mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
-							new String[] { e.getMessage() }, null, locale));
-				} catch (Exception e) {
-					log.error("Exception occurs: ", e);
-					mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
-							new String[] { e.getMessage() }, null, locale));
-				}
+				String convertedJsonString = jsonString.replaceAll(" ", "");
+				convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
+				convertedJsonString = convertedJsonString.replaceAll("\n", "");
+				parseJson(convertedJsonString, mav, locale);
 			} else {
 				mav.addObject("msg", msg.getMessage("msg.enter.json.string", null, locale));
 			}
@@ -56,4 +44,20 @@ public class CodeInjectionController {
 		}
 		return mav;
 	}
+
+    private void parseJson(String jsonString, ModelAndView mav, Locale locale) {
+        try {
+        	ScriptEngineManager manager = new ScriptEngineManager();
+        	ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
+        	scriptEngine.eval("JSON.parse('" + jsonString + "')");
+        	mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
+        } catch (ScriptException e) {
+        	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
+        			new String[] { e.getMessage() }, null, locale));
+        } catch (Exception e) {
+        	log.error("Exception occurs: ", e);
+        	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
+        			new String[] { e.getMessage() }, null, locale));
+        }
+    }
 }

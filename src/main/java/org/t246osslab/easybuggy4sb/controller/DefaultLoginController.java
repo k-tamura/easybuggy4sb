@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,14 +40,14 @@ public class DefaultLoginController {
 	@Value("${account.lock.count}")
 	long accountLockCount;
 
+    @Autowired
+    protected MessageSource msg;
+
     /* User's login history using in-memory account locking */
-    protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<String, User>();
+    protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
     
     private static final Logger log = LoggerFactory.getLogger(DefaultLoginController.class);
-    
-    @Autowired
-    MessageSource msg;
-    
+   
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         mav.setViewName("login");
@@ -71,7 +70,7 @@ public class DefaultLoginController {
     }
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException, ServletException {
+    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
 
         String userid = StringUtils.trim(req.getParameter("userid"));
         String password = StringUtils.trim(req.getParameter("password"));
@@ -126,11 +125,8 @@ public class DefaultLoginController {
 
     protected boolean isAccountLocked(String userid) {
         User admin = userLoginHistory.get(userid);
-		if (admin != null && admin.getLoginFailedCount() == accountLockCount
-				&& (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime)) {
-			return true;
-        }
-        return false;
+        return admin != null && admin.getLoginFailedCount() == accountLockCount
+				&& (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime);
     }
 
     protected boolean authUser(String username, String password) {

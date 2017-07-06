@@ -43,13 +43,11 @@ public class SlowRegularExpressionController {
 	}
 
 	private boolean isMatched(String word) {
-		Date startDate = new Date();
-		log.info("Start Date: {}", startDate.toString());
+		log.info("Start Date: {}", new Date());
 		Pattern compile = Pattern.compile("^([a-z0-9]+[-]{0,1}){1,100}$");
 		Matcher matcher = compile.matcher(word);
 		boolean matches = matcher.matches();
-		Date endDate = new Date();
-		log.info("End Date: {}", endDate.toString());
+		log.info("End Date: {}", new Date());
 		return matches;
 	}
 }
