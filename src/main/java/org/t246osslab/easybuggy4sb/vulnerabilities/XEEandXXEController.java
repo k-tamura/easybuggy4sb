@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.annotation.MultipartConfig;
@@ -109,21 +108,7 @@ public class XEEandXXEController {
 			mav.addObject("errmsg", msg.getMessage("msg.not.xml.file", null, locale));
 			return doGet(mav, req, res, locale);
 		}
-		// TODO Remove this try block that is a workaround of issue #9
-		// (FileNotFoundException on
-		// Jetty * Windows)
-		boolean isRegistered = false;
-		try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-				InputStream in = filePart.getInputStream()) {
-			int read = 0;
-			final byte[] bytes = new byte[1024];
-			while ((read = in.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-		} catch (FileNotFoundException e) {
-			// Ignore because file already exists
-			isRegistered = true;
-		}
+		boolean isRegistered = writeFile(savePath, filePart, fileName);
 
 		CustomHandler customHandler = new CustomHandler();
 		customHandler.setLocale(locale);
@@ -172,6 +157,22 @@ public class XEEandXXEController {
 		}
 		return mav;
 	}
+
+    private boolean writeFile(String savePath, Part filePart, String fileName) throws IOException {
+		boolean isRegistered = false;
+		try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
+				InputStream in = filePart.getInputStream()) {
+			int read = 0;
+			final byte[] bytes = new byte[1024];
+			while ((read = in.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+		} catch (FileNotFoundException e) {
+			// Ignore because file already exists
+			isRegistered = true;
+		}
+        return isRegistered;
+    }
 
 	// Get file name from content-disposition filename
 	private String getFileName(final Part part) {
@@ -232,11 +233,10 @@ public class XEEandXXEController {
 		public String upsertUser(Attributes attributes, Locale locale) {
 			String resultMessage = null;
 			try {
-				List<User> users = jdbcTemplate.query("select * from users where id = ?", (rs, i) -> {
-					return new User();
-				}, attributes.getValue("uid"));
+			    int count = jdbcTemplate.queryForObject(
+			            "select count(*) from users where id = ?", Integer.class, attributes.getValue("uid"));
 
-				if (!users.isEmpty()) {
+				if (count == 1) {
 					if (isInsert) {
 						return msg.getMessage("msg.user.already.exist", null, locale);
 					}

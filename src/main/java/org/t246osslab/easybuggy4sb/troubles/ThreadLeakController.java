@@ -15,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ThreadLeakController {
 
-    private static final Logger log = LoggerFactory.getLogger(ThreadLeakController.class);
-
     @Autowired
     MessageSource msg;
 
@@ -24,17 +22,10 @@ public class ThreadLeakController {
     public ModelAndView process(ModelAndView mav, Locale locale) {
         mav.setViewName("threadleak");
         mav.addObject("title", msg.getMessage("title.current.thread.count", null, locale));
-        try {
-            ThreadCountLoggingThread sub = new ThreadCountLoggingThread();
-            sub.start();
-            ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-            mav.addObject("count", bean.getAllThreadIds().length);
-
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-        }
+        ThreadCountLoggingThread sub = new ThreadCountLoggingThread();
+        sub.start();
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        mav.addObject("count", bean.getAllThreadIds().length);
         return mav;
     }
 }

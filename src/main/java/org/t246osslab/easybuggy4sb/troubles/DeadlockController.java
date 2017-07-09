@@ -32,26 +32,20 @@ public class DeadlockController {
         mav.setViewName("deadlock");
         mav.addObject("title", msg.getMessage("title.detect.deadlock", null, locale));
 
-        try {
-            if (ses.getAttribute("dlpinit") == null) {
-                ses.setAttribute("dlpinit", "true");
-            } else {
-                todoRemove();
-            }
+        if (ses.getAttribute("dlpinit") == null) {
+            ses.setAttribute("dlpinit", "true");
+        } else {
+            todoRemove();
+        }
 
-            ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-            long[] threadIds = bean.findDeadlockedThreads();
-            if (threadIds != null) {
-                mav.addObject("msg", msg.getMessage("msg.dead.lock.detected", null, locale));
-                ThreadInfo[] infos = bean.getThreadInfo(threadIds);
-                mav.addObject("threadsInfo", infos);
-            } else {
-                mav.addObject("msg", msg.getMessage("msg.dead.lock.not.occur", null, locale));
-            }
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale));
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        long[] threadIds = bean.findDeadlockedThreads();
+        if (threadIds != null) {
+            mav.addObject("msg", msg.getMessage("msg.dead.lock.detected", null, locale));
+            ThreadInfo[] infos = bean.getThreadInfo(threadIds);
+            mav.addObject("threadsInfo", infos);
+        } else {
+            mav.addObject("msg", msg.getMessage("msg.dead.lock.not.occur", null, locale));
         }
         return mav;
     }

@@ -74,20 +74,7 @@ public class UnrestrictedExtensionUploadController {
         if (StringUtils.isBlank(fileName)) {
             return doGet(mav, req, res, locale);
         }
-        // TODO Remove this try block that is a workaround of issue #9 (FileNotFoundException on
-        // Jetty * Windows)
-        boolean isConverted = false;
-        try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-                InputStream in = filePart.getInputStream();) {
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = in.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-        } catch (FileNotFoundException e) {
-            // Ignore because file already exists
-            isConverted = true;
-        }
+        boolean isConverted = writeFile(savePath, filePart, fileName);
 
         if (!isConverted) {
             isConverted = convert2GrayScale(new File(savePath + File.separator + fileName).getAbsolutePath());
@@ -100,6 +87,22 @@ public class UnrestrictedExtensionUploadController {
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));
         }
         return mav;
+    }
+
+    private boolean writeFile(String savePath, Part filePart, String fileName) throws IOException {
+        boolean isConverted = false;
+        try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
+                InputStream in = filePart.getInputStream();) {
+            int read = 0;
+            final byte[] bytes = new byte[1024];
+            while ((read = in.read(bytes)) != -1) {
+                out.write(bytes, 0, read);
+            }
+        } catch (FileNotFoundException e) {
+            // Ignore because file already exists
+            isConverted = true;
+        }
+        return isConverted;
     }
 
     // Get file name from content-disposition filename

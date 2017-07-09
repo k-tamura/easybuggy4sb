@@ -31,46 +31,39 @@ public class DeadlockController2 {
     @Autowired
     MessageSource msg;
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	
-	@Autowired
-	private PlatformTransactionManager txMgr;
-	
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private PlatformTransactionManager txMgr;
+
     @RequestMapping(value = "/deadlock2")
     public ModelAndView process(HttpServletRequest req, HttpSession ses, ModelAndView mav, Locale locale) {
         mav.setViewName("deadlock2");
         mav.addObject("title", msg.getMessage("title.xxe", null, locale));
 
         List<User> users = null;
-        try {
-            String order = getOrder(req);
-            if ("POST".equals(req.getMethod())) {
-                users = new ArrayList<>();
-                for (int j = 0;; j++) {
-                    String uid = req.getParameter("uid_" + (j + 1));
-                    if (uid == null) {
-                        break;
-                    }
-                    User user = new User();
-                    user.setUserId(uid);
-                    user.setName(req.getParameter(uid + "_name"));
-                    user.setPhone(req.getParameter(uid + "_phone"));
-                    user.setMail(req.getParameter(uid + "_mail"));
-                    users.add(user);
+        String order = getOrder(req);
+        if ("POST".equals(req.getMethod())) {
+            users = new ArrayList<>();
+            for (int j = 0;; j++) {
+                String uid = req.getParameter("uid_" + (j + 1));
+                if (uid == null) {
+                    break;
                 }
-                updateUsers(users, locale, mav);
-            } else {
-                users = selectUsers(order);
+                User user = new User();
+                user.setUserId(uid);
+                user.setName(req.getParameter(uid + "_name"));
+                user.setPhone(req.getParameter(uid + "_phone"));
+                user.setMail(req.getParameter(uid + "_mail"));
+                users.add(user);
             }
-            mav.addObject("userList", users);
-            mav.addObject("order", order);
-
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            updateUsers(users, locale, mav);
+        } else {
+            users = selectUsers(order, locale, mav);
         }
+        mav.addObject("userList", users);
+        mav.addObject("order", order);
         return mav;
     }
 
@@ -84,46 +77,58 @@ public class DeadlockController2 {
         return order;
     }
 
-    private List<User> selectUsers(String order) {
-
-		return jdbcTemplate.query("select * from users where ispublic = 'true' order by id "
-				+ ("desc".equals(order) ? "desc" : "asc"), (rs, i) -> {
-	                User user = new User();
-	                user.setUserId(rs.getString("id"));
-	                user.setName(rs.getString("name"));
-	                user.setPhone(rs.getString("phone"));
-	                user.setMail(rs.getString("mail"));
-					return user;
-				});
+    private List<User> selectUsers(String order, Locale locale, ModelAndView mav) {
+        List<User> users = null;
+        try {
+            users = jdbcTemplate.query("select * from users where ispublic = 'true' order by id "
+                    + ("desc".equals(order) ? "desc" : "asc"), (rs, i) -> {
+                        User user = new User();
+                        user.setUserId(rs.getString("id"));
+                        user.setName(rs.getString("name"));
+                        user.setPhone(rs.getString("phone"));
+                        user.setMail(rs.getString("mail"));
+                        return user;
+                    });
+        } catch (DataAccessException e) {
+            mav.addObject("errmsg",
+                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            log.error("DataAccessException occurs: ", e);
+        } catch (Exception e) {
+            mav.addObject("errmsg",
+                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            log.error("Exception occurs: ", e);
+        }
+        return users;
     }
 
     @Transactional
     private void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
-		DefaultTransactionDefinition dtDef = new DefaultTransactionDefinition();
+        DefaultTransactionDefinition dtDef = new DefaultTransactionDefinition();
 
-		TransactionStatus trnStatus = txMgr.getTransaction(dtDef);
+        TransactionStatus trnStatus = txMgr.getTransaction(dtDef);
         int executeUpdate = 0;
         try {
             for (User user : users) {
-            	executeUpdate = executeUpdate + jdbcTemplate.update("Update users set name = ?, phone = ?, mail = ? where id = ?", user.getName(),
-						user.getPhone(), user.getMail(), user.getUserId());
-                log.info(user.getUserId() +" is updated.");
+                executeUpdate = executeUpdate
+                        + jdbcTemplate.update("Update users set name = ?, phone = ?, mail = ? where id = ?",
+                                user.getName(), user.getPhone(), user.getMail(), user.getUserId());
+                log.info(user.getUserId() + " is updated.");
                 Thread.sleep(500);
             }
             txMgr.commit(trnStatus);
             mav.addObject("msg", msg.getMessage("msg.update.records", new Object[] { executeUpdate }, null, locale));
-		} catch (DeadlockLoserDataAccessException e) {
-			mav.addObject("errmsg", msg.getMessage("msg.deadlock.occurs", null, locale));
-			log.error("DeadlockLoserDataAccessException occurs: ", e);
-		} catch (DataAccessException e) {
-			mav.addObject("errmsg",
-					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-			log.error("DataAccessException occurs: ", e);
-		} catch (Exception e) {
-			txMgr.rollback(trnStatus);
-			mav.addObject("errmsg",
-					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-			log.error("Exception occurs: ", e);
-		}
+        } catch (DeadlockLoserDataAccessException e) {
+            mav.addObject("errmsg", msg.getMessage("msg.deadlock.occurs", null, locale));
+            log.error("DeadlockLoserDataAccessException occurs: ", e);
+        } catch (DataAccessException e) {
+            mav.addObject("errmsg",
+                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            log.error("DataAccessException occurs: ", e);
+        } catch (Exception e) {
+            txMgr.rollback(trnStatus);
+            mav.addObject("errmsg",
+                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            log.error("Exception occurs: ", e);
+        }
     }
 }

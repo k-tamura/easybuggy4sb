@@ -35,24 +35,18 @@ public class DBConnectionLeakController {
     public ModelAndView process(ModelAndView mav, Locale locale) {
         mav.setViewName("dbconnectionleak");
         mav.addObject("title", msg.getMessage("title.user.list", null, locale));
-        try {
-            if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
-                mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));
-                return mav;
-            } else {
-                mav.addObject("note", msg.getMessage("msg.note.db.connection.leak.occur", null, locale));
-            }
+        if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
+            mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));
+            return mav;
+        } else {
+            mav.addObject("note", msg.getMessage("msg.note.db.connection.leak.occur", null, locale));
+        }
 
-            List<User> users = selectUsers(mav, locale);
-            if (users.isEmpty()) {
-                mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
-            } else {
-                mav.addObject("userList", users);
-            }
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+        List<User> users = selectUsers(mav, locale);
+        if (users.isEmpty()) {
+            mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
+        } else {
+            mav.addObject("userList", users);
         }
         return mav;
     }

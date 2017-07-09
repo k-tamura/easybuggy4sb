@@ -17,6 +17,7 @@ public class Easybuggy4sbApplication {
 	public ServletRegistrationBean servletRegistrationBean() {
 		final DefaultServlet servlet = new DefaultServlet();
 		final ServletRegistrationBean bean = new ServletRegistrationBean(servlet, "/uid/*");
+		bean.setEnabled(true);
 		bean.addInitParameter("listings", "true");
 		bean.setLoadOnStartup(1);
 		return bean;

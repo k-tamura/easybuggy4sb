@@ -29,19 +29,14 @@ public class CodeInjectionController {
 			ModelAndView mav, Locale locale) {
 		mav.setViewName("codeinjection");
 		mav.addObject("title", msg.getMessage("title.parse.json", null, locale));
-		try {
-			if (!StringUtils.isBlank(jsonString)) {
-				String convertedJsonString = jsonString.replaceAll(" ", "");
-				convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
-				convertedJsonString = convertedJsonString.replaceAll("\n", "");
-				parseJson(convertedJsonString, mav, locale);
-			} else {
-				mav.addObject("msg", msg.getMessage("msg.enter.json.string", null, locale));
-			}
-
-		} catch (Exception e) {
-			log.error("Exception occurs: ", e);
-		}
+        if (!StringUtils.isBlank(jsonString)) {
+            String convertedJsonString = jsonString.replaceAll(" ", "");
+            convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
+            convertedJsonString = convertedJsonString.replaceAll("\n", "");
+            parseJson(convertedJsonString, mav, locale);
+        } else {
+            mav.addObject("msg", msg.getMessage("msg.enter.json.string", null, locale));
+        }
 		return mav;
 	}
 

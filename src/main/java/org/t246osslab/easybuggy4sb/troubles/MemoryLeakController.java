@@ -8,8 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -21,8 +19,6 @@ public class MemoryLeakController {
 
     private HashMap<String, String> cache = new HashMap<>();
 
-	private static final Logger log = LoggerFactory.getLogger(MemoryLeakController.class);
-
 	@Autowired
 	MessageSource msg;
 
@@ -31,24 +27,16 @@ public class MemoryLeakController {
 		mav.setViewName("memoryleak");
 		mav.addObject("title", msg.getMessage("title.heap.memory.usage", null, locale));
 		mav.addObject("note", msg.getMessage("msg.java.heap.space.leak.occur", null, locale));
-		try {
-			toDoRemove();
+        toDoRemove();
 
-			List<MemoryPoolMXBean> heapPoolMXBeans = new ArrayList<>();
-			List<MemoryPoolMXBean> memoryPoolMXBeans = ManagementFactory.getMemoryPoolMXBeans();
-			for (MemoryPoolMXBean memoryPoolMXBean : memoryPoolMXBeans) {
-				if (MemoryType.HEAP.equals(memoryPoolMXBean.getType())) {
-					heapPoolMXBeans.add(memoryPoolMXBean);
-				}
-			}
-			mav.addObject("memoryPoolMXBeans", heapPoolMXBeans);
-
-		} catch (Exception e) {
-			log.error("Exception occurs: ", e);
-			mav.addObject("errmsg",
-					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
-
-		}
+        List<MemoryPoolMXBean> heapPoolMXBeans = new ArrayList<>();
+        List<MemoryPoolMXBean> memoryPoolMXBeans = ManagementFactory.getMemoryPoolMXBeans();
+        for (MemoryPoolMXBean memoryPoolMXBean : memoryPoolMXBeans) {
+            if (MemoryType.HEAP.equals(memoryPoolMXBean.getType())) {
+                heapPoolMXBeans.add(memoryPoolMXBean);
+            }
+        }
+        mav.addObject("memoryPoolMXBeans", heapPoolMXBeans);
 		return mav;
 	}
 

@@ -26,44 +26,38 @@ public class OGNLExpressionInjectionController {
     MessageSource msg;
 
     @RequestMapping(value = "/ognleijc")
-	public ModelAndView process(@RequestParam(value = "expression", required = false) String expression,
-			ModelAndView mav, Locale locale) {
+    public ModelAndView process(@RequestParam(value = "expression", required = false) String expression,
+            ModelAndView mav, Locale locale) {
         mav.setViewName("commandinjection");
         mav.addObject("title", msg.getMessage("title.ognl.expression.injection.page", null, locale));
 
         Object value = null;
         String errMessage = "";
-        boolean isValid = true;
         OgnlContext ctx = new OgnlContext();
-        if (StringUtils.isBlank(expression)) {
-            isValid = false;
-        } else {
+        if (!StringUtils.isBlank(expression)) {
             try {
                 Object expr = Ognl.parseExpression(expression.replaceAll("Math\\.", "@Math@"));
                 value = Ognl.getValue(expr, ctx);
             } catch (OgnlException e) {
-                isValid = false;
                 if (e.getReason() != null) {
                     errMessage = e.getReason().getMessage();
                 }
                 log.debug("OgnlException occurs: ", e);
             } catch (Exception e) {
-                isValid = false;
                 log.debug("Exception occurs: ", e);
             } catch (Error e) {
-                isValid = false;
                 log.debug("Error occurs: ", e);
             }
         }
         if (expression != null) {
             mav.addObject("expression", expression);
+            if (value == null) {
+                mav.addObject("errmsg",
+                        msg.getMessage("msg.invalid.expression", new String[] { errMessage }, null, locale));
+            }
         }
-        if (isValid && value != null && NumberUtils.isNumber(value.toString())) {
+        if (value != null && NumberUtils.isNumber(value.toString())) {
             mav.addObject("value", value);
-        }
-        if ((!isValid || value == null) && expression != null) {
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.invalid.expression", new String[] { errMessage }, null, locale));
         }
         return mav;
     }
