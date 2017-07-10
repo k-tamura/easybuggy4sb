@@ -7,7 +7,7 @@ EasyBuggy built on Spring Boot
 
 This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.com/k-tamura/easybuggy) is a broken web application in order to understand behavior of bugs and vulnerabilities, for example, [memory leak, deadlock, JVM crash, SQL injection and so on](https://github.com/k-tamura/easybuggy/wiki).
 
-![logo](https://github.com/k-tamura/easybuggy/blob/master/src/main/webapp/images/easybuggy.png)
+![logo](https://github.com/k-tamura/easybuggy4sb/blob/master/src/main/webapp/images/easybuggy.png)
 
 Quick Start
 -
