@@ -5,8 +5,7 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<th:block th:if="${mail == null}" >
-	<form action="/admins/clickjacking" method="post">
+	<form th:if="${mail == null}" action="/admins/clickjacking" method="post">
 		<p th:text="#{msg.enter.mail}" /><br />
 		<label th:text="#{label.mail}"></label><span>: </span>
 			<input type="text" name="mail" size="30" maxlength="30" /><br />
@@ -16,7 +15,6 @@
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.clickjacking}"></span>
 		</div>
 	</form>
-	</th:block>
 	<th:block th:if="${mail != null}" >
 		<p th:text="#{msg.mail.changed} + ${mail}" /><br /><br /><a href="/admins/main" th:text="#{label.goto.admin.page}"></a>
 	</th:block>

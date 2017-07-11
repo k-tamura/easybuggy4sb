@@ -5,8 +5,7 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<th:block th:if="${upladFilePath == null}" >
-	<form action="ursupload" method="post" enctype="multipart/form-data">
+	<form th:if="${upladFilePath == null}" action="ursupload" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.reverse.color}" />
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
@@ -19,7 +18,6 @@
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.unrestricted.size.upload}"></span>
 		</div>
 	</form>
-	</th:block>
 	<th:block th:if="${upladFilePath != null}">
 		<img th:src="${upladFilePath}" />
 		<p th:text="${msg}" />

@@ -20,36 +20,24 @@
 				<td th:text="${memoryPoolMXBean.usage.init}" />
 				<td th:text="${memoryPoolMXBean.usage.used}" />
 				<td th:text="${memoryPoolMXBean.usage.committed}" />
-				<th:block th:if="${memoryPoolMXBean.usage.max != -1}">
-					<td th:text="${memoryPoolMXBean.usage.max}" />
-				</th:block>
-				<th:block th:if="${memoryPoolMXBean.usage.max == -1}">
-					<td />
-				</th:block>
+				<td th:if="${memoryPoolMXBean.usage.max != -1}" th:text="${memoryPoolMXBean.usage.max}" />
+				<td th:if="${memoryPoolMXBean.usage.max == -1}" />
 			</tr>
 			<tr th:if="${memoryPoolMXBean.peakUsage}" >
 				<td th:text="#{label.memory.peak.usage}" />
 				<td th:text="${memoryPoolMXBean.peakUsage.init}" />
 				<td th:text="${memoryPoolMXBean.peakUsage.used}" />
 				<td th:text="${memoryPoolMXBean.peakUsage.committed}" />
-				<th:block th:if="${memoryPoolMXBean.peakUsage.max != -1}">
-					<td th:text="${memoryPoolMXBean.peakUsage.max}" />
-				</th:block>
-				<th:block th:if="${memoryPoolMXBean.peakUsage.max == -1}">
-					<td />
-				</th:block>
+				<td th:if="${memoryPoolMXBean.peakUsage.max != -1}" th:text="${memoryPoolMXBean.peakUsage.max}" />
+				<td th:if="${memoryPoolMXBean.peakUsage.max == -1}" />
 			</tr>
 			<tr th:if="${memoryPoolMXBean.collectionUsage}" >
 				<td th:text="#{label.memory.collection.usage}" />
 				<td th:text="${memoryPoolMXBean.collectionUsage.init}" />
 				<td th:text="${memoryPoolMXBean.collectionUsage.used}" />
 				<td th:text="${memoryPoolMXBean.collectionUsage.committed}" />
-				<th:block th:if="${memoryPoolMXBean.collectionUsage.max != -1}">
-					<td th:text="${memoryPoolMXBean.collectionUsage.max}" />
-				</th:block>
-				<th:block th:if="${memoryPoolMXBean.collectionUsage.max == -1}">
-					<td />
-				</th:block>
+				<td th:if="${memoryPoolMXBean.collectionUsage.max != -1}" th:text="${memoryPoolMXBean.collectionUsage.max}" />
+				<td th:if="${memoryPoolMXBean.collectionUsage.max == -1}" />
 			</tr>
 		</table>
 	</th:block>

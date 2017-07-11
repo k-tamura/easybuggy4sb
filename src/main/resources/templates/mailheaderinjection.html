@@ -39,10 +39,8 @@
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.mail.header.injection}"></span>
 		</div>
 	</th:block>
-	<th:block th:if="${isReady == null}">
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.smtp.server.not.setup}"></span>
-		</div>
-	</th:block>
+	<div th:if="${isReady == null}" class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.smtp.server.not.setup}"></span>
+	</div>
 </body>
 </html>

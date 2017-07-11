@@ -5,8 +5,7 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<th:block th:if="${resultList == null}" >
-	<form action="xee" method="post" enctype="multipart/form-data">
+	<form th:if="${resultList == null}" action="xee" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.add.users.by.xml}" />
 		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
 		<input type="file" name="file" size="60" /><br />
@@ -18,7 +17,6 @@
 		</div>
 		<pre id="code" class="prettyprint lang-xml" th:text="${xee_xml}"></pre>
 	</form>
-	</th:block>
 	<th:block th:if="${resultList != null}">
 		<p th:text="${msg}" />
 		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
@@ -41,8 +39,8 @@
 					<td th:text="${result.mail}" ></td>
 				</th:block>
 				<th:block th:if="${result instanceof T(java.lang.String)}">
-						<td th:text="${#strings.arraySplit(result, ' :: ')[0]}" colspan="1"></td>
-						<td th:text="${#strings.arraySplit(result, ' :: ')[1]}" colspan="4"></td>
+					<td th:text="${#strings.arraySplit(result, ' :: ')[0]}" colspan="1"></td>
+					<td th:text="${#strings.arraySplit(result, ' :: ')[1]}" colspan="4"></td>
 				</th:block>
 			</tr>
 		</table>

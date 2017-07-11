@@ -5,24 +5,22 @@
 <div th:replace="head"></div>
 <body STYLE="margin-left: 20px; margin-right: 20px;">
 	<div th:include="header"></div>
-	<th:block th:if="${resultList == null}">
-		<form action="xxe" method="post" enctype="multipart/form-data">
-			<p th:text="#{msg.update.users.by.xml}" />
+	<form th:if="${resultList == null}" action="xxe" method="post" enctype="multipart/form-data">
+		<p th:text="#{msg.update.users.by.xml}" />
 		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
-			<input type="file" name="file" size="60" /><br />
-			<p th:text="#{msg.select.upload.file}" />
-			<input type="submit" th:value="#{label.upload}" />
-			<p th:utext="${msg}" /><br />
-			<div class="alert alert-info" role="alert">
-				<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step1}"></span>
-			</div>
-			<pre id="code" class="prettyprint lang-xml" th:text="${xxe_dtd}"></pre><br />
-			<div class="alert alert-info" role="alert">
-				<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step2}"></span>
-			</div>
-			<pre id="code" class="prettyprint lang-xml" th:text="${xxe_xml}"></pre>
-		</form>
-	</th:block>
+		<input type="file" name="file" size="60" /><br />
+		<p th:text="#{msg.select.upload.file}" />
+		<input type="submit" th:value="#{label.upload}" />
+		<p th:utext="${msg}" /><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step1}"></span>
+		</div>
+		<pre id="code" class="prettyprint lang-xml" th:text="${xxe_dtd}"></pre><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step2}"></span>
+		</div>
+		<pre id="code" class="prettyprint lang-xml" th:text="${xxe_xml}"></pre>
+	</form>
 	<th:block th:if="${resultList != null}">
 		<p th:text="${msg}" />
 		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">

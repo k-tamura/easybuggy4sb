@@ -2,6 +2,8 @@ package org.t246osslab.easybuggy4sb.troubles;
 
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
 import org.owasp.esapi.ESAPI;
@@ -20,7 +22,7 @@ public class MojibakeController {
 
     @RequestMapping(value = "/mojibake")
     public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
-            Locale locale) {
+    		HttpServletRequest req, Locale locale) {
         mav.setViewName("mojibake");
         mav.addObject("title", msg.getMessage("title.mojibake.page", null, locale));
         if (!StringUtils.isBlank(string)) {
