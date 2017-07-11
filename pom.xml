@@ -120,14 +120,11 @@
 				<configuration>
 					<jvmArguments>
 						-Xmx256m
-						<!-- MaxPermSize: For Java 7 or older, MaxMetaspaceSize: For 8 or later -->
-						<!-- -XX:MaxPermSize=32m -->
 						-XX:MaxMetaspaceSize=64m
 						-XX:MaxDirectMemorySize=90m
 						-XX:+UseSerialGC
 						-Xloggc:logs/gc.log
-						<!-- MaxPermSize: For Java 8 or later, add pid and timestamp prefix -->
-						<!-- -Xloggc:logs/gc_%p_%t.log -->
+						-Xloggc:logs/gc_%p_%t.log
 						-XX:+PrintHeapAtGC
 						-XX:+PrintGCDetails
 						-XX:+PrintGCDateStamps
