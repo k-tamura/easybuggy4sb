@@ -12,23 +12,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.directory.server.core.filtering.EntryFilteringCursor;
-import org.apache.directory.shared.ldap.filter.ExprNode;
-import org.apache.directory.shared.ldap.filter.FilterParser;
-import org.apache.directory.shared.ldap.filter.SearchScope;
-import org.apache.directory.shared.ldap.message.AliasDerefMode;
-import org.apache.directory.shared.ldap.name.LdapDN;
-import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.ldap.AuthenticationException;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.query.LdapQuery;
+import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.core.dao.EmbeddedADS;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
@@ -42,7 +39,10 @@ public class DefaultLoginController {
 
     @Autowired
     protected MessageSource msg;
-
+	
+    @Autowired
+	LdapTemplate ldapTemplate;
+	
     /* User's login history using in-memory account locking */
     protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
     
@@ -129,29 +129,19 @@ public class DefaultLoginController {
 				&& (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime);
     }
 
-    protected boolean authUser(String username, String password) {
-        
-        ExprNode filter = null;
-        EntryFilteringCursor cursor = null;
+    protected boolean authUser(String userId, String password) {
         try {
-            filter = FilterParser.parse("(&(uid=" + ESAPI.encoder().encodeForLDAP(username.trim())
-                    + ")(userPassword=" + ESAPI.encoder().encodeForLDAP(password.trim()) + "))");
-            cursor = EmbeddedADS.getAdminSession().search(new LdapDN("ou=people,dc=t246osslab,dc=org"),
-                    SearchScope.SUBTREE, filter, AliasDerefMode.NEVER_DEREF_ALIASES, null);
-            if (cursor.available()) {
-                return true;
-            }
-        } catch (Exception e) {
-            log.error("Exception occurs: ", e);
-        } finally {
-            if (cursor != null) {
-                try {
-                    cursor.close();
-                } catch (Exception e) {
-                    log.error("Exception occurs: ", e);
-                }
-            }
-        }
-        return false;
-    }
+    		LdapQuery query = LdapQueryBuilder.query().where("uid").is(userId);
+    		ldapTemplate.authenticate(query, password);
+    		
+		} catch (EmptyResultDataAccessException e) {
+            return false;
+		} catch (AuthenticationException e) {
+            return false;
+		} catch (Exception e) {
+			log.error("Exception occurs: ", e);
+            return false;
+		}
+        return true;
+	}
 }

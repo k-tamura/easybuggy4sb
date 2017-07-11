@@ -3,11 +3,22 @@ package org.t246osslab.easybuggy4sb.core.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.naming.Name;
+
+import org.springframework.ldap.odm.annotations.Attribute;
+import org.springframework.ldap.odm.annotations.Entry;
+import org.springframework.ldap.odm.annotations.Id;
+
+@Entry(objectClasses = { "person", "inetOrgPerson" })
 public class User implements Serializable{
     
     private static final long serialVersionUID = 1L;
+    @Id
+    private Name dn = null;
+    @Attribute(name = "uid")
     private String userId = null;
     private String name = null;
+    @Attribute(name = "userPassword")
     private String password = null;
     private String secret = null;
     private String phone = null;
@@ -17,11 +28,19 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", name=" + name + ", password=" + password + ", secret=" + secret
-                + ", phone=" + phone + ", mail=" + mail + ", loginFailedCount=" + loginFailedCount
-                + ", lastLoginFailedTime=" + lastLoginFailedTime + "]";
+		return "User dn=" + dn + " [userId=" + userId + ", name=" + name + ", password=" + password + ", secret="
+				+ secret + ", phone=" + phone + ", mail=" + mail + ", loginFailedCount=" + loginFailedCount
+				+ ", lastLoginFailedTime=" + lastLoginFailedTime + "]";
     }
 
+	public Name getDN() {
+		return dn;
+	}
+
+	public void setDN(Name distinguisedName) {
+		this.dn = distinguisedName;
+	}
+    	 
     public String getUserId() {
         return userId;
     }

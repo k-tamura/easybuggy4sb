@@ -3,26 +3,24 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import java.io.IOException;
 import java.util.Locale;
 
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.directory.shared.ldap.entry.ModificationOperation;
-import org.apache.directory.shared.ldap.entry.client.ClientModification;
-import org.apache.directory.shared.ldap.entry.client.DefaultClientAttribute;
-import org.apache.directory.shared.ldap.message.ModifyRequestImpl;
-import org.apache.directory.shared.ldap.name.LdapDN;
 import org.owasp.esapi.ESAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.core.dao.EmbeddedADS;
 
 @Controller
 public class CSRFController {
@@ -32,6 +30,9 @@ public class CSRFController {
     @Autowired
     MessageSource msg;
 
+	@Autowired
+	LdapTemplate ldapTemplate;
+	
     @RequestMapping(value = "/admins/csrf", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, Locale locale) {
         mav.setViewName("csrf");
@@ -53,17 +54,11 @@ public class CSRFController {
         String password = StringUtils.trim(req.getParameter("password"));
         if (!StringUtils.isBlank(userid) && !StringUtils.isBlank(password) && password.length() >= 8) {
             try {
-                DefaultClientAttribute entryAttribute = new DefaultClientAttribute("userPassword",
-                        ESAPI.encoder().encodeForLDAP(password.trim()));
-                ClientModification clientModification = new ClientModification();
-                clientModification.setAttribute(entryAttribute);
-                clientModification.setOperation(ModificationOperation.REPLACE_ATTRIBUTE);
-                ModifyRequestImpl modifyRequest = new ModifyRequestImpl(1);
-                modifyRequest.setName(new LdapDN(
-                        "uid=" + ESAPI.encoder().encodeForLDAP(userid.trim()) + ",ou=people,dc=t246osslab,dc=org"));
-                modifyRequest.addModification(clientModification);
-                EmbeddedADS.getAdminSession().modify(modifyRequest);
-
+				ModificationItem item = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+						new BasicAttribute("userPassword", password));
+				ldapTemplate.modifyAttributes(
+						"uid=" + ESAPI.encoder().encodeForLDAP(userid.trim()) + ",ou=people,dc=t246osslab,dc=org",
+						new ModificationItem[] { item });
             } catch (Exception e) {
                 log.error("Exception occurs: ", e);
                 mav.addObject("errmsg", msg.getMessage("msg.passwd.change.failed", null, locale));
