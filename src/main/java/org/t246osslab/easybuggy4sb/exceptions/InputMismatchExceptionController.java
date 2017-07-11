@@ -10,6 +10,8 @@ public class InputMismatchExceptionController {
 
     @RequestMapping(value = "/ime")
     public void process() {
-        new Scanner("a").nextInt();
+        try (Scanner scanner = new Scanner("a")) {
+            scanner.nextInt();
+        }
     }
 }

@@ -41,7 +41,7 @@ public class DefaultLoginController {
     protected MessageSource msg;
 	
     @Autowired
-	LdapTemplate ldapTemplate;
+	protected LdapTemplate ldapTemplate;
 	
     /* User's login history using in-memory account locking */
     protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
@@ -133,10 +133,7 @@ public class DefaultLoginController {
         try {
     		LdapQuery query = LdapQueryBuilder.query().where("uid").is(userId);
     		ldapTemplate.authenticate(query, password);
-    		
-		} catch (EmptyResultDataAccessException e) {
-            return false;
-		} catch (AuthenticationException e) {
+        } catch (EmptyResultDataAccessException | AuthenticationException e) {
             return false;
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);

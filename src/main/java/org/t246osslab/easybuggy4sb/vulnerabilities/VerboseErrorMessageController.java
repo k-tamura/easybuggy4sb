@@ -10,8 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
@@ -25,9 +23,6 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class VerboseErrorMessageController extends DefaultLoginController {
 
 	private static final Logger log = LoggerFactory.getLogger(VerboseErrorMessageController.class);
-
-	@Autowired
-	LdapTemplate ldapTemplate;
 
 	@Override
 	@RequestMapping(value = "/verbosemsg/login", method = RequestMethod.GET)

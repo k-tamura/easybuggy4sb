@@ -119,7 +119,7 @@ public class UnrestrictedSizeUploadController {
     }
 
     private boolean isImageFile(String fileName) {
-        return Arrays.asList(new String[] { "png", "gif", "jpg", "jpeg", "tif", "tiff", "bmp" }).contains(
+        return Arrays.asList("png", "gif", "jpg", "jpeg", "tif", "tiff", "bmp").contains(
                 FilenameUtils.getExtension(fileName));
     }
     

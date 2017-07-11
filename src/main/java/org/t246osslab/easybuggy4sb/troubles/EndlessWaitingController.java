@@ -55,7 +55,7 @@ public class EndlessWaitingController {
                     mav.addObject("result",
                             printInputStream(process.getInputStream()) + printInputStream(process.getErrorStream()));
                 } catch (InterruptedException e) {
-                    log.error("Exception occurs: ", e);
+                    log.error("InterruptedException occurs: ", e);
                     mav.addObject("errmsg",
                             msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
                 }

@@ -10,9 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
@@ -27,9 +25,6 @@ public class LDAPInjectionController extends DefaultLoginController {
 	
     private static final Logger log = LoggerFactory.getLogger(LDAPInjectionController.class);
 
-	@Autowired
-	LdapTemplate ldapTemplate;
-	  
     @Override
     @RequestMapping(value = "/ldapijc/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {

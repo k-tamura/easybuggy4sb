@@ -52,7 +52,7 @@ public class SQLInjectionController {
 		return mav;
 	}
 
-	private List<User> selectUsers(String name, String password) throws DataAccessException {
+	private List<User> selectUsers(String name, String password) {
 
 		return jdbcTemplate.query("SELECT name, secret FROM users WHERE ispublic = 'true' AND name='" + name
 				+ "' AND password='" + password + "'", (rs, i) -> {
