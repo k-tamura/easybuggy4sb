@@ -30,10 +30,7 @@ public class CodeInjectionController {
 		mav.setViewName("codeinjection");
 		mav.addObject("title", msg.getMessage("title.parse.json", null, locale));
         if (!StringUtils.isBlank(jsonString)) {
-            String convertedJsonString = jsonString.replaceAll(" ", "");
-            convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
-            convertedJsonString = convertedJsonString.replaceAll("\n", "");
-            parseJson(convertedJsonString, mav, locale);
+            parseJson(jsonString, mav, locale);
         } else {
             mav.addObject("msg", msg.getMessage("msg.enter.json.string", null, locale));
         }
@@ -41,10 +38,13 @@ public class CodeInjectionController {
 	}
 
     private void parseJson(String jsonString, ModelAndView mav, Locale locale) {
+        String convertedJsonString = jsonString.replaceAll(" ", "");
+        convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
+        convertedJsonString = convertedJsonString.replaceAll("\n", "");
         try {
         	ScriptEngineManager manager = new ScriptEngineManager();
         	ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
-        	scriptEngine.eval("JSON.parse('" + jsonString + "')");
+        	scriptEngine.eval("JSON.parse('" + convertedJsonString + "')");
         	mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
         } catch (ScriptException e) {
         	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",

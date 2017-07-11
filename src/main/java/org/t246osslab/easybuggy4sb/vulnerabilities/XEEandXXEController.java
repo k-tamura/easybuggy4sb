@@ -134,27 +134,24 @@ public class XEEandXXEController {
 			log.error("Exception occurs: ", e);
 		}
 
-		if (isRegistered && customHandler.isRegistered()) {
-			if ("/xee".equals(req.getServletPath())) {
+		if ("/xee".equals(req.getServletPath())) {
+			if (isRegistered && customHandler.isRegistered()) {
 				mav.addObject("msg", msg.getMessage("msg.batch.registration.complete", null, locale));
 			} else {
-				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
-			}
-		} else {
-			if ("/xee".equals(req.getServletPath())) {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.registration.fail", null, locale));
-			} else {
-				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
 			}
-		}
-		mav.addObject("resultList", customHandler.getResult());
-		if ("/xee".equals(req.getServletPath())) {
 			mav.setViewName("xee");
 			mav.addObject("title", msg.getMessage("title.xee", null, locale));
 		} else {
+			if (isRegistered && customHandler.isRegistered()) {
+				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
+			} else {
+				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
+			}
 			mav.setViewName("xxe");
 			mav.addObject("title", msg.getMessage("title.xxe", null, locale));
 		}
+		mav.addObject("resultList", customHandler.getResult());
 		return mav;
 	}
 

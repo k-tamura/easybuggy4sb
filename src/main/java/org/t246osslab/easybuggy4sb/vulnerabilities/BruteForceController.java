@@ -46,8 +46,7 @@ public class BruteForceController extends DefaultLoginController {
             }
         } else {
             session.setAttribute("authNMsg", "msg.authentication.fail");
-            doGet(mav, req, res, locale);
-            return mav;
+            return doGet(mav, req, res, locale);
         }
         return null;
     }

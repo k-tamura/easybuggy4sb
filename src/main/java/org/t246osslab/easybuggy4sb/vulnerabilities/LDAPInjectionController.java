@@ -45,15 +45,15 @@ public class LDAPInjectionController extends DefaultLoginController {
     }
     
 	@Override
-	protected boolean authUser(String username, String password) {
+	protected boolean authUser(String userId, String password) {
 
-		if (StringUtils.isBlank(username) || username.length() < 3 || StringUtils.isBlank(password)
+		if (StringUtils.isBlank(userId) || userId.length() < 5 || StringUtils.isBlank(password)
 				|| password.length() < 8) {
 			return false;
 		}
 		try {
 			LdapQuery query = LdapQueryBuilder.query()
-					.filter("(&(uid=" + username.trim() + ")(userPassword=" + password.trim() + "))");
+					.filter("(&(uid=" + userId.trim() + ")(userPassword=" + password.trim() + "))");
 			List<User> users = ldapTemplate.find(query, User.class);
 			if (users.isEmpty()) {
 				return false;
