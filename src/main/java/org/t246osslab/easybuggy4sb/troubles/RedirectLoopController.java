@@ -2,8 +2,6 @@ package org.t246osslab.easybuggy4sb.troubles;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,7 @@ public class RedirectLoopController {
     MessageSource msg;
 
     @RequestMapping(value = "/redirectloop")
-    public void process(HttpServletResponse res) throws IOException {
-        res.sendRedirect("/redirectloop");
+    public String process() throws IOException {
+        return "redirect:redirectloop";
     }
 }
