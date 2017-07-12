@@ -13,10 +13,10 @@
 			<th th:text="#{label.mail}"></th>
 		</tr>
 		<tr th:each="user : ${userList}">
-			<td th:text="${user.getUserId()}"></td>
-			<td th:text="${user.getName()}"></td>
-			<td th:text="${user.getPhone()}"></td>
-			<td th:text="${user.getMail()}"></td>
+			<td th:text="${user.userId}"></td>
+			<td th:text="${user.name}"></td>
+			<td th:text="${user.phone}"></td>
+			<td th:text="${user.mail}"></td>
 		</tr>
 	</table>
 	<p th:utext="${errmsg}" /><br />

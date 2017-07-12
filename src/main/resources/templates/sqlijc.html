@@ -16,8 +16,8 @@
 				<th th:text="#{label.secret}"></th>
 			</tr>
 			<tr th:each="user : ${userList}">
-				<td th:text="${user.getName()}"></td>
-				<td th:text="${user.getSecret()}"></td>
+				<td th:text="${user.name}"></td>
+				<td th:text="${user.secret}"></td>
 			</tr>
 		</table>
 		<p th:utext="${errmsg}" /><br />
