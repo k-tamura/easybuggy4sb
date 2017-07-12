@@ -1,10 +1,8 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
-	th:lang="${lang}">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <div th:replace="head"></div>
-<body STYLE="margin-left: 20px; margin-right: 20px;">
-	<div th:include="header"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
 	<form action="iof" method="post">
 		<p th:text="#{msg.question.reach.the.moon}" /><span>: </span>
 		<input type="text" name="times" size="2" maxlength="2" th:value="${times}" />
