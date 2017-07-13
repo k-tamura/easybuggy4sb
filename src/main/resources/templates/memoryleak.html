@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
-	<div th:replace="header" />
+	<div th:replace="header"></div>
 	<th:block th:each="memoryPoolMXBean : ${memoryPoolMXBeans}">
 		<p th:utext="${memoryPoolMXBean.name}" />
 		<table class="table table-striped table-bordered table-hover" style="font-size: small;">

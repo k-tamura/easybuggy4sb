@@ -54,6 +54,10 @@ public class ClickJackingController {
 			return null;
 		}
 		String userid = (String) session.getAttribute("userid");
+		if (userid == null) {
+			res.sendRedirect("/");
+			return null;
+		}
 		String mail = StringUtils.trim(req.getParameter("mail"));
 		if (!StringUtils.isBlank(mail) && isValidEmailAddress(mail)) {
 			try {

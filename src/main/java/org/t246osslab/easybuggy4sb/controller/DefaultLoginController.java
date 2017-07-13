@@ -118,7 +118,7 @@ public class DefaultLoginController {
             admin.setLastLoginFailedTime(new Date());
             
             session.setAttribute("authNMsg", "msg.authentication.fail");
-            return doGet(mav, req, res, locale) ;
+            return doGet(mav, req, res, locale);
         }
         return null;
     }
