@@ -10,8 +10,8 @@ import org.springframework.ldap.odm.annotations.Entry;
 import org.springframework.ldap.odm.annotations.Id;
 
 @Entry(objectClasses = { "person", "inetOrgPerson" })
-public class User implements Serializable{
-    
+public class User implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     private Name dn = null;
@@ -28,19 +28,19 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-		return "User dn=" + dn + " [userId=" + userId + ", name=" + name + ", password=" + password + ", secret="
-				+ secret + ", phone=" + phone + ", mail=" + mail + ", loginFailedCount=" + loginFailedCount
-				+ ", lastLoginFailedTime=" + lastLoginFailedTime + "]";
+        return "User dn=" + dn + " [userId=" + userId + ", name=" + name + ", password=" + password + ", secret="
+                + secret + ", phone=" + phone + ", mail=" + mail + ", loginFailedCount=" + loginFailedCount
+                + ", lastLoginFailedTime=" + lastLoginFailedTime + "]";
     }
 
-	public Name getDN() {
-		return dn;
-	}
+    public Name getDN() {
+        return dn;
+    }
 
-	public void setDN(Name distinguisedName) {
-		this.dn = distinguisedName;
-	}
-    	 
+    public void setDN(Name distinguisedName) {
+        this.dn = distinguisedName;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -72,7 +72,7 @@ public class User implements Serializable{
     public void setSecret(String secret) {
         this.secret = secret;
     }
-    
+
     public String getPhone() {
         return phone;
     }

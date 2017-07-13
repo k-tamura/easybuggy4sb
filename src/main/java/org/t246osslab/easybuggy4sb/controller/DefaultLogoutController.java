@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class DefaultLogoutController {
 
 	@RequestMapping(value = "/logout")
-	public String service(HttpSession ses) {
+	public String process(HttpSession ses) {
 
         ses.invalidate();
         return "redirect:";
