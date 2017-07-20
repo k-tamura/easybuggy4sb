@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "account.lock.time",
+    "type": "java.lang.String",
+    "description": "Account lock interval, in milliseconds. This property is used by EasyBuggy."
+  },
+  {
+    "name": "account.lock.count",
+    "type": "java.lang.String",
+    "description": "When the number of bad password attempts reaches this value, the account is locked."
+  },
+  {
+    "name": "mail.admin.address",
+    "type": "java.lang.String",
+    "description": "A mail address of EasyBuggy administrator."
+  }
+]}
