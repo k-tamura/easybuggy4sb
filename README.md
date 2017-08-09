@@ -25,5 +25,5 @@ Access to
 For more detail
 -
    
-See [the wiki page](https://github.com/k-tamura/easybuggy/).
+See [the wiki page](https://github.com/k-tamura/easybuggy/wiki).
 
