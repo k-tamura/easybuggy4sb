@@ -14,7 +14,6 @@ import java.util.Locale;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +24,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,8 +48,8 @@ public class UnrestrictedSizeUploadController {
     }
 
     @RequestMapping(value = "/ursupload", method = RequestMethod.POST)
-    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
-        
+    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+
         mav.setViewName("unrestrictedsizeupload");
         mav.addObject("title", msg.getMessage("title.unrestricted.size.upload", null, locale));
 
@@ -62,22 +63,14 @@ public class UnrestrictedSizeUploadController {
             fileSaveDir.mkdir();
         }
 
-        // Save the file
-        Part filePart = null;
-        try {
-            filePart = req.getPart("file");
-        } catch (Exception e) {
-            mav.addObject("errmsg", msg.getMessage("msg.max.file.size.exceed", null, locale));
-            return doGet(mav, req, res, locale);
-        }
-        String fileName = getFileName(filePart);
+        String fileName = file.getOriginalFilename();
         if (StringUtils.isBlank(fileName)) {
             return doGet(mav, req, res, locale);
         } else if (!isImageFile(fileName)) {
             mav.addObject("errmsg", msg.getMessage("msg.not.image.file", null, locale));
             return doGet(mav, req, res, locale);
         }
-        boolean isConverted = writeFile(savePath, filePart, fileName);
+        boolean isConverted = writeFile(savePath, file, fileName);
 
         if (!isConverted) {
             isConverted = reverseColor(new File(savePath + File.separator + fileName).getAbsolutePath());
@@ -92,7 +85,7 @@ public class UnrestrictedSizeUploadController {
         return mav;
     }
 
-    private boolean writeFile(String savePath, Part filePart, String fileName) throws IOException {
+    private boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
         boolean isConverted = false;
         try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
                 InputStream in = filePart.getInputStream();) {
@@ -106,16 +99,6 @@ public class UnrestrictedSizeUploadController {
             isConverted = true;
         }
         return isConverted;
-    }
-
-    // Get file name from content-disposition filename
-    private String getFileName(final Part part) {
-        for (String content : part.getHeader("content-disposition").split(";")) {
-            if (content.trim().startsWith("filename")) {
-                return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
-            }
-        }
-        return null;
     }
 
     private boolean isImageFile(String fileName) {
