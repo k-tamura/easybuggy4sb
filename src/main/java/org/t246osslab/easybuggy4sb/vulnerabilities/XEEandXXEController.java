@@ -18,7 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -59,19 +59,19 @@ public class XEEandXXEController {
 			throws IOException {
 
 		Resource resource = new ClassPathResource("/xml/sample_users.xml");
-		mav.addObject("sample_users_xml", FileUtils.readFileToString(resource.getFile()));
+		mav.addObject("sample_users_xml", IOUtils.toString(resource.getInputStream()));
 		if ("/xee".equals(req.getServletPath())) {
 			mav.setViewName("xee");
 			mav.addObject("title", msg.getMessage("title.xee", null, locale));
 			resource = new ClassPathResource("/xml/xee.xml");
-			mav.addObject("xee_xml", FileUtils.readFileToString(resource.getFile()));
+			mav.addObject("xee_xml", IOUtils.toString(resource.getInputStream()));
 		} else {
 			mav.setViewName("xxe");
 			mav.addObject("title", msg.getMessage("title.xxe", null, locale));
 			resource = new ClassPathResource("/xml/xxe.xml");
-			mav.addObject("xxe_xml", FileUtils.readFileToString(resource.getFile()));
+			mav.addObject("xxe_xml", IOUtils.toString(resource.getInputStream()));
 			resource = new ClassPathResource("/xml/xxe.dtd");
-			mav.addObject("xxe_dtd", FileUtils.readFileToString(resource.getFile()));
+			mav.addObject("xxe_dtd", IOUtils.toString(resource.getInputStream()));
 		}
 		if (req.getAttribute("errorMessage") != null) {
 			mav.addObject("msg", req.getAttribute("errorMessage"));
