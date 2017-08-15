@@ -54,7 +54,7 @@ public class UnrestrictedExtensionUploadController {
         String appPath = req.getServletContext().getRealPath("");
 
         // Create a directory to save the uploaded file if it does not exists
-        String savePath = appPath + File.separator + SAVE_DIR;
+        String savePath = (appPath == null ? System.getProperty("user.dir") : appPath) + File.separator + SAVE_DIR;
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
             fileSaveDir.mkdir();
