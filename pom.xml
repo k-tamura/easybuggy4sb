@@ -5,8 +5,8 @@
 
 	<groupId>org.t246osslab</groupId>
 	<artifactId>easybuggy4sb</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
 
 	<name>easybuggy4sb</name>
 	<description>EasyBuggy project for Spring Boot</description>
