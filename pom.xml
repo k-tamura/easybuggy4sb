@@ -84,8 +84,8 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<!-- Override this with old version to avoid build error -->
-			<version>10.12.1.1</version>
+			<!-- Override this with old version to avoid build error on Windows Oracle Java 7 -->
+			<!--<version>10.12.1.1</version>--><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 		<dependency>
@@ -118,7 +118,7 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 			<!-- Override this with old version to cause mail header injection -->
-			<version>1.5.1</version>
+			<version>1.5.1</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 	</dependencies>
@@ -138,7 +138,8 @@
 						-XX:MaxDirectMemorySize=90m
 						-XX:+UseSerialGC
 						-Xloggc:logs/gc.log
-						-Xloggc:logs/gc_%p_%t.log
+						<!-- GC Log: For Java 8 or later, add pid and timestamp prefix -->
+						<!-- Xloggc:logs/gc_%p_%t.log -->
 						-XX:+PrintHeapAtGC
 						-XX:+PrintGCDetails
 						-XX:+PrintGCDateStamps
