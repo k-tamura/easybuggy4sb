@@ -42,8 +42,9 @@ public class SecurityFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String target = request.getRequestURI();
 
-        /* Prevent to upload large files if target does not start w/ /ursupload ... */
-        if (!target.startsWith("/ursupload") && request.getMethod().equalsIgnoreCase("POST")) {
+        /* Prevent to upload large files if target does not start w/ /ureupload ... */
+        if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
+                && request.getMethod().equalsIgnoreCase("POST")) {
             ServletFileUpload upload = new ServletFileUpload();
             upload.setFileItemFactory(new DiskFileItemFactory());
             upload.setFileSizeMax(1024 * 1024 * 10); // 10MB
