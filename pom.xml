@@ -84,7 +84,8 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<scope>runtime</scope>
+			<!-- Override this with old version to avoid build error -->
+			<version>10.12.1.1</version>
 		</dependency>
 
 		<dependency>
@@ -116,6 +117,7 @@
 		<dependency>
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
+			<!-- Override this with old version to cause mail header injection -->
 			<version>1.5.1</version>
 		</dependency>
 
@@ -129,7 +131,10 @@
 				<configuration>
 					<jvmArguments>
 						-Xmx256m
-						-XX:MaxMetaspaceSize=64m
+						<!-- Max Perm Size (for Java 7) -->
+						-XX:MaxPermSize=64m
+						<!-- Max Metaspace Size (for Java 8) -->
+						<!-- -XX:MaxMetaspaceSize=64m -->
 						-XX:MaxDirectMemorySize=90m
 						-XX:+UseSerialGC
 						-Xloggc:logs/gc.log
@@ -145,15 +150,15 @@
 						-XX:+HeapDumpOnOutOfMemoryError
 						-XX:HeapDumpPath=logs/
 						-XX:ErrorFile=logs/hs_err_pid%p.log
-						-XX:NativeMemoryTracking=summary
+						<!-- Native Memory Tracking: summary (for Java 8) -->
+						<!-- -XX:NativeMemoryTracking=summary -->
 						<!-- Auto kill JVM when OOME occurs: For post-8u92 JDKs -->
 						<!-- -XX:+CrashOnOutOfMemoryError -->
 						<!-- Auto kill JVM when OOME occurs: For Linux -->
 						<!-- -XX:OnOutOfMemoryError="kill -9 %p" -->
 						<!-- Auto kill JVM when OOME occurs: For Windows -->
 						<!-- -XX:OnOutOfMemoryError=taskkill /F /PID %p -->
-						<!-- UnlockCommercialFeatures/FlightRecorder: For Oracle Java commercial 
-							use -->
+						<!-- UnlockCommercialFeatures/FlightRecorder: For Oracle Java commercial use -->
 						<!-- -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -->
 						<!-- -agentpath:/root/eclipse/plugins/org.zeroturnaround.eclipse.embedder_7.0.8.RELEASE/jrebel/lib/libjrebel64.so -->
 						-agentlib:jdwp=transport=dt_socket,server=y,address=9009,suspend=n
