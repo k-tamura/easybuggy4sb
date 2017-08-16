@@ -1,5 +1,7 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,11 +58,13 @@ public class SQLInjectionController {
 	private List<User> selectUsers(String name, String password) {
 
 		return jdbcTemplate.query("SELECT name, secret FROM users WHERE ispublic = 'true' AND name='" + name
-				+ "' AND password='" + password + "'", (rs, i) -> {
-					User user = new User();
-					user.setName(rs.getString("name"));
-					user.setSecret(rs.getString("secret"));
-					return user;
+				+ "' AND password='" + password + "'", new RowMapper<User>() {
+                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        User user = new User();
+                        user.setName(rs.getString("name"));
+                        user.setSecret(rs.getString("secret"));
+                        return user;
+                    }
 				});
 	}
 }

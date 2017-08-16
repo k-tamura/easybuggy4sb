@@ -42,7 +42,7 @@ public class SecurityFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String target = request.getRequestURI();
 
-        /* Prevent to upload large files if target does not start w/ /ureupload ... */
+        /* Prevent to upload large files if target start w/ /ureupload and /xee and /xxe  */
         if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
                 && request.getMethod().equalsIgnoreCase("POST")) {
             ServletFileUpload upload = new ServletFileUpload();

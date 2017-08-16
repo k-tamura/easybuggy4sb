@@ -1,5 +1,7 @@
 package org.t246osslab.easybuggy4sb.troubles;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -14,6 +16,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -81,13 +84,15 @@ public class DeadlockController2 {
         List<User> users = null;
         try {
             users = jdbcTemplate.query("select * from users where ispublic = 'true' order by id "
-                    + ("desc".equals(order) ? "desc" : "asc"), (rs, i) -> {
-                        User user = new User();
-                        user.setUserId(rs.getString("id"));
-                        user.setName(rs.getString("name"));
-                        user.setPhone(rs.getString("phone"));
-                        user.setMail(rs.getString("mail"));
-                        return user;
+                    + ("desc".equals(order) ? "desc" : "asc"), new RowMapper<User>() {
+                        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+                            User user = new User();
+                            user.setUserId(rs.getString("id"));
+                            user.setName(rs.getString("name"));
+                            user.setPhone(rs.getString("phone"));
+                            user.setMail(rs.getString("mail"));
+                            return user;
+                        }
                     });
         } catch (DataAccessException e) {
             mav.addObject("errmsg",
