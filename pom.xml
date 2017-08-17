@@ -24,6 +24,28 @@
 		<java.version>1.7</java.version>
 	</properties>
 
+    <profiles>
+        <!-- JRE 7 specific config elements -->
+        <profile>
+            <id>jre7</id>
+            <properties>
+                <jvm.args>-XX:MaxPermSize=64m -Xloggc:logs/gc.log</jvm.args>
+                <derby.version>10.12.1.1</derby.version>
+            </properties>
+        </profile>
+        <!-- JRE 8 specific config elements -->
+        <profile>
+            <id>jre8</id>
+            <!-- activates jre8 by default -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <jvm.args>-XX:MaxMetaspaceSize=64m -Xloggc:logs/gc_%p_%t.log -XX:NativeMemoryTracking=summary</jvm.args>
+            </properties>
+        </profile>
+    </profiles>
+    
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -84,8 +106,7 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-			<!-- Override this with old version to avoid build error on Windows Oracle Java 7 -->
-			<version>10.12.1.1</version><!--$NO-MVN-MAN-VER$-->
+            <version>${derby.version}</version>
 		</dependency>
 
 		<dependency>
@@ -130,16 +151,10 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<jvmArguments>
+						${jvm.args}
 						-Xmx256m
-						<!-- Max Perm Size (for Java 7) -->
-						-XX:MaxPermSize=64m
-						<!-- Max Metaspace Size (for Java 8) -->
-						<!-- -XX:MaxMetaspaceSize=64m -->
 						-XX:MaxDirectMemorySize=90m
 						-XX:+UseSerialGC
-						-Xloggc:logs/gc.log
-						<!-- GC Log: For Java 8 or later, add pid and timestamp prefix -->
-						<!-- Xloggc:logs/gc_%p_%t.log -->
 						-XX:+PrintHeapAtGC
 						-XX:+PrintGCDetails
 						-XX:+PrintGCDateStamps
@@ -151,8 +166,6 @@
 						-XX:+HeapDumpOnOutOfMemoryError
 						-XX:HeapDumpPath=logs/
 						-XX:ErrorFile=logs/hs_err_pid%p.log
-						<!-- Native Memory Tracking: summary (for Java 8) -->
-						<!-- -XX:NativeMemoryTracking=summary -->
 						<!-- Auto kill JVM when OOME occurs: For post-8u92 JDKs -->
 						<!-- -XX:+CrashOnOutOfMemoryError -->
 						<!-- Auto kill JVM when OOME occurs: For Linux -->
