@@ -24,28 +24,28 @@
 		<java.version>1.7</java.version>
 	</properties>
 
-    <profiles>
-        <!-- JRE 7 specific config elements -->
-        <profile>
-            <id>jre7</id>
-            <properties>
-                <jvm.args>-XX:MaxPermSize=64m -Xloggc:logs/gc.log</jvm.args>
-                <derby.version>10.12.1.1</derby.version>
-            </properties>
-        </profile>
-        <!-- JRE 8 specific config elements -->
-        <profile>
-            <id>jre8</id>
-            <!-- activates jre8 by default -->
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <jvm.args>-XX:MaxMetaspaceSize=64m -Xloggc:logs/gc_%p_%t.log -XX:NativeMemoryTracking=summary</jvm.args>
-            </properties>
-        </profile>
-    </profiles>
-    
+	<profiles>
+		<!-- JRE 7 specific config elements -->
+		<profile>
+			<id>jre7</id>
+			<properties>
+				<jvm.args>-XX:MaxPermSize=64m -Xloggc:logs/gc.log</jvm.args>
+				<derby.version>10.12.1.1</derby.version>
+			</properties>
+		</profile>
+		<!-- JRE 8 specific config elements -->
+		<profile>
+			<id>jre8</id>
+			<!-- activates jre8 by default -->
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<jvm.args>-XX:MaxMetaspaceSize=64m -Xloggc:logs/gc_%p_%t.log -XX:NativeMemoryTracking=summary</jvm.args>
+			</properties>
+		</profile>
+	</profiles>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -86,6 +86,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -106,7 +107,7 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
-            <version>${derby.version}</version>
+			<version>${derby.version}</version>
 		</dependency>
 
 		<dependency>
@@ -145,6 +146,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
