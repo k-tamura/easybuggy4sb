@@ -24,7 +24,7 @@
 		<li><p><a href="forwardloop" target="_blank" th:text="#{function.name.forward.loop}"></a>: <span th:text="#{function.description.forward.loop}"></span></p></li>
 		<li><p><a href="jvmcrasheav" target="_blank" th:text="#{function.name.jvm.crash.eav}"></a>: <span th:text="#{function.description.jvm.crash.eav}"></span></p></li>
 		<li><p><a href="memoryleak" th:text="#{function.name.memory.leak}"></a>: <span th:text="#{function.description.memory.leak}"></span></p></li>
-		<li><p><a href="memoryleak2" th:text="#{function.name.memory.leak2}"></a>: <span th:text="#{function.description.memory.leak2}"></span></p></li>
+		<li><p><a href="memoryleak2" th:text="${memoryleak2func}"></a>: <span th:text="${memoryleak2desc}"></span></p></li>
 		<li><p><a href="memoryleak3" th:text="#{function.name.memory.leak3}"></a>: <span th:text="#{function.description.memory.leak3}"></span></p></li>
 		<li><p><a href="netsocketleak" th:text="#{function.name.network.socket.leak}"></a>: <span th:text="#{function.description.network.socket.leak}"></span></p></li>
 		<li><p><a href="dbconnectionleak " th:text="#{function.name.database.connection.leak}"></a> :<span th:text="#{function.description.database.connection.leak}"></span></p></li>
@@ -91,7 +91,7 @@
 		<li><p><a href="oome2" target="_blank">OutOfMemoryError (Requested	array size exceeds VM limit)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome3" target="_blank">OutOfMemoryError (unable to	create new native thread)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome4" target="_blank">OutOfMemoryError (GC overhead	limit exceeded)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
-		<li><p><a href="oome5" target="_blank">OutOfMemoryError (Metaspace)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome5" target="_blank">OutOfMemoryError (<span th:text="${permname}"></span>)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome6" target="_blank">OutOfMemoryError (Direct buffer	memory)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="sofe" target="_blank">StackOverflowError</a>: <span th:text="#{function.description.throwable(${'StackOverflowError'})}"></span></p></li>
 		<li><p><a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'TransformerFactoryConfigurationError'})}"></span></p></li>

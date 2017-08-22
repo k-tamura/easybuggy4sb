@@ -32,7 +32,9 @@ public class MemoryLeakController2 {
 	public ModelAndView process(ModelAndView mav, Locale locale) {
 		mav.setViewName("memoryleak");
 		mav.addObject("title", msg.getMessage("title.nonheap.memory.usage", null, locale));
-		mav.addObject("note", msg.getMessage("msg.permgen.space.leak.occur", null, locale));
+        String permName = System.getProperty("java.version").startsWith("1.7")
+                ? msg.getMessage("label.permgen.space", null, locale) : msg.getMessage("label.metaspace", null, locale);
+        mav.addObject("note", msg.getMessage("msg.permgen.space.leak.occur", new Object[] { permName }, locale));
 		try {
 			toDoRemove();
 
