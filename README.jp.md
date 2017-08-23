@@ -26,4 +26,4 @@ EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです�
 詳細は
 -
    
-[wikiページ](https://github.com/k-tamura/easybuggy/wiki)を参照下さい。
+[wikiページ](https://github.com/k-tamura/easybuggy4sb/wiki)を参照下さい。
