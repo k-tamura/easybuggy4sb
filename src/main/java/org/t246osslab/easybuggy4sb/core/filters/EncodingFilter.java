@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 public class EncodingFilter extends OrderedCharacterEncodingFilter {
 
     /**
-     * @see org.springframework.web.filter.CharacterEncodingFilter#doFilterInternal(javax.servlet.http.HttpServletRequest,
-     *      javax.servlet.http.HttpServletResponse, javax.servlet.FilterChain)
+     * Set the encoding to use for requests.
+     * "Shift_JIS" is intentionally set to the request to /mojibake.
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

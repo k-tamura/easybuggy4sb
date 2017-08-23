@@ -37,7 +37,8 @@ public class DeadlockController {
         } else {
             todoRemove();
         }
-
+        
+        /* Get threads that are in deadlock waiting */
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();
         long[] threadIds = bean.findDeadlockedThreads();
         if (threadIds != null) {

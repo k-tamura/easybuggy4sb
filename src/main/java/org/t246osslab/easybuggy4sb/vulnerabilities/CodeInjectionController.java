@@ -38,10 +38,12 @@ public class CodeInjectionController {
 	}
 
     private void parseJson(String jsonString, ModelAndView mav, Locale locale) {
+        /* Remove spaces and line breaks to parse as JSON */
         String convertedJsonString = jsonString.replaceAll(" ", "");
         convertedJsonString = convertedJsonString.replaceAll("\r\n", "");
         convertedJsonString = convertedJsonString.replaceAll("\n", "");
         try {
+            /* Parse the input string as JSON */
         	ScriptEngineManager manager = new ScriptEngineManager();
         	ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
         	scriptEngine.eval("JSON.parse('" + convertedJsonString + "')");

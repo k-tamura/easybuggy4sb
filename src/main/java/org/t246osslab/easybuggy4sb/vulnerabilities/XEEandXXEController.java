@@ -11,7 +11,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -31,6 +30,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.core.model.User;
 import org.xml.sax.Attributes;
@@ -77,8 +78,8 @@ public class XEEandXXEController {
 	}
 
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.POST)
-	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
-			throws IOException {
+    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
+            HttpServletResponse res, Locale locale) throws IOException {
 
 		// Get absolute path of the web application
 		String appPath = req.getServletContext().getRealPath("");
@@ -90,28 +91,19 @@ public class XEEandXXEController {
 			fileSaveDir.mkdir();
 		}
 
-		// Save the file
-		Part filePart = null;
-		try {
-			filePart = req.getPart("file");
-		} catch (Exception e) {
-			req.setAttribute("errorMessage", msg.getMessage("msg.max.file.size.exceed", null, locale));
-			return doGet(mav, req, res, locale);
-		}
-		String fileName = getFileName(filePart);
+		String fileName = file.getOriginalFilename();
 		if (StringUtils.isBlank(fileName)) {
 			return doGet(mav, req, res, locale);
 		} else if (!fileName.endsWith(".xml")) {
 			mav.addObject("errmsg", msg.getMessage("msg.not.xml.file", null, locale));
 			return doGet(mav, req, res, locale);
 		}
-		boolean isRegistered = writeFile(savePath, filePart, fileName);
+		boolean isRegistered = writeFile(savePath, file, fileName);
 
 		CustomHandler customHandler = new CustomHandler();
 		customHandler.setLocale(locale);
 		SAXParser parser;
 		try {
-			File file = new File(savePath + File.separator + fileName);
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			if ("/xee".equals(req.getServletPath())) {
 				customHandler.setInsert(true);
@@ -121,7 +113,7 @@ public class XEEandXXEController {
 				spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 			}
 			parser = spf.newSAXParser();
-			parser.parse(file, customHandler);
+			parser.parse(new File(savePath + File.separator + fileName).getAbsolutePath(), customHandler);
 			isRegistered = true;
 		} catch (ParserConfigurationException e) {
 			log.error("ParserConfigurationException occurs: ", e);
@@ -152,7 +144,7 @@ public class XEEandXXEController {
 		return mav;
 	}
 
-    private boolean writeFile(String savePath, Part filePart, String fileName) throws IOException {
+    private boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
 		boolean isRegistered = false;
 		try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
 				InputStream in = filePart.getInputStream()) {
@@ -167,16 +159,6 @@ public class XEEandXXEController {
 		}
         return isRegistered;
     }
-
-	// Get file name from content-disposition filename
-	private String getFileName(final Part part) {
-		for (String content : part.getHeader("content-disposition").split(";")) {
-			if (content.trim().startsWith("filename")) {
-				return content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
-			}
-		}
-		return null;
-	}
 
 	public class CustomHandler extends DefaultHandler {
 		ArrayList<Object> resultList = new ArrayList<>();
@@ -257,7 +239,7 @@ public class XEEandXXEController {
 					}
 				}
 			} catch (DataAccessException e) {
-				resultMessage = msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale);
+				resultMessage = msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, locale);
 				log.error("DataAccessException occurs: ", e);
 			} catch (Exception e) {
 				resultMessage = msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale);

@@ -80,7 +80,7 @@ public class DefaultLoginController {
             session.setAttribute("authNMsg", "msg.account.locked");
             res.sendRedirect("/login");
         } else if (authUser(userid, password)) {
-            /* Reset account lock */
+            /* if authentication succeeded, then reset account lock */
             User admin = userLoginHistory.get(userid);
             if (admin == null) {
                 User newAdmin = new User();
@@ -131,6 +131,7 @@ public class DefaultLoginController {
 
     protected boolean authUser(String userId, String password) {
         try {
+            /* Perform a simple LDAP 'bind' authentication */
     		LdapQuery query = LdapQueryBuilder.query().where("uid").is(userId);
     		ldapTemplate.authenticate(query, password);
         } catch (EmptyResultDataAccessException | AuthenticationException e) {

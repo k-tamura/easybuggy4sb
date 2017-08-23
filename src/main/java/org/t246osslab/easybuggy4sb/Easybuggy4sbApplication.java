@@ -22,6 +22,7 @@ public class Easybuggy4sbApplication extends SpringBootServletInitializer {
     
 	@Bean
 	public ServletRegistrationBean servletRegistrationBean() {
+	    /* Enable directory listing under /uid/ */
 		final DefaultServlet servlet = new DefaultServlet();
 		final ServletRegistrationBean bean = new ServletRegistrationBean(servlet, "/uid/*");
 		bean.setEnabled(true);

@@ -39,6 +39,7 @@ public class DBConnectionLeakController {
         mav.setViewName("dbconnectionleak");
         mav.addObject("title", msg.getMessage("title.user.list", null, locale));
         if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
+            /* Just show users the warning because this feature can work if an external DB is used. */
             mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));
             return mav;
         } else {

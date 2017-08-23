@@ -51,7 +51,7 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			session.setAttribute("authNMsg", "msg.low.alphnum8");
 			return doGet(mav, req, res, locale);
 		} else if (authUser(userid, password)) {
-			/* Reset account lock */
+            /* if authentication succeeded, then reset account lock */
 			User admin = userLoginHistory.get(userid);
 			if (admin == null) {
 				User newAdmin = new User();

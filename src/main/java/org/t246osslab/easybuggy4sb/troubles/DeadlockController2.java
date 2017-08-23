@@ -96,7 +96,7 @@ public class DeadlockController2 {
                     });
         } catch (DataAccessException e) {
             mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+                    msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
             log.error("DataAccessException occurs: ", e);
         } catch (Exception e) {
             mav.addObject("errmsg",
@@ -127,7 +127,7 @@ public class DeadlockController2 {
             log.error("DeadlockLoserDataAccessException occurs: ", e);
         } catch (DataAccessException e) {
             mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+                    msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
             log.error("DataAccessException occurs: ", e);
         } catch (Exception e) {
             txMgr.rollback(trnStatus);

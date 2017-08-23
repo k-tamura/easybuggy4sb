@@ -49,7 +49,7 @@ public class OpenRedirectController extends DefaultLoginController {
             session.setAttribute("authNMsg", "msg.account.locked");
             res.sendRedirect("/openredirect/login" + loginQueryString);
         } else if (authUser(userid, password)) {
-            /* Reset account lock */
+            /* if authentication succeeded, then reset account lock */
             User admin = userLoginHistory.get(userid);
             if (admin == null) {
                 User newAdmin = new User();
