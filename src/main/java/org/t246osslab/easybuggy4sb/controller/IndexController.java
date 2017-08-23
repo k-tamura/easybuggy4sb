@@ -20,7 +20,7 @@ public class IndexController {
 	public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
 		ses.removeAttribute("dlpinit");
 		mav.setViewName("index");
-		mav.addObject("title", "EasyBuggy");
+		mav.addObject("title", "EasyBuggy Boot");
         String permName = null;
 		String lblPerm = null;
         if (System.getProperty("java.version").startsWith("1.7")) {
