@@ -12,6 +12,6 @@ public class DefaultLogoutController {
 	public String process(HttpSession ses) {
 
         ses.invalidate();
-        return "redirect:";
+        return "redirect:/";
     }
 }
