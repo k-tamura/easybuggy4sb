@@ -30,4 +30,9 @@ public class Easybuggy4sbApplication extends SpringBootServletInitializer {
 		bean.setLoadOnStartup(1);
 		return bean;
 	}
+	
+	@Bean
+	public InitializationListener executorListener() {
+	   return new InitializationListener();
+	}
 }
