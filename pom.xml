@@ -22,27 +22,20 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.7</java.version>
+		<!-- default properties (JDK 1.8 or later) -->
+		<jvm.args>-XX:MaxMetaspaceSize=64m -Xloggc:logs/gc_%p_%t.log
+			-XX:NativeMemoryTracking=summary</jvm.args>
+		<derby.version>10.13.1.1</derby.version>
 	</properties>
 
 	<profiles>
-		<!-- JRE 7 specific config elements -->
 		<profile>
-			<id>jre7</id>
+			<activation>
+				<jdk>1.7</jdk>
+			</activation>
 			<properties>
 				<jvm.args>-XX:MaxPermSize=64m -Xloggc:logs/gc.log</jvm.args>
 				<derby.version>10.12.1.1</derby.version>
-			</properties>
-		</profile>
-		<!-- JRE 8 specific config elements -->
-		<profile>
-			<id>jre8</id>
-			<!-- activates jre8 by default -->
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<jvm.args>-XX:MaxMetaspaceSize=64m -Xloggc:logs/gc_%p_%t.log
-					-XX:NativeMemoryTracking=summary</jvm.args>
 			</properties>
 		</profile>
 	</profiles>
