@@ -24,6 +24,16 @@ import org.springframework.stereotype.Component;
 public class SecurityFilter implements Filter {
 
     /**
+     * The maximum size permitted for the complete request.
+     */
+    private static final int REQUEST_SIZE_MAX = 1024 * 1024 * 50;
+    
+    /**
+     * The maximum size permitted for a single uploaded file.
+     */
+    private static final int FILE_SIZE_MAX = 1024 * 1024 * 10;
+
+    /**
      * Default constructor.
      */
     public SecurityFilter() {
@@ -47,8 +57,8 @@ public class SecurityFilter implements Filter {
                 && request.getMethod().equalsIgnoreCase("POST")) {
             ServletFileUpload upload = new ServletFileUpload();
             upload.setFileItemFactory(new DiskFileItemFactory());
-            upload.setFileSizeMax(1024 * 1024 * 10); // 10MB
-            upload.setSizeMax(1024 * 1024 * 50); // 50MB
+            upload.setFileSizeMax(FILE_SIZE_MAX); // 10MB
+            upload.setSizeMax(REQUEST_SIZE_MAX); // 50MB
             try {
                 upload.parseRequest(new ServletRequestContext(request));
             } catch (FileUploadException e) {

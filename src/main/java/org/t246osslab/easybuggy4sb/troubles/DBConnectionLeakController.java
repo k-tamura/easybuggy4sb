@@ -47,7 +47,7 @@ public class DBConnectionLeakController {
         }
 
         try {
-            List<User> users = selectUsers(mav, locale);
+            List<User> users = selectUsers();
             if (users.isEmpty()) {
                 mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
             } else {
@@ -60,7 +60,7 @@ public class DBConnectionLeakController {
         return mav;
     }
 
-    private List<User> selectUsers(ModelAndView mav, Locale locale) throws SQLException {
+    private List<User> selectUsers() throws SQLException {
         List<User> users = new ArrayList<>();
         Connection conn = null;
         Statement stmt = null;

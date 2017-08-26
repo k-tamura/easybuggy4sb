@@ -107,7 +107,7 @@ public class DeadlockController2 {
     }
 
     @Transactional
-    private void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
+    public void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
         DefaultTransactionDefinition dtDef = new DefaultTransactionDefinition();
 
         TransactionStatus trnStatus = txMgr.getTransaction(dtDef);
