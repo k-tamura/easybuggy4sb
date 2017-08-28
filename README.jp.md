@@ -13,6 +13,8 @@ EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです�
 
     $ mvn spring-boot:run
 
+( または[JVMオプション](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148)付きで ``` java -jar ROOT.war ``` か任意のサーブレットコンテナに ROOT.war をデプロイ。 )
+
 以下にアクセス:
 
     http://localhost:8080
