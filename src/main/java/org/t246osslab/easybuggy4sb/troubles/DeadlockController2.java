@@ -20,7 +20,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -106,8 +105,7 @@ public class DeadlockController2 {
         return users;
     }
 
-    @Transactional
-    public void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
+    private void updateUsers(List<User> users, Locale locale, ModelAndView mav) {
         DefaultTransactionDefinition dtDef = new DefaultTransactionDefinition();
 
         TransactionStatus trnStatus = txMgr.getTransaction(dtDef);
@@ -123,9 +121,11 @@ public class DeadlockController2 {
             txMgr.commit(trnStatus);
             mav.addObject("msg", msg.getMessage("msg.update.records", new Object[] { executeUpdate }, null, locale));
         } catch (DeadlockLoserDataAccessException e) {
+            txMgr.rollback(trnStatus);
             mav.addObject("errmsg", msg.getMessage("msg.deadlock.occurs", null, locale));
             log.error("DeadlockLoserDataAccessException occurs: ", e);
         } catch (DataAccessException e) {
+            txMgr.rollback(trnStatus);
             mav.addObject("errmsg",
                     msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
             log.error("DataAccessException occurs: ", e);
