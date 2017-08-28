@@ -13,6 +13,8 @@ Quick Start
 
     $ mvn spring-boot:run
 
+( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
+
 Access to
 
     http://localhost:8080
