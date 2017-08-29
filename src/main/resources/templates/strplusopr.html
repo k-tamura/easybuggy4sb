@@ -9,7 +9,8 @@
 			<input type="text" name="length" size="6" maxlength="6" th:value="${length}" />
 			<p th:utext="${html}" /><br />
 		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.slow.string.plus.operation}"></span>
+			<span class="glyphicon glyphicon-info-sign"></span>
+            <span th:utext="#{msg.note.slow.string.plus.operation}"></span>
 		</div>
 	</form>
 </body>
