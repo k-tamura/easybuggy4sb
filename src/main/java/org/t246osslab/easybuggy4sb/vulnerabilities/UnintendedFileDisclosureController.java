@@ -44,7 +44,12 @@ public class UnintendedFileDisclosureController {
         }
         Resource resource = new ClassPathResource("/templates/serverinfo.html");
         String htmlString = IOUtils.toString(resource.getInputStream());
-        htmlString = htmlString.replace("<!-- [REPLACE:@UserId] -->", (String) ses.getAttribute("userid"));
+        String userid = (String) ses.getAttribute("userid");
+        if(userid == null){
+            res.sendRedirect("/");
+            return;
+        }
+        htmlString = htmlString.replace("<!-- [REPLACE:@UserId] -->", userid);
         htmlString = htmlString.replace("<!-- [REPLACE:@Contents] -->", sb.toString());
         htmlString = repacLocalizedString(htmlString, locale);
         res.getWriter().write(htmlString);
