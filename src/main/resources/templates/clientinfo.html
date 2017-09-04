@@ -4,18 +4,17 @@
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
 	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
-		<tr><th><p th:text="#{label.key}" /></th><th><p th:text="#{label.value}" /></th></tr>
-		<tr><td><p th:text="#{label.code}" /></td><td id="appCodeName"></td></tr>
-		<tr><td><p th:text="#{label.browser}" /></td><td id="appName"></td></tr>
-		<tr><td><p th:text="#{label.version}" /></td><td id="appVersion"></td></tr>
-		<tr><td><p th:text="#{label.platform}" /></td><td id="platform"></td></tr>
-		<tr><td><p th:text="#{label.user.agent}" /></td><td id="userAgent"></td></tr>
-		<tr><td><p th:text="#{label.language}" /></td><td id="browserLanguage"></td></tr>
+		<tr><th th:text="#{label.key}" /><th th:text="#{label.value}" /></tr>
+		<tr><td th:text="#{label.code}" /><td id="appCodeName"/></tr>
+		<tr><td th:text="#{label.browser}" /><td id="appName" /></tr>
+		<tr><td th:text="#{label.version}" /><td id="appVersion" /></tr>
+		<tr><td th:text="#{label.platform}" /><td id="platform" /></tr>
+		<tr><td th:text="#{label.user.agent}" /><td id="userAgent" /></tr>
+		<tr><td th:text="#{label.language}" /><td id="browserLanguage" /></tr>
 	</table>
 	<hr />
-	<div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign"></span>&nbsp;
-		<p th:text="#{msg.note.unintended.file.disclosure}" />
+	<div class="alert alert-info" role="alert"> 
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.unintended.file.disclosure}"></span>
 	</div>
 	<script type="text/javascript">
 	<!--
