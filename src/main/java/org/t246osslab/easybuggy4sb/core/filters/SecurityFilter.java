@@ -16,6 +16,8 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -24,11 +26,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class SecurityFilter implements Filter {
 
+    @Autowired
+    MessageSource msg;
+    
     /**
      * The maximum size permitted for the complete request.
      */
     private static final int REQUEST_SIZE_MAX = 1024 * 1024 * 50;
-    
+
     /**
      * The maximum size permitted for a single uploaded file.
      */
@@ -66,22 +71,8 @@ public class SecurityFilter implements Filter {
             response.sendRedirect("/safemode");
             return;
         }
-
-        /* Prevent to upload large files if target start w/ /ureupload and /xee and /xxe  */
-        if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
-                && request.getMethod().equalsIgnoreCase("POST")) {
-            ServletFileUpload upload = new ServletFileUpload();
-            upload.setFileItemFactory(new DiskFileItemFactory());
-            upload.setFileSizeMax(FILE_SIZE_MAX); // 10MB
-            upload.setSizeMax(REQUEST_SIZE_MAX); // 50MB
-            try {
-                upload.parseRequest(new ServletRequestContext(request));
-            } catch (FileUploadException e) {
-                throw new ServletException(e);
-            }
-        }
-
-        /* Prevent clickjacking if target is not /admins/clickjacking ... */
+        
+         /* Prevent clickjacking if target is not /admins/clickjacking ... */
         if (!target.startsWith("/admins/clickjacking")) {
             response.addHeader("X-FRAME-OPTIONS", "DENY");
         }
@@ -92,7 +83,22 @@ public class SecurityFilter implements Filter {
         if (!target.startsWith("/xss")) {
             response.addHeader("X-XSS-Protection", "1; mode=block");
         }
-        chain.doFilter(req, res);
+        
+        /* Prevent to upload large files if target start w/ /ureupload and /xee and /xxe */
+        if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
+                && request.getMethod().equalsIgnoreCase("POST")) {
+            ServletFileUpload upload = new ServletFileUpload();
+            upload.setFileItemFactory(new DiskFileItemFactory());
+            upload.setFileSizeMax(FILE_SIZE_MAX); // 10MB
+            upload.setSizeMax(REQUEST_SIZE_MAX); // 50MB
+            try {
+                upload.parseRequest(new ServletRequestContext(request));
+            } catch (FileUploadException e) {
+                req.setAttribute("errorMessage", msg.getMessage("msg.max.file.size.exceed", null, request.getLocale()));
+            }
+        }
+
+       chain.doFilter(req, res);
     }
 
     @Override
