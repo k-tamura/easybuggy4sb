@@ -16,13 +16,13 @@ public class IndexController {
     @Autowired
     MessageSource msg;
     
-	@RequestMapping(value = "/")
-	public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
-		ses.removeAttribute("dlpinit");
-		mav.setViewName("index");
-		mav.addObject("title", "EasyBuggy Boot");
+    @RequestMapping(value = "/")
+    public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
+        ses.removeAttribute("dlpinit");
+        mav.setViewName("index");
+        mav.addObject("title", "EasyBuggy Boot");
         String permName = null;
-		String lblPerm = null;
+        String lblPerm = null;
         if (System.getProperty("java.version").startsWith("1.7")) {
             permName = "PermGen space";
             lblPerm = msg.getMessage("label.permgen.space", null, locale);
@@ -33,6 +33,13 @@ public class IndexController {
         mav.addObject("permname", permName);
         mav.addObject("memoryleak2func", msg.getMessage("function.name.memory.leak2", new Object[] { lblPerm }, locale));
         mav.addObject("memoryleak2desc", msg.getMessage("function.description.memory.leak2", new Object[] { lblPerm }, locale));
+        return mav;
+    }
+    
+	@RequestMapping(value = "/safemode")
+	public ModelAndView process(ModelAndView mav) {
+        mav.setViewName("safemode");
+        mav.addObject("title", "Not accessible");
 		return mav;
 	}
 }

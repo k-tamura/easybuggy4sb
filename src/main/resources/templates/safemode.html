@@ -1,0 +1,10 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.safe.mode}"></span>
+	</div>
+</body>
+</html>
