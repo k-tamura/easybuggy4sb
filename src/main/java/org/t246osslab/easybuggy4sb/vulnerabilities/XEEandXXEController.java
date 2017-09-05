@@ -72,7 +72,7 @@ public class XEEandXXEController {
 			mav.addObject("xxe_dtd", IOUtils.toString(resource.getInputStream()));
 		}
 		if (req.getAttribute("errorMessage") != null) {
-			mav.addObject("msg", req.getAttribute("errorMessage"));
+			mav.addObject("errmsg", req.getAttribute("errorMessage"));
 		}
 		return mav;
 	}
@@ -80,6 +80,10 @@ public class XEEandXXEController {
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.POST)
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
             HttpServletResponse res, Locale locale) throws IOException {
+
+        if (req.getAttribute("errorMessage") != null) {
+            return doGet(mav, req, res, locale);
+        }
 
 		// Get absolute path of the web application
 		String appPath = req.getServletContext().getRealPath("");

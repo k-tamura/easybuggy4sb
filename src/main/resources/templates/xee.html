@@ -9,7 +9,10 @@
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
 		<input type="submit" th:value="#{label.upload}" />
-		<p th:utext="${msg}" /><br />
+        <p th:text="${msg}" /><br />
+        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+        </div>
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xee}"></span>
 		</div>
