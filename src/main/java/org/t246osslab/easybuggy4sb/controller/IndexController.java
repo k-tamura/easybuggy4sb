@@ -33,13 +33,9 @@ public class IndexController {
         mav.addObject("permname", permName);
         mav.addObject("memoryleak2func", msg.getMessage("function.name.memory.leak2", new Object[] { lblPerm }, locale));
         mav.addObject("memoryleak2desc", msg.getMessage("function.description.memory.leak2", new Object[] { lblPerm }, locale));
+
+        String mode = System.getProperty("easybuggy.mode");
+        mav.addObject("isOnlyVulnerabilities", mode != null && mode.equalsIgnoreCase("only-vulnerabilities"));
         return mav;
     }
-    
-	@RequestMapping(value = "/safemode")
-	public ModelAndView process(ModelAndView mav) {
-        mav.setViewName("safemode");
-        mav.addObject("title", "Not accessible");
-		return mav;
-	}
 }

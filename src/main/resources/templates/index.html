@@ -12,6 +12,7 @@
 		</table>
 	</header>
 	<hr />
+    <th:block th:unless="${isOnlyVulnerabilities}">
 	<h2>
 		<span class="glyphicon glyphicon-knight"></span> 
         <span th:text="#{section.troubles}"></span>
@@ -38,6 +39,7 @@
 		<li><p><a href="te" th:text="#{function.name.truncation.error}"></a>: <span th:text="#{function.description.truncation.error}"></span></p></li>
 		<li><p><a href="lotd" th:text="#{function.name.loss.of.trailing.digits}"></a>: <span th:text="#{function.description.loss.of.trailing.digits}"></span></p></li>
 	</ul>
+    </th:block>
 
 	<h2>
 		<span class="glyphicon glyphicon-knight"></span> 
@@ -71,6 +73,7 @@
 		<li><p><a href="xxe" th:text="#{function.name.xxe}"></a>: <span th:text="#{function.description.xxe}"></span></p></li>
 	</ul>
 
+    <th:block th:unless="${isOnlyVulnerabilities}">
 	<h2>
 		<span class="glyphicon glyphicon-knight"></span> 
         <span th:text="#{section.performance.issue}"></span>
@@ -137,6 +140,7 @@
 		<li><p><a href="uce" target="_blank">UnsupportedCharsetException </a>: <span th:text="#{function.description.throwable(${'UnsupportedCharsetException'})}"></span></p></li>
 		<li><p><a href="uoe" target="_blank">UnsupportedOperationException </a>: <span th:text="#{function.description.throwable(${'UnsupportedOperationException'})}"></span></p></li>
 	</ul>
+    </th:block>
 
 	<hr />
 	<footer>
