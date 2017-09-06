@@ -47,7 +47,7 @@ public class UnrestrictedSizeUploadController {
         return mav;
     }
 
-    @RequestMapping(value = "/ursupload", method = RequestMethod.POST)
+    @RequestMapping(value = "/ursupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
 
         mav.setViewName("unrestrictedsizeupload");
