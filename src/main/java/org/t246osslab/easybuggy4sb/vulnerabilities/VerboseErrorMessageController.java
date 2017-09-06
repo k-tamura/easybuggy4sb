@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
@@ -101,7 +102,9 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			if (user != null) {
 				return true;
 			}
-		} catch (Exception e) {
+        } catch (EmptyResultDataAccessException e) {
+            // do nothing if user does not exist
+        } catch (Exception e) {
 			log.error("Exception occurs: ", e);
 		}
 		return false;
