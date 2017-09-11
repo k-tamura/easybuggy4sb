@@ -77,17 +77,19 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			}
 		} else {
 			/* account lock count +1 */
-			User admin = userLoginHistory.get(userid);
-			if (admin == null) {
-				User newAdmin = new User();
-				newAdmin.setUserId(userid);
-				admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-				if (admin == null) {
-					admin = newAdmin;
-				}
-			}
-			admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-			admin.setLastLoginFailedTime(new Date());
+            if (userid != null) {
+                User admin = userLoginHistory.get(userid);
+                if (admin == null) {
+                    User newAdmin = new User();
+                    newAdmin.setUserId(userid);
+                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+                    if (admin == null) {
+                        admin = newAdmin;
+                    }
+                }
+                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
+                admin.setLastLoginFailedTime(new Date());
+            }
 
 			session.setAttribute("authNMsg", "msg.password.not.match");
 			return doGet(mav, req, res, locale);

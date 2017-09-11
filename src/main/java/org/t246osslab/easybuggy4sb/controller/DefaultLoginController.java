@@ -31,25 +31,25 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 @Controller
 public class DefaultLoginController {
 
-	@Value("${account.lock.time}")
-	long accountLockTime;
+    @Value("${account.lock.time}")
+    long accountLockTime;
 
-	@Value("${account.lock.count}")
-	long accountLockCount;
+    @Value("${account.lock.count}")
+    long accountLockCount;
 
     @Autowired
     protected MessageSource msg;
-	
+
     @Autowired
-	protected LdapTemplate ldapTemplate;
-	
+    protected LdapTemplate ldapTemplate;
+
     /* User's login history using in-memory account locking */
     protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
-    
+
     private static final Logger log = LoggerFactory.getLogger(DefaultLoginController.class);
-   
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         mav.setViewName("login");
         mav.addObject("title", msg.getMessage("title.login.page", null, locale));
 
@@ -63,14 +63,15 @@ public class DefaultLoginController {
 
         HttpSession session = req.getSession(true);
         if (session.getAttribute("authNMsg") != null && !"authenticated".equals(session.getAttribute("authNMsg"))) {
-            mav.addObject("errmsg", msg.getMessage((String)session.getAttribute("authNMsg"), null, locale));
+            mav.addObject("errmsg", msg.getMessage((String) session.getAttribute("authNMsg"), null, locale));
             session.setAttribute("authNMsg", null);
         }
         return mav;
     }
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
+            throws IOException {
 
         String userid = StringUtils.trim(req.getParameter("userid"));
         String password = StringUtils.trim(req.getParameter("password"));
@@ -95,7 +96,7 @@ public class DefaultLoginController {
 
             session.setAttribute("authNMsg", "authenticated");
             session.setAttribute("userid", userid);
-            
+
             String target = (String) session.getAttribute("target");
             if (target == null) {
                 res.sendRedirect("/admins/main");
@@ -105,18 +106,19 @@ public class DefaultLoginController {
             }
         } else {
             /* account lock count +1 */
-            User admin = userLoginHistory.get(userid);
-            if (admin == null) {
-                User newAdmin = new User();
-                newAdmin.setUserId(userid);
-                admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+            if (userid != null) {
+                User admin = userLoginHistory.get(userid);
                 if (admin == null) {
-                    admin = newAdmin;
+                    User newAdmin = new User();
+                    newAdmin.setUserId(userid);
+                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+                    if (admin == null) {
+                        admin = newAdmin;
+                    }
                 }
+                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
+                admin.setLastLoginFailedTime(new Date());
             }
-            admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-            admin.setLastLoginFailedTime(new Date());
-            
             session.setAttribute("authNMsg", "msg.authentication.fail");
             return doGet(mav, req, res, locale);
         }
@@ -124,22 +126,28 @@ public class DefaultLoginController {
     }
 
     protected boolean isAccountLocked(String userid) {
+        if (userid == null) {
+            return false;
+        }
         User admin = userLoginHistory.get(userid);
         return admin != null && admin.getLoginFailedCount() == accountLockCount
-				&& (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime);
+                && (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime);
     }
 
     protected boolean authUser(String userId, String password) {
+        if (userId == null || password == null) {
+            return false;
+        }
         try {
             /* Perform a simple LDAP 'bind' authentication */
-    		LdapQuery query = LdapQueryBuilder.query().where("uid").is(userId);
-    		ldapTemplate.authenticate(query, password);
+            LdapQuery query = LdapQueryBuilder.query().where("uid").is(userId);
+            ldapTemplate.authenticate(query, password);
         } catch (EmptyResultDataAccessException | AuthenticationException e) {
             return false;
-		} catch (Exception e) {
-			log.error("Exception occurs: ", e);
+        } catch (Exception e) {
+            log.error("Exception occurs: ", e);
             return false;
-		}
+        }
         return true;
-	}
+    }
 }

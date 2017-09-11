@@ -85,17 +85,19 @@ public class OpenRedirectController extends DefaultLoginController {
             }
         } else {
             /* account lock count +1 */
-            User admin = userLoginHistory.get(userid);
-            if (admin == null) {
-                User newAdmin = new User();
-                newAdmin.setUserId(userid);
-                admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+            if (userid != null) {
+                User admin = userLoginHistory.get(userid);
                 if (admin == null) {
-                    admin = newAdmin;
+                    User newAdmin = new User();
+                    newAdmin.setUserId(userid);
+                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+                    if (admin == null) {
+                        admin = newAdmin;
+                    }
                 }
+                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
+                admin.setLastLoginFailedTime(new Date());
             }
-            admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-            admin.setLastLoginFailedTime(new Date());
             
             session.setAttribute("authNMsg", "msg.authentication.fail");
             res.sendRedirect("/openredirect/login" + loginQueryString);

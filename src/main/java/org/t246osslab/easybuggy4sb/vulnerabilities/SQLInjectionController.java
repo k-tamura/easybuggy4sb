@@ -45,10 +45,10 @@ public class SQLInjectionController {
 				} else {
 					mav.addObject("userList", users);
 				}
-			} catch (DataAccessException se) {
-				log.error("SQLException occurs: ", se);
-				mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
-			}
+            } catch (DataAccessException se) {
+                log.error("DataAccessException occurs: ", se);
+                mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
+            }
 		} else {
 			mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
 		}
