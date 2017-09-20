@@ -67,12 +67,6 @@ public class OpenRedirectController extends DefaultLoginController {
             
             String gotoUrl = req.getParameter("goto");
             if (gotoUrl != null) {
-                try {
-                    URL u = new URL(gotoUrl);
-                    gotoUrl = u.toURI().toString();
-                } catch (Exception e) {
-                    log.warn("Invalid goto Url: {}", gotoUrl);
-                }
                 res.sendRedirect(gotoUrl);
             } else {
                 String target = (String) session.getAttribute("target");
