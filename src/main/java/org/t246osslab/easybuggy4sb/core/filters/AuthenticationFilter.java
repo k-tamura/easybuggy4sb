@@ -40,7 +40,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String target = request.getRequestURI();
         
-        if (target.startsWith("/admins") || "/uid/serverinfo.html".equals(target) || "/serverinfo".equals(target)) {
+        if (target.startsWith("/admins") || "/uid/serverinfo.jsp".equals(target) || "/serverinfo".equals(target)) {
             /* Login (authentication) is needed to access admin pages (under /admins). */
             
             String loginType = request.getParameter("logintype");
