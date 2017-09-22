@@ -23,6 +23,8 @@ dist/
 nbdist/
 .nb-gradle/
 /server-work/
+
 /derby.log
 /logs/
 /work/
+/uploadFiles/
