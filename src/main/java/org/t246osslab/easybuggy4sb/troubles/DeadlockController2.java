@@ -9,10 +9,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DeadlockLoserDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,15 +20,11 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
-public class DeadlockController2 {
-
-    private static final Logger log = LoggerFactory.getLogger(DeadlockController2.class);
-
-    @Autowired
-    MessageSource msg;
+public class DeadlockController2 extends AbstractController {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -41,9 +34,9 @@ public class DeadlockController2 {
 
     @RequestMapping(value = "/deadlock2")
     public ModelAndView process(HttpServletRequest req, HttpSession ses, ModelAndView mav, Locale locale) {
-        mav.setViewName("deadlock2");
-        mav.addObject("title", msg.getMessage("title.xxe", null, locale));
-
+        setViewAndCommonObjects(mav, locale, "deadlock2");
+        // Overwrite title (because title is the same as xee page)
+        mav.addObject("title", msg.getMessage("title.xee.page", null, locale));
         List<User> users = null;
         String order = getOrder(req);
         if ("POST".equals(req.getMethod())) {

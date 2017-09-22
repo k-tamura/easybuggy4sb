@@ -4,22 +4,17 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class IndexController {
-    
-    @Autowired
-    MessageSource msg;
+public class IndexController extends AbstractController {
     
     @RequestMapping(value = "/")
     public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
         ses.removeAttribute("dlpinit");
-        mav.setViewName("index");
+        setViewAndCommonObjects(mav, locale, "index");
         mav.addObject("title", "EasyBuggy Boot");
         String permName = null;
         String lblPerm = null;

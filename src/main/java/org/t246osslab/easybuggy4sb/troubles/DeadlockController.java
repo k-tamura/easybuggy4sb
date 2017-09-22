@@ -7,31 +7,22 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class DeadlockController {
-
-    private static final Logger log = LoggerFactory.getLogger(DeadlockController.class);
+public class DeadlockController extends AbstractController {
 
     private final Object lock1 = new Object();
     private final Object lock2 = new Object();
     private boolean switchFlag = true;
 
-    @Autowired
-    MessageSource msg;
-
     @RequestMapping(value = "/deadlock")
     public ModelAndView process(HttpSession ses, ModelAndView mav, Locale locale) {
-        mav.setViewName("deadlock");
-        mav.addObject("title", msg.getMessage("title.detect.deadlock", null, locale));
-
+        setViewAndCommonObjects(mav, locale, "deadlock");
+        
         if (ses.getAttribute("dlpinit") == null) {
             ses.setAttribute("dlpinit", "true");
         } else {

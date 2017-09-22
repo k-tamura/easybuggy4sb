@@ -3,24 +3,19 @@ package org.t246osslab.easybuggy4sb.troubles;
 import java.util.Locale;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class LossOfTrailingDigitsController {
-
-    @Autowired
-    MessageSource msg;
+public class LossOfTrailingDigitsController extends AbstractController {
 
     @RequestMapping(value = "/lotd")
     public ModelAndView process(@RequestParam(value = "number", required = false) String strNumber, ModelAndView mav,
             Locale locale) {
-        mav.setViewName("lossoftrailingdigits");
-        mav.addObject("title", msg.getMessage("title.loss.of.trailing.digits.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "lossoftrailingdigits");
         double number = NumberUtils.toDouble(strNumber, -1);
         if (!Double.isNaN(number) && -1 < number && number < 1) {
             mav.addObject("number", strNumber);

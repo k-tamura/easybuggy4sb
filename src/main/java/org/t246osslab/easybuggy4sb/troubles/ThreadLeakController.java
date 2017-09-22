@@ -6,22 +6,17 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class ThreadLeakController {
-
-    @Autowired
-    MessageSource msg;
+public class ThreadLeakController extends AbstractController {
 
     @RequestMapping(value = "/threadleak")
     public ModelAndView process(ModelAndView mav, Locale locale) {
-        mav.setViewName("threadleak");
-        mav.addObject("title", msg.getMessage("title.current.thread.count", null, locale));
+        setViewAndCommonObjects(mav, locale, "threadleak");
         ThreadCountLoggingThread sub = new ThreadCountLoggingThread();
         sub.start();
         ThreadMXBean bean = ManagementFactory.getThreadMXBean();

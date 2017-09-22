@@ -4,12 +4,16 @@
 <body style="margin-left: 20px; margin-right: 20px;">
     <div th:replace="header"></div>
     <form action="mojibake" method="post">
-        <p th:text="#{description.capitalize.string}" />
-            <br /> <label th:text="#{label.string}"></label><span>: </span>
-            <input type="text" name="string" size="100" maxlength="100" /><br /> <br />
-            <input type="submit" /><br /><br /><p th:utext="${msg}" />
-            <br /><div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.mojibake}"></span>
+        <p th:text="#{description.capitalize.string}" /><br /> 
+        <label th:text="#{label.string}"></label><span>: </span>
+        <input type="text" name="string" size="100" maxlength="100" /><br /> <br />
+        <input type="submit" /><br /><br />
+        <div th:if="${msg != null}">
+            <th:block th:utext="${msg}" ></th:block><br /><br />
+        </div>
+        <div th:if="${note != null}"  class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign"></span> 
+            <th:block th:utext="${note}"></th:block>
         </div>
     </form>
 </body>

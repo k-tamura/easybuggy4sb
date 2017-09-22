@@ -1,0 +1,11 @@
+        <div th:if="${msg != null}">
+            <th:block th:text="${msg}"></th:block><br /><br />
+        </div>
+        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-warning-sign"></span> 
+            <th:block th:text="${errmsg}"></th:block>
+        </div>
+        <div th:if="${note != null}" class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign"></span> 
+            <th:block th:utext="${note}"></th:block>
+        </div>

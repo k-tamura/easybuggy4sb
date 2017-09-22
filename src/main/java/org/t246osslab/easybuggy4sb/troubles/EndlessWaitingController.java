@@ -12,30 +12,21 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class EndlessWaitingController {
+public class EndlessWaitingController extends AbstractController {
 
     private static final int MAX_COUNT = 100000;
-
-    private static final Logger log = LoggerFactory.getLogger(EndlessWaitingController.class);
-
-    @Autowired
-    MessageSource msg;
 
     @RequestMapping(value = "/endlesswaiting")
     public ModelAndView process(@RequestParam(value = "count", required = false) String strCount,
             HttpServletRequest req, ModelAndView mav, Locale locale) throws IOException {
-        mav.setViewName("endlesswaiting");
-        mav.addObject("title", msg.getMessage("title.endless.waiting.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "endlesswaiting");
         int count = NumberUtils.toInt(strCount, 0);
         if (count > 0) {
             /* create a batch file in the temp directory */

@@ -6,11 +6,9 @@
 	<form action="lotd" method="post">
 		<p th:text="#{msg.enter.decimal.value}" />
 		<input type="text" name="number" size="20" maxlength="18" th:value="${number}" />
-			<span> + 1 = </span><span th:text="${result}"></span><br />
-			<br /> <input type="submit" th:value="#{label.calculate}" /><br /><br />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.decimal.value}"></span>
-		</div>
+		<span> + 1 = </span><span th:text="${result}"></span><br /><br /> 
+		<input type="submit" th:value="#{label.calculate}" /><br /><br />
+		<div th:replace="messages"></div>
 	</form>
 </body>
 </html>

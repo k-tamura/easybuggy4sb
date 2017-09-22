@@ -4,33 +4,23 @@ import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 import ognl.Ognl;
 import ognl.OgnlContext;
 import ognl.OgnlException;
 
 @Controller
-public class OGNLExpressionInjectionController {
-
-    private static final Logger log = LoggerFactory.getLogger(SQLInjectionController.class);
-
-    @Autowired
-    MessageSource msg;
+public class OGNLExpressionInjectionController extends AbstractController {
 
     @RequestMapping(value = "/ognleijc")
     public ModelAndView process(@RequestParam(value = "expression", required = false) String expression,
             ModelAndView mav, Locale locale) {
-        mav.setViewName("commandinjection");
-        mav.addObject("title", msg.getMessage("title.ognl.expression.injection.page", null, locale));
-
+        setViewAndCommonObjects(mav, locale, "commandinjection");
         Object value = null;
         String errMessage = "";
         OgnlContext ctx = new OgnlContext();

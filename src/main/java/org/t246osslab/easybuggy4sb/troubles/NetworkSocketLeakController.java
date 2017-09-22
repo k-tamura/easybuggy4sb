@@ -6,26 +6,17 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class NetworkSocketLeakController {
-
-    private static final Logger log = LoggerFactory.getLogger(NetworkSocketLeakController.class);
-
-    @Autowired
-    MessageSource msg;
+public class NetworkSocketLeakController extends AbstractController {
 
     @RequestMapping(value = "/netsocketleak")
     public ModelAndView process(ModelAndView mav, HttpServletRequest req, Locale locale) {
-        mav.setViewName("netsocketleak");
-        mav.addObject("title", msg.getMessage("title.response.time", null, locale));
+        setViewAndCommonObjects(mav, locale, "netsocketleak");
         HttpURLConnection connection = null;
         URL url = null;
         String pingURL = req.getParameter("pingurl");

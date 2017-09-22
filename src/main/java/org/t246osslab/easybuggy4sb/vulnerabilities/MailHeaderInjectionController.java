@@ -17,17 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 /**
  * A servlet that takes message details from user and send it as a new mail
@@ -35,9 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
  * uploaded from client.
  */
 @Controller
-public class MailHeaderInjectionController {
-
-	private static final Logger log = LoggerFactory.getLogger(MailHeaderInjectionController.class);
+public class MailHeaderInjectionController extends AbstractController {
 
 	@Value("${spring.mail.username}")
 	String username;
@@ -52,24 +48,21 @@ public class MailHeaderInjectionController {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	@Autowired
-	MessageSource msg;
-
 	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-		mav.setViewName("mailheaderinjection");
-		mav.addObject("title", msg.getMessage("title.mail.header.injection.page", null, locale));
+	    setViewAndCommonObjects(mav, locale, "mailheaderinjection");
 		if (isReadyToSendEmail()) {
 			mav.addObject("isReady", "yes");
-		}
+        } else {
+            mav.addObject("note", msg.getMessage("msg.smtp.server.not.setup", null, locale));
+        }
 		return mav;
 	}
 
 	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.POST)
 	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
 			throws IOException, ServletException {
-		mav.setViewName("mailheaderinjection");
-		mav.addObject("title", msg.getMessage("title.mail.header.injection.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "mailheaderinjection");
 
 		List<File> uploadedFiles = saveUploadedFiles(req);
 

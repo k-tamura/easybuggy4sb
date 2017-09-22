@@ -18,10 +18,7 @@
 				<td th:text="${user.secret}"></td>
 			</tr>
 		</table>
-		<p th:utext="${errmsg}" /><br />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.sql.injection}"></span>
-		</div>
+		<div th:replace="messages"></div>
 	</form>
 </body>
 </html>

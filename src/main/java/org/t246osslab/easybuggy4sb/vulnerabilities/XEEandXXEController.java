@@ -19,10 +19,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
@@ -33,21 +30,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 @Controller
-public class XEEandXXEController {
-
-	private static final Logger log = LoggerFactory.getLogger(XEEandXXEController.class);
+public class XEEandXXEController extends AbstractController {
 
 	// Name of the directory where uploaded files is saved
 	private static final String SAVE_DIR = "uploadFiles";
-
-	@Autowired
-	MessageSource msg;
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
@@ -59,13 +52,11 @@ public class XEEandXXEController {
 		Resource resource = new ClassPathResource("/xml/sample_users.xml");
 		mav.addObject("sample_users_xml", IOUtils.toString(resource.getInputStream()));
 		if ("/xee".equals(req.getServletPath())) {
-			mav.setViewName("xee");
-			mav.addObject("title", msg.getMessage("title.xee", null, locale));
+		    setViewAndCommonObjects(mav, locale, "xee");
 			resource = new ClassPathResource("/xml/xee.xml");
 			mav.addObject("xee_xml", IOUtils.toString(resource.getInputStream()));
 		} else {
-			mav.setViewName("xxe");
-			mav.addObject("title", msg.getMessage("title.xxe", null, locale));
+            setViewAndCommonObjects(mav, locale, "xxe");
 			resource = new ClassPathResource("/xml/xxe.xml");
 			mav.addObject("xxe_xml", IOUtils.toString(resource.getInputStream()));
 			resource = new ClassPathResource("/xml/xxe.dtd");
@@ -133,16 +124,14 @@ public class XEEandXXEController {
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.registration.fail", null, locale));
 			}
-			mav.setViewName("xee");
-			mav.addObject("title", msg.getMessage("title.xee", null, locale));
+            setViewAndCommonObjects(mav, locale, "xee");
 		} else {
 			if (isRegistered && customHandler.isRegistered()) {
 				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
 			}
-			mav.setViewName("xxe");
-			mav.addObject("title", msg.getMessage("title.xxe", null, locale));
+            setViewAndCommonObjects(mav, locale, "xxe");
 		}
 		mav.addObject("resultList", customHandler.getResult());
 		return mav;

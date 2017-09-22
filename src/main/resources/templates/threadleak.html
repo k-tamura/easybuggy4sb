@@ -5,8 +5,6 @@
 	<div th:replace="header"></div>
 	<span th:utext="#{label.current.thread.count}"></span>
 	<span>: </span><span th:text="${count}"></span><br /><br />
-	<div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.thread.leak.occur}"></span>
-	</div>
+	<div th:replace="messages"></div>
 </body>
 </html>

@@ -13,9 +13,7 @@
 		<tr><td th:text="#{label.language}" /><td id="browserLanguage" /></tr>
 	</table>
 	<hr />
-	<div class="alert alert-info" role="alert"> 
-		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.unintended.file.disclosure}"></span>
-	</div>
+    <div th:replace="messages"></div>
 	<script type="text/javascript">
 	<!--
 		document.getElementById("appCodeName").textContent=navigator.appCodeName;

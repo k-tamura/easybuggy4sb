@@ -6,17 +6,14 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.owasp.esapi.ESAPI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class StringPlusOperationController {
+public class StringPlusOperationController extends AbstractController {
 
     private static final int MAX_LENGTH = 1000000;
     private static final String[] ALL_NUMBERS = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
@@ -27,19 +24,13 @@ public class StringPlusOperationController {
     private static final String[] ALL_SIGNS = { "!", "#", "$", "%", "&", "(", ")", "*", "+", ",", "-", ".", "/", ":",
             ";", "<", "=", ">", "?", "@", "[", "]", "^", "_", "{", "|", "}" };
 
-    private static final Logger log = LoggerFactory.getLogger(StringPlusOperationController.class);
-
-    @Autowired
-    MessageSource msg;
-
     @RequestMapping(value = "/strplusopr")
     public ModelAndView process(@RequestParam(value = "length", required = false) String strLength,
             @RequestParam(value = "characters", required = false) String[] characters, ModelAndView mav,
             Locale locale) {
+        setViewAndCommonObjects(mav, locale, "strplusopr");
         try {
             int length = NumberUtils.toInt(strLength, 0);
-            mav.setViewName("strplusopr");
-            mav.addObject("title", msg.getMessage("title.random.string.generator", null, locale));
             StringBuilder html = createMainContent(characters, mav, locale, length);
             mav.addObject("html", html.toString());
         } catch (Exception e) {

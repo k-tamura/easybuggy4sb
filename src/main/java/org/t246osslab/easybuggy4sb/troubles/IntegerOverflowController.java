@@ -4,24 +4,19 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class IntegerOverflowController {
-
-    @Autowired
-    MessageSource msg;
+public class IntegerOverflowController extends AbstractController {
 
     @RequestMapping(value = "/iof")
     public ModelAndView process(@RequestParam(value = "times", required = false) String strTimes, ModelAndView mav,
             Locale locale) {
-        mav.setViewName("intoverflow");
-        mav.addObject("title", msg.getMessage("title.integer.overflow.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "intoverflow");
         BigDecimal thickness = null;
         BigDecimal thicknessM = null;
         BigDecimal thicknessKm = null;

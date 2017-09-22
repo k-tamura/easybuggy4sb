@@ -9,30 +9,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class NullByteInjectionController {
-
-	private static final Logger log = LoggerFactory.getLogger(NullByteInjectionController.class);
-
-	@Autowired
-	MessageSource msg;
+public class NullByteInjectionController extends AbstractController {
 
 	@RequestMapping(value = "/nullbyteijct")
     public ModelAndView process(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
-		mav.setViewName("nullbyteinjection");
-		mav.addObject("title", msg.getMessage("title.guide.download", null, locale));
-		
+        setViewAndCommonObjects(mav, locale, "nullbyteinjection");
 		String fileName = req.getParameter("fileName");
 		if (StringUtils.isBlank(fileName)) {
 			return mav;

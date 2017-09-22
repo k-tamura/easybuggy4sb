@@ -18,9 +18,6 @@
 			<td th:text="${timeZone.rawOffset}" />
 		</tr>
 	</table>
-	<br />
-	<div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.c.heap.space.leak.occur}"></span>
-	</div>
+	<div th:replace="messages"></div>
 </body>
 </html>

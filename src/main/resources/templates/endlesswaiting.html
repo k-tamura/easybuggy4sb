@@ -6,14 +6,11 @@
 	<form action="endlesswaiting" method="post">
 		<p th:text="#{description.endless.waiting}" />
 		<label th:text="#{label.character.count}"></label><span>: </span>
-			<input type="text" name="count" size="5" maxlength="5" /><br /><br /> 
-			<input type="submit" /><br /><br />
-			<p th:utext="${msg}" /><p th:utext="${errmsg}" />
-			<span th:if="${result}" th:utext="#{label.execution.result}" ></span>
-			<p th:if="${result}" th:utext="${result}" /><br /> 
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.count}"></span>
-		</div>
+    	<input type="text" name="count" size="5" maxlength="5" /><br /><br /> 
+		<input type="submit" /><br /><br />
+        <span th:if="${result}" th:utext="#{label.execution.result}" ></span>
+        <p th:if="${result}" th:utext="${result}" />
+		<div th:replace="messages"></div>
 	</form>
 </body>
 </html>

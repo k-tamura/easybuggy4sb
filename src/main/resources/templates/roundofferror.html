@@ -6,11 +6,9 @@
 	<form action="roe" method="post">
 		<p th:text="#{msg.enter.positive.number}" />
 		<input type="text" name="number" size="1" maxlength="1" th:value="${number}" />
-			<span> - 0.9 = </span><span th:text="${result}"></span><br /><br />
-			<input type="submit" th:value="#{label.calculate}" /><br /><br />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.one}"></span>
-		</div>
+		<span> - 0.9 = </span><span th:text="${result}"></span><br /><br />
+		<input type="submit" th:value="#{label.calculate}" /><br /><br />
+		<div th:replace="messages"></div>
 	</form>
 </body>
 </html>

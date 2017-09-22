@@ -39,9 +39,6 @@
 			</tr>
 		</table>
 	</th:block>
-	<p th:utext="${errmsg}" /><br />
-	<div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign" th:utext="${note}"></span>
-	</div>
+	<div th:replace="messages"></div>
 </body>
 </html>

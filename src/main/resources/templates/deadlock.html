@@ -3,14 +3,11 @@
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
-	<p th:utext="${msg}" />
 	<table th:if="${threadsInfo != null}" class="table table-striped table-bordered table-hover" style="font-size: small;">
 		<tr th:each="threadInfo: ${threadsInfo}">
 			<td th:text="${threadInfo}"></td>
 		</tr>
 	</table>
-	<br /><div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.dead.lock.occur}"></span>
-	</div>
+	<div th:replace="messages"></div>
 </body>
 </html>

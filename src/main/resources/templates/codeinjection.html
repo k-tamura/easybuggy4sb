@@ -6,15 +6,9 @@
 	<form action="codeijc" method="post">
 		<p th:text="#{description.parse.json}" />
 		<label th:text="#{label.json.string}"></label><span>: </span>
-			<textarea name="jsonString" cols="80" rows="15" th:value="${jsonString}" ></textarea>
-			<br /><br /> <input type="submit" /><br /><br />
-			<p th:text="${msg}" /><br />
-		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-		</div>
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.code.injection}"></span>
-		</div>
+		<textarea name="jsonString" cols="80" rows="15" th:value="${jsonString}" ></textarea><br /><br /> 
+		<input type="submit" /><br /><br />
+        <div th:replace="messages"></div>
 	</form>
 </body>
 </html>

@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
@@ -23,8 +21,6 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 @Controller
 public class LDAPInjectionController extends DefaultLoginController {
 	
-    private static final Logger log = LoggerFactory.getLogger(LDAPInjectionController.class);
-
     @Override
     @RequestMapping(value = "/ldapijc/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {

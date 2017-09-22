@@ -7,28 +7,19 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class CodeInjectionController {
-
-	private static final Logger log = LoggerFactory.getLogger(CodeInjectionController.class);
-
-	@Autowired
-	MessageSource msg;
+public class CodeInjectionController extends AbstractController {
 
 	@RequestMapping(value = "/codeijc")
 	public ModelAndView process(@RequestParam(value = "jsonString", required = false) String jsonString,
 			ModelAndView mav, Locale locale) {
-		mav.setViewName("codeinjection");
-		mav.addObject("title", msg.getMessage("title.parse.json", null, locale));
+		setViewAndCommonObjects(mav, locale, "codeinjection");
         if (!StringUtils.isBlank(jsonString)) {
             parseJson(jsonString, mav, locale);
         } else {

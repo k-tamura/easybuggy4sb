@@ -8,25 +8,26 @@
 		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />
-		<input type="submit" th:value="#{label.upload}" />
-        <p th:text="${msg}" /><br />
-        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
+		<input type="submit" th:value="#{label.upload}" /><br /><br />
+        <div th:if="${msg != null}">
+            <th:block th:text="${msg}" ></th:block><br /><br />
         </div>
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step1}"></span>
-		</div>
-		<pre id="code" class="prettyprint lang-xml" th:text="${xxe_dtd}"></pre><br />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.xxe.step2}"></span>
-		</div>
+        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-warning-sign"></span> 
+            <th:block th:text="${errmsg}"></th:block>
+        </div>
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign"></span> 
+            <th:block th:utext="#{msg.note.xxe.step1}"></th:block>
+        </div>
+        <pre id="code" class="prettyprint lang-xml" th:text="${xxe_dtd}"></pre><br />
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign"></span> 
+            <th:block th:utext="#{msg.note.xxe.step2}"></th:block>
+        </div>
 		<pre id="code" class="prettyprint lang-xml" th:text="${xxe_xml}"></pre>
 	</form>
 	<th:block th:if="${resultList != null}">
-		<p th:text="${msg}" />
-		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-		</div>
 		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
 			<tr>
 				<th th:text="#{label.user.id}"></th>
@@ -50,7 +51,8 @@
 				</th:block>
 			</tr>
 		</table>
-		<input type="button" onClick='history.back();' th:value="#{label.history.back}" />
+		<input type="button" onClick='history.back();' th:value="#{label.history.back}" /><br /><br />
+        <div th:replace="messages"></div>
 	</th:block>
 </body>
 </html>

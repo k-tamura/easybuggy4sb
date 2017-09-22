@@ -6,29 +6,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class SlowRegularExpressionController {
-
-	private static final Logger log = LoggerFactory.getLogger(SlowRegularExpressionController.class);
-
-	@Autowired
-	MessageSource msg;
+public class SlowRegularExpressionController extends AbstractController {
 
 	@RequestMapping(value = "/slowre")
 	public ModelAndView process(@RequestParam(value = "word", required = false) String word, ModelAndView mav,
 			Locale locale) {
 		String message = null;
-		mav.setViewName("slowregex");
-		mav.addObject("title", msg.getMessage("title.slow.regular.expression.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "slowregex");
 		if (!StringUtils.isBlank(word)) {
 			if (isMatched(word)) {
 				message = msg.getMessage("msg.match.regular.expression", null, locale);

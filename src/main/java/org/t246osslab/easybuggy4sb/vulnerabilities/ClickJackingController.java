@@ -14,39 +14,30 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.owasp.esapi.ESAPI;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class ClickJackingController {
-
-	private static final Logger log = LoggerFactory.getLogger(ClickJackingController.class);
-
-	@Autowired
-	MessageSource msg;
+public class ClickJackingController extends AbstractController {
 
 	@Autowired
 	LdapTemplate ldapTemplate;
 	
 	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-		mav.setViewName("clickjacking");
-		mav.addObject("title", msg.getMessage("section.change.mail", null, locale));
+        setViewAndCommonObjects(mav, locale, "clickjacking");
 		return mav;
 	}
 
 	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.POST)
 	protected ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
 			throws IOException {
-        mav.setViewName("clickjacking");
-        mav.addObject("title", msg.getMessage("section.change.mail", null, locale));
+        setViewAndCommonObjects(mav, locale, "clickjacking");
         
 		HttpSession session = req.getSession();
 		if (session == null) {

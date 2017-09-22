@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
@@ -22,8 +20,6 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
 public class VerboseErrorMessageController extends DefaultLoginController {
-
-	private static final Logger log = LoggerFactory.getLogger(VerboseErrorMessageController.class);
 
 	@Override
 	@RequestMapping(value = "/verbosemsg/login", method = RequestMethod.GET)

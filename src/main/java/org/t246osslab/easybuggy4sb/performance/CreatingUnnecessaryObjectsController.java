@@ -3,30 +3,21 @@ package org.t246osslab.easybuggy4sb.performance;
 import java.util.Locale;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class CreatingUnnecessaryObjectsController {
-
-    private static final Logger log = LoggerFactory.getLogger(CreatingUnnecessaryObjectsController.class);
-
-    @Autowired
-    MessageSource msg;
+public class CreatingUnnecessaryObjectsController extends AbstractController {
 
     @RequestMapping(value = "/createobjects")
     public ModelAndView process(@RequestParam(value = "number", required = false) String strNumber, ModelAndView mav,
             Locale locale) {
         int number = NumberUtils.toInt(strNumber, -1);
         StringBuilder message = new StringBuilder();
-        mav.setViewName("createobjects");
-        mav.addObject("title", msg.getMessage("title.sum.of.natural.numbers", null, locale));
+        setViewAndCommonObjects(mav, locale, "createobjects");
 
         if (number > 0) {
             mav.addObject("number", number);

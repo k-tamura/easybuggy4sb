@@ -8,12 +8,7 @@
 		<input type="text" name="expression" size="80" maxlength="300"
 			th:value="${expression}" /> = <span th:text="${value}"></span><br /><br /> 
 		<input type="submit" th:value="#{label.calculate}" /><br /><br />
-		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-		</div>
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.runtime.exec}"></span>
-		</div>
+        <div th:replace="messages"></div>
 	</form>
 </body>
 </html>

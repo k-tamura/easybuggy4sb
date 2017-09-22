@@ -7,31 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
 
 @Controller
-public class MemoryLeakController2 {
+public class MemoryLeakController2 extends AbstractController {
 
 	private int i = 0;
 
-	private static final Logger log = LoggerFactory.getLogger(MemoryLeakController2.class);
-
-	@Autowired
-	MessageSource msg;
-
 	@RequestMapping(value = "/memoryleak2")
 	public ModelAndView process(ModelAndView mav, Locale locale) {
-		mav.setViewName("memoryleak");
-		mav.addObject("title", msg.getMessage("title.nonheap.memory.usage", null, locale));
+        setViewAndCommonObjects(mav, locale, "memoryleak");
+        mav.addObject("title", msg.getMessage("title.memoryleak2.page", null, locale));
         String permName = System.getProperty("java.version").startsWith("1.7")
                 ? msg.getMessage("label.permgen.space", null, locale) : msg.getMessage("label.metaspace", null, locale);
         mav.addObject("note", msg.getMessage("msg.permgen.space.leak.occur", new Object[] { permName }, locale));

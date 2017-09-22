@@ -33,16 +33,7 @@
 				</tr>
 			</table>
 		</form>
-        <p th:text="${msg}" />
-        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-        </div>
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.mail.header.injection}"></span>
-		</div>
 	</th:block>
-	<div th:if="${isReady == null}" class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.smtp.server.not.setup}"></span>
-	</div>
+    <div th:replace="messages"></div>
 </body>
 </html>

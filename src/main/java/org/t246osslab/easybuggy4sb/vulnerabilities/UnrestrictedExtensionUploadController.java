@@ -14,33 +14,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class UnrestrictedExtensionUploadController {
-
-    private static final Logger log = LoggerFactory.getLogger(UnrestrictedExtensionUploadController.class);
-
-    @Autowired
-    MessageSource msg;
+public class UnrestrictedExtensionUploadController extends AbstractController {
 
     // Name of the directory where uploaded files is saved
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-        
-        mav.setViewName("unrestrictedextupload");
-        mav.addObject("title", msg.getMessage("title.unrestricted.extension.upload", null, locale));
+        setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
         if (req.getAttribute("errorMessage") != null) {
             mav.addObject("errmsg", req.getAttribute("errorMessage"));
         }
@@ -54,8 +44,7 @@ public class UnrestrictedExtensionUploadController {
             return doGet(mav, req, res, locale);
         }
 
-        mav.setViewName("unrestrictedextupload");
-        mav.addObject("title", msg.getMessage("title.unrestricted.extension.upload", null, locale));
+        setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
         
         // Get absolute path of the web application
         String appPath = req.getServletContext().getRealPath("");
@@ -81,6 +70,7 @@ public class UnrestrictedExtensionUploadController {
             mav.addObject("msg", msg.getMessage("msg.convert.grayscale.complete", null, locale));
             mav.addObject("upladFilePath", SAVE_DIR + "/" + fileName);
         } else {
+            mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", null, locale));
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));
         }
         return mav;

@@ -6,12 +6,9 @@
 	<form th:if="${complete == null}"  action="/admins/csrf" method="post">
 		<p th:text="#{msg.enter.passwd}" /><br />
 		<label th:text="#{label.password}"></label><span>: </span>
-			<input type="password" name="password" size="30" maxlength="30" autocomplete="off" /><br />
-			<br /> <input type="submit" /><br /><br />
-			<p th:utext="${errmsg}" />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.csrf}"></span>
-		</div>
+		<input type="password" name="password" size="30" maxlength="30" autocomplete="off" /><br /><br /> 
+		<input type="submit" /><br /><br />
+		<div th:replace="messages"></div>
 	</form>
 	<th:block th:if="${complete != null}" >
 		<p th:text="#{msg.passwd.changed}" /><br /><br /><a href="/admins/main" th:text="#{label.goto.admin.page}"></a>

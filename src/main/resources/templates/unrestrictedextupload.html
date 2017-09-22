@@ -7,21 +7,12 @@
 		<p th:text="#{msg.convert.grayscale}" />
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
-		<input type="submit" th:value="#{label.upload}" />
-		<p th:text="${msg}" /><br />
-		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-		</div>
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.unrestricted.ext.upload}"></span>
-		</div>
+		<input type="submit" th:value="#{label.upload}" /><br /><br />
+		<div th:replace="messages"></div>
 	</form>
 	<th:block th:if="${upladFilePath != null}">
-		<img th:src="${upladFilePath}" />
-		<p th:text="${msg}" />
-		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-		</div>
+		<img th:src="${upladFilePath}" /><br /><br />
+		<div th:replace="messages"></div>
 		<input type="button" onClick='history.back();'  th:value="#{label.history.back}" />
 	</th:block>
 </body>

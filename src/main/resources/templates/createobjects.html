@@ -5,12 +5,9 @@
 	<div th:replace="header"></div>
 	<form action="createobjects" method="post">
 		<p th:utext="#{msg.calc.sym.natural.numbers}" /><br />
-			n =  <input type="text" name="number" size="9" maxlength="9" th:value="${number}" /><br />
-			<br /> <input type="submit" th:value="#{label.calculate}" /><br /><br />
-			<p th:utext="${msg}" /><br />
-		<div class="alert alert-info" role="alert">
-			<span class="glyphicon glyphicon-info-sign" th:utext="#{msg.note.enter.large.number}"></span>
-		</div>
+		n =  <input type="text" name="number" size="9" maxlength="9" th:value="${number}" /><br /><br /> 
+		<input type="submit" th:value="#{label.calculate}" /><br /><br />
+		<div th:replace="messages"></div>
 	</form>
 </body>
 </html>

@@ -9,35 +9,27 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
-public class DBConnectionLeakController {
-
-    private static final Logger log = LoggerFactory.getLogger(DBConnectionLeakController.class);
+public class DBConnectionLeakController extends AbstractController {
 
     @Value("${spring.datasource.url}")
     String datasourceUrl;
-
-    @Autowired
-    MessageSource msg;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
     
     @RequestMapping(value = "/dbconnectionleak")
     public ModelAndView process(ModelAndView mav, Locale locale) {
-        mav.setViewName("dbconnectionleak");
-        mav.addObject("title", msg.getMessage("title.user.list", null, locale));
+        setViewAndCommonObjects(mav, locale, "dbconnectionleak");
         if (StringUtils.isBlank(datasourceUrl) || datasourceUrl.startsWith("jdbc:derby:memory:")) {
             /* Just show users the warning because this feature can work if an external DB is used. */
             mav.addObject("note", msg.getMessage("msg.note.not.use.ext.db", null, locale));

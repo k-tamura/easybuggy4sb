@@ -12,11 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.core.LdapTemplate;
@@ -29,7 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
-public class DefaultLoginController {
+public class DefaultLoginController extends AbstractController {
 
     @Value("${account.lock.time}")
     long accountLockTime;
@@ -38,20 +35,14 @@ public class DefaultLoginController {
     long accountLockCount;
 
     @Autowired
-    protected MessageSource msg;
-
-    @Autowired
     protected LdapTemplate ldapTemplate;
 
     /* User's login history using in-memory account locking */
     protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultLoginController.class);
-
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-        mav.setViewName("login");
-        mav.addObject("title", msg.getMessage("title.login.page", null, locale));
+        setViewAndCommonObjects(mav, locale, "login");
 
         HashMap<String, String[]> hiddenMap = new HashMap<>();
         Enumeration<?> paramNames = req.getParameterNames();

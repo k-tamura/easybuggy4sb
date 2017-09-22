@@ -11,31 +11,23 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 @Controller
-public class FileDescriptorLeakController {
+public class FileDescriptorLeakController extends AbstractController {
 
     private static final int MAX_DISPLAY_COUNT = 15;
-    private static final Logger log = LoggerFactory.getLogger(FileDescriptorLeakController.class);
     private long count = 0;
-
-    @Autowired
-    MessageSource msg;
 
     @RequestMapping(value = "/filedescriptorleak")
     public ModelAndView process(@RequestParam(value = "pingurl", required = false) String pingURL,
             HttpServletRequest req, ModelAndView mav, Locale locale) {
 
-        mav.setViewName("filedescriptorleak");
-        mav.addObject("title", msg.getMessage("title.access.history", null, locale));
+        setViewAndCommonObjects(mav, locale, "filedescriptorleak");
         try {
             File file = new File(req.getServletContext().getAttribute("javax.servlet.context.tempdir").toString(),
                     "history.csv");

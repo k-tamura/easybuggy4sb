@@ -21,13 +21,6 @@
 			</tr>
 		</table>
 	</form>
-	<p th:if="${msg != null}" th:utext="${msg}" /><br />
-	<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-		<span class="glyphicon glyphicon-warning-sign" th:text="${errmsg}"></span>
-	</div>
-	<div class="alert alert-info" role="alert">
-		<span class="glyphicon glyphicon-info-sign"
-			th:utext="#{msg.note.sql.deadlock}"></span>
-	</div>
+	<div th:replace="messages"></div>
 </body>
 </html>

@@ -5,11 +5,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,24 +16,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
-public class SQLInjectionController {
-
-	private static final Logger log = LoggerFactory.getLogger(SQLInjectionController.class);
-
-	@Autowired
-	MessageSource msg;
+public class SQLInjectionController extends AbstractController {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = "/sqlijc")
-	public ModelAndView process(@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "password", required = false) String password, ModelAndView mav, Locale locale) {
-		mav.setViewName("sqlijc");
-		mav.addObject("title", msg.getMessage("title.sql.injection.page", null, locale));
+    public ModelAndView process(@RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "password", required = false) String password, ModelAndView mav,
+            HttpServletRequest req, Locale locale) {
+	    setViewAndCommonObjects(mav, locale, "sqlijc");
 		String trimedName = StringUtils.trim(name);
 		String trimedPassword = StringUtils.trim(password);
 		if (!StringUtils.isBlank(trimedName) && !StringUtils.isBlank(trimedPassword) && trimedPassword.length() >= 8) {
@@ -50,8 +45,10 @@ public class SQLInjectionController {
                 mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
             }
 		} else {
-			mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
-		}
+            if (req.getMethod().equalsIgnoreCase("POST")) {
+                mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
+            }
+        }
 		return mav;
 	}
 
