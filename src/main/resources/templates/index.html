@@ -60,10 +60,6 @@
 		<li><p><a href="admins/main?logintype=bruteforce" th:text="#{function.name.brute.force}"></a>: <span th:text="#{function.description.brute.force}"></span></p></li>
 		<li><p><a th:href="@{'admins/main?logintype=sessionfixation'}" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></p></li>
 		<li><p><a href="admins/main?logintype=verbosemsg" th:text="#{function.name.verbose.error.message}"></a>: <span th:text="#{function.description.verbose.error.message}"></span></p></li>
-		<!-- TODO
-		<li><p><span th:text="#{function.name.dangerous.file.inclusion} +': ' + #{function.description.dangerous.file.inclusion}"></span></p></li>
-		<li><p><span th:text="#{function.name.path.traversal} +': ' + #{function.description.path.traversal}"></span></p></li>
-		 -->
 		<li><p><a href="/dfi/includable.jsp?template=style_bootstrap.html" th:text="#{function.name.dangerous.file.inclusion}"></a>: <span th:text="#{function.description.dangerous.file.inclusion}"></span></p></li>
 		<li><p><a href="/dt/includable.jsp?template=basic" th:text="#{function.name.path.traversal}"></a>: <span th:text="#{function.description.path.traversal}"></span></p></li>
 		<li><p><a href="/uid/clientinfo.jsp" th:text="#{function.name.unintended.file.disclosure}"></a>: <span th:text="#{function.description.unintended.file.disclosure}"></span></p></li>
@@ -95,12 +91,12 @@
 		<li><p><a href="eie" target="_blank">ExceptionInInitializerError / NoClassDefFoundError</a>: <span th:text="#{function.description.ei.error}"></span></p></li>
 		<li><p><a href="fce" target="_blank">FactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'FactoryConfigurationError'})}"></span></p></li>
 		<li><p><a href="gsfe" target="_blank">GenericSignatureFormatError</a>: <span th:text="#{function.description.throwable(${'GenericSignatureFormatError'})}"></span></p></li>
-		<li><p><a href="oome" target="_blank">OutOfMemoryError (Java heap	space)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
-		<li><p><a href="oome2" target="_blank">OutOfMemoryError (Requested	array size exceeds VM limit)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
-		<li><p><a href="oome3" target="_blank">OutOfMemoryError (unable to	create new native thread)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
-		<li><p><a href="oome4" target="_blank">OutOfMemoryError (GC overhead	limit exceeded)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome" target="_blank">OutOfMemoryError (Java heap space)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome2" target="_blank">OutOfMemoryError (Requested array size exceeds VM limit)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome3" target="_blank">OutOfMemoryError (unable to create new native thread)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome4" target="_blank">OutOfMemoryError (GC overhead limit exceeded)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome5" target="_blank">OutOfMemoryError (<span th:text="${permname}"></span>)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
-		<li><p><a href="oome6" target="_blank">OutOfMemoryError (Direct buffer	memory)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
+		<li><p><a href="oome6" target="_blank">OutOfMemoryError (Direct buffer memory)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="sofe" target="_blank">StackOverflowError</a>: <span th:text="#{function.description.throwable(${'StackOverflowError'})}"></span></p></li>
 		<li><p><a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'TransformerFactoryConfigurationError'})}"></span></p></li>
 		<li><p><a href="jnicall" target="_blank">UnsatisfiedLinkError</a>: <span th:text="#{function.description.throwable(${'UnsatisfiedLinkError'})}"></span></p></li>
@@ -144,8 +140,7 @@
 
 	<hr />
 	<footer>
-		<img src="images/easybuggyL.png" />Copyright &copy; 2016-17 T246
-		OSS Lab, all rights reserved.<br/><br/>
+		<img src="images/easybuggyL.png" />Copyright &copy; 2016-17 T246 OSS Lab, all rights reserved.<br/><br/>
 	</footer>
 </body>
 </html>
