@@ -8,7 +8,10 @@
 		<input type="submit" th:value="#{label.update}" /><br /><br />
 		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
 			<tr>
-				<th><a th:href="'/deadlock2?order=' + ${order}"><th:block th:text="#{label.user.id}"></th:block></a></th>
+				<th><a th:href="'/deadlock2?order=' + ${order}"><th:block th:text="#{label.user.id}"></th:block> 
+                <th:span th:if="${order != 'desc'}" class="glyphicon glyphicon-triangle-top"></th:span>
+                <th:span th:if="${order == 'desc'}" class="glyphicon glyphicon-triangle-bottom"></th:span>
+                </a></th>
 				<th th:text="#{label.name}"></th>
 				<th th:text="#{label.phone}"></th>
 				<th th:text="#{label.mail}"></th>
