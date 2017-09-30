@@ -31,3 +31,10 @@ EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです�
 -
    
 [wikiページ](https://github.com/k-tamura/easybuggy4sb/wiki)を参照下さい。
+
+:clock4: デモ
+-
+
+EasyBuggyを起動して、無限ループ、LDAPインジェクション、UnsatisfiedLinkError、BufferOverflowException、デッドロック、メモリリーク、JVMクラッシュの順で実行しています。
+
+![demo](https://github.com/k-tamura/test/blob/master/demo_ebsb_ja.gif)
