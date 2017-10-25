@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class IndexController extends AbstractController {
+	boolean isFirstLoad = true;
     
     @RequestMapping(value = "/")
     public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
@@ -31,6 +32,8 @@ public class IndexController extends AbstractController {
 
         String mode = System.getProperty("easybuggy.mode");
         mav.addObject("isOnlyVulnerabilities", mode != null && mode.equalsIgnoreCase("only-vulnerabilities"));
+        mav.addObject("isFirstLoad", isFirstLoad);
+        isFirstLoad = false;
         return mav;
     }
 }

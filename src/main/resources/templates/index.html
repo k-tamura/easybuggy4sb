@@ -5,7 +5,10 @@
 	<header>
 		<table style="width: 720px;">
 			<tr>
-				<td><img src="images/easybuggy.png" /></td>
+				<td>
+					<th:block th:if="${isFirstLoad}"><img src="images/easybuggy.png"  class="bounceInRight animated" /></th:block>
+					<th:block th:unless="${isFirstLoad}"><img src="images/easybuggy.png" /></th:block>
+				</td>
 				<td><span class="glyphicon glyphicon-warning-sign"></span> 
                 <span th:text="#{description.all}"></span></td>
 			</tr>
