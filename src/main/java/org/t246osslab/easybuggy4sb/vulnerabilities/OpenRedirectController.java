@@ -1,7 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
-import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
 public class OpenRedirectController extends DefaultLoginController {
@@ -45,17 +43,7 @@ public class OpenRedirectController extends DefaultLoginController {
             res.sendRedirect("/openredirect/login" + loginQueryString);
         } else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
-            User admin = userLoginHistory.get(userid);
-            if (admin == null) {
-                User newAdmin = new User();
-                newAdmin.setUserId(userid);
-                admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-                if (admin == null) {
-                    admin = newAdmin;
-                }
-            }
-            admin.setLoginFailedCount(0);
-            admin.setLastLoginFailedTime(null);
+            resetAccountLock(userid);
 
             session.setAttribute("authNMsg", "authenticated");
             session.setAttribute("userid", userid);
@@ -74,19 +62,7 @@ public class OpenRedirectController extends DefaultLoginController {
             }
         } else {
             /* account lock count +1 */
-            if (userid != null) {
-                User admin = userLoginHistory.get(userid);
-                if (admin == null) {
-                    User newAdmin = new User();
-                    newAdmin.setUserId(userid);
-                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-                    if (admin == null) {
-                        admin = newAdmin;
-                    }
-                }
-                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-                admin.setLastLoginFailedTime(new Date());
-            }
+            incrementAccountLockNum(userid);
             
             session.setAttribute("authNMsg", "msg.authentication.fail");
             res.sendRedirect("/openredirect/login" + loginQueryString);

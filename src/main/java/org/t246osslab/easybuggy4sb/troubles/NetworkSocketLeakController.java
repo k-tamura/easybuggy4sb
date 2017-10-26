@@ -17,8 +17,8 @@ public class NetworkSocketLeakController extends AbstractController {
     @RequestMapping(value = "/netsocketleak")
     public ModelAndView process(ModelAndView mav, HttpServletRequest req, Locale locale) {
         setViewAndCommonObjects(mav, locale, "netsocketleak");
-        HttpURLConnection connection = null;
-        URL url = null;
+        HttpURLConnection connection;
+        URL url;
         String pingURL = req.getParameter("pingurl");
         try {
             if (pingURL == null) {

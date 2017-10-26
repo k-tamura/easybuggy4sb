@@ -18,7 +18,7 @@ public class SlowRegularExpressionController extends AbstractController {
 	@RequestMapping(value = "/slowre")
 	public ModelAndView process(@RequestParam(value = "word", required = false) String word, ModelAndView mav,
 			Locale locale) {
-		String message = null;
+		String message;
         setViewAndCommonObjects(mav, locale, "slowregex");
 		if (!StringUtils.isBlank(word)) {
 			if (isMatched(word)) {

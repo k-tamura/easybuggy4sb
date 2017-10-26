@@ -54,9 +54,9 @@ public class DBConnectionLeakController extends AbstractController {
 
     private List<User> selectUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        Connection conn = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+        Connection conn;
+        Statement stmt;
+        ResultSet rs;
         conn = jdbcTemplate.getDataSource().getConnection();
         stmt = conn.createStatement();
         rs = stmt.executeQuery("select id, name, phone, mail from users where ispublic = 'true'");

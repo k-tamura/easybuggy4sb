@@ -2,16 +2,11 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -21,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 
 @Controller
 public class UnrestrictedExtensionUploadController extends AbstractController {
@@ -29,7 +25,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
         if (req.getAttribute("errorMessage") != null) {
             mav.addObject("errmsg", req.getAttribute("errorMessage"));
@@ -38,10 +34,10 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     }
 
     @RequestMapping(value = "/ureupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
-    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         
         if (req.getAttribute("errorMessage") != null) {
-            return doGet(mav, req, res, locale);
+            return doGet(mav, req, locale);
         }
 
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
@@ -58,9 +54,9 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
 
         String fileName = file.getOriginalFilename();
         if (StringUtils.isBlank(fileName)) {
-            return doGet(mav, req, res, locale);
+            return doGet(mav, req, locale);
         }
-        boolean isConverted = writeFile(savePath, file, fileName);
+        boolean isConverted = MultiPartFileUtils.writeFile(savePath, file, fileName);
 
         if (!isConverted) {
             isConverted = convert2GrayScale(new File(savePath + File.separator + fileName).getAbsolutePath());
@@ -74,22 +70,6 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));
         }
         return mav;
-    }
-
-    private boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
-        boolean isConverted = false;
-        try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-                InputStream in = filePart.getInputStream();) {
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = in.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-        } catch (FileNotFoundException e) {
-            // Ignore because file already exists
-            isConverted = true;
-        }
-        return isConverted;
     }
 
     // Convert color image into gray scale image.

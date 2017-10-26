@@ -1,7 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,17 +48,7 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			return doGet(mav, req, res, locale);
 		} else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
-			User admin = userLoginHistory.get(userid);
-			if (admin == null) {
-				User newAdmin = new User();
-				newAdmin.setUserId(userid);
-				admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-				if (admin == null) {
-					admin = newAdmin;
-				}
-			}
-			admin.setLoginFailedCount(0);
-			admin.setLastLoginFailedTime(null);
+		    resetAccountLock(userid);
 
 			session.setAttribute("authNMsg", "authenticated");
 			session.setAttribute("userid", userid);
@@ -73,19 +62,7 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			}
 		} else {
 			/* account lock count +1 */
-            if (userid != null) {
-                User admin = userLoginHistory.get(userid);
-                if (admin == null) {
-                    User newAdmin = new User();
-                    newAdmin.setUserId(userid);
-                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-                    if (admin == null) {
-                        admin = newAdmin;
-                    }
-                }
-                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-                admin.setLastLoginFailedTime(new Date());
-            }
+		    incrementAccountLockNum(userid);
 
 			session.setAttribute("authNMsg", "msg.password.not.match");
 			return doGet(mav, req, res, locale);

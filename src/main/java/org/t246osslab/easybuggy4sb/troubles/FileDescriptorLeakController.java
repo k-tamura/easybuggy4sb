@@ -24,8 +24,7 @@ public class FileDescriptorLeakController extends AbstractController {
     private long count = 0;
 
     @RequestMapping(value = "/filedescriptorleak")
-    public ModelAndView process(@RequestParam(value = "pingurl", required = false) String pingURL,
-            HttpServletRequest req, ModelAndView mav, Locale locale) {
+    public ModelAndView process(HttpServletRequest req, ModelAndView mav, Locale locale) {
 
         setViewAndCommonObjects(mav, locale, "filedescriptorleak");
         try {

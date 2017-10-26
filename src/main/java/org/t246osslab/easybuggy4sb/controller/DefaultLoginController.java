@@ -73,17 +73,7 @@ public class DefaultLoginController extends AbstractController {
             res.sendRedirect("/login");
         } else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
-            User admin = userLoginHistory.get(userid);
-            if (admin == null) {
-                User newAdmin = new User();
-                newAdmin.setUserId(userid);
-                admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-                if (admin == null) {
-                    admin = newAdmin;
-                }
-            }
-            admin.setLoginFailedCount(0);
-            admin.setLastLoginFailedTime(null);
+            resetAccountLock(userid);
 
             session.setAttribute("authNMsg", "authenticated");
             session.setAttribute("userid", userid);
@@ -97,23 +87,37 @@ public class DefaultLoginController extends AbstractController {
             }
         } else {
             /* account lock count +1 */
-            if (userid != null) {
-                User admin = userLoginHistory.get(userid);
-                if (admin == null) {
-                    User newAdmin = new User();
-                    newAdmin.setUserId(userid);
-                    admin = userLoginHistory.putIfAbsent(userid, newAdmin);
-                    if (admin == null) {
-                        admin = newAdmin;
-                    }
-                }
-                admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
-                admin.setLastLoginFailedTime(new Date());
-            }
+            incrementAccountLockNum(userid);
+            
             session.setAttribute("authNMsg", "msg.authentication.fail");
             return doGet(mav, req, res, locale);
         }
         return null;
+    }
+
+    protected void incrementAccountLockNum(String userid) {
+        User admin = getUser(userid);
+        admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
+        admin.setLastLoginFailedTime(new Date());
+    }
+
+    protected void resetAccountLock(String userid) {
+        User admin = getUser(userid);
+        admin.setLoginFailedCount(0);
+        admin.setLastLoginFailedTime(null);
+    }
+
+    protected User getUser(String userid) {
+        User admin = userLoginHistory.get(userid);
+        if (admin == null) {
+            User newAdmin = new User();
+            newAdmin.setUserId(userid);
+            admin = userLoginHistory.putIfAbsent(userid, newAdmin);
+            if (admin == null) {
+                admin = newAdmin;
+            }
+        }
+        return admin;
     }
 
     protected boolean isAccountLocked(String userid) {

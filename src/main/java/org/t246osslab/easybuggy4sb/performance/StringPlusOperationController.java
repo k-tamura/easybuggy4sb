@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import org.owasp.esapi.ESAPI;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -66,8 +65,8 @@ public class StringPlusOperationController extends AbstractController {
             }
             html.append(msg.getMessage("label.execution.result", null, locale));
             html.append("<br /><br />");
-            // message.append(ESAPI.encoder().encodeForHTML(builder.toString()));
-            html.append(ESAPI.encoder().encodeForHTML(s));
+            // message.append(encodeForHTML(builder.toString()));
+            html.append(encodeForHTML(s));
         } else {
             html.append(msg.getMessage("msg.enter.positive.number", null, locale));
         }
@@ -78,15 +77,15 @@ public class StringPlusOperationController extends AbstractController {
             String label) {
         message.append("<p>" + msg.getMessage(label, null, locale) + "</p>");
         message.append("<p>");
-        for (int i = 0; i < allCharacters.length; i++) {
+        for (String allCharacter : allCharacters) {
             message.append("<input type=\"checkbox\" name=\"characters\" value=\"");
-            message.append(allCharacters[i]);
-            if (characters == null || Arrays.asList(characters).contains(allCharacters[i])) {
+            message.append(allCharacter);
+            if (characters == null || Arrays.asList(characters).contains(allCharacter)) {
                 message.append("\" checked=\"checked\">");
             } else {
                 message.append("\">");
             }
-            message.append(allCharacters[i]);
+            message.append(allCharacter);
             message.append(" ");
         }
         message.append("</p>");

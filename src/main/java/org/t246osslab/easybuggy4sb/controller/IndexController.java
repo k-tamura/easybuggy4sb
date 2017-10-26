@@ -10,15 +10,16 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class IndexController extends AbstractController {
-	boolean isFirstLoad = true;
+
+	private boolean isFirstLoad = true;
     
     @RequestMapping(value = "/")
     public ModelAndView init(HttpSession ses, ModelAndView mav, Locale locale) {
         ses.removeAttribute("dlpinit");
         setViewAndCommonObjects(mav, locale, "index");
         mav.addObject("title", "EasyBuggy Boot");
-        String permName = null;
-        String lblPerm = null;
+        String permName;
+        String lblPerm;
         if (System.getProperty("java.version").startsWith("1.7")) {
             permName = "PermGen space";
             lblPerm = msg.getMessage("label.permgen.space", null, locale);

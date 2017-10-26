@@ -2,11 +2,8 @@ package org.t246osslab.easybuggy4sb.troubles;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
-import org.owasp.esapi.ESAPI;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,13 +15,13 @@ public class MojibakeController extends AbstractController {
 
     @RequestMapping(value = "/mojibake")
     public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
-    		HttpServletRequest req, Locale locale) {
+    		Locale locale) {
         setViewAndCommonObjects(mav, locale, "mojibake");
         if (!StringUtils.isBlank(string)) {
             // Capitalize the given string
             String capitalizedName = WordUtils.capitalize(string);
             mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : "
-                    + ESAPI.encoder().encodeForHTML(capitalizedName));
+                    + encodeForHTML(capitalizedName));
         } else {
             mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
         }

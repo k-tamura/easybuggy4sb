@@ -14,7 +14,7 @@ import sun.misc.Unsafe;
 public class JVMCrashByEAVController {
 
     @RequestMapping(value = "/jvmcrasheav")
-    public void process(HttpServletRequest req, HttpServletResponse res) {
+    public void process() {
         try {
             getUnsafe().getByte(0);
         } catch (Exception e) {

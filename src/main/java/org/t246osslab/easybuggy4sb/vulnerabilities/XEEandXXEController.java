@@ -1,16 +1,11 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -32,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
+import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -46,7 +42,7 @@ public class XEEandXXEController extends AbstractController {
 	JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
+	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale)
 			throws IOException {
 
 		Resource resource = new ClassPathResource("/xml/sample_users.xml");
@@ -70,10 +66,10 @@ public class XEEandXXEController extends AbstractController {
 
 	@RequestMapping(value = { "/xee", "/xxe" }, headers=("content-type=multipart/*"), method = RequestMethod.POST)
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
-            HttpServletResponse res, Locale locale) throws IOException {
+			Locale locale) throws IOException {
 
         if (req.getAttribute("errorMessage") != null) {
-            return doGet(mav, req, res, locale);
+            return doGet(mav, req, locale);
         }
 
 		// Get absolute path of the web application
@@ -88,12 +84,12 @@ public class XEEandXXEController extends AbstractController {
 
 		String fileName = file.getOriginalFilename();
 		if (StringUtils.isBlank(fileName)) {
-			return doGet(mav, req, res, locale);
+			return doGet(mav, req, locale);
 		} else if (!fileName.endsWith(".xml")) {
 			mav.addObject("errmsg", msg.getMessage("msg.not.xml.file", null, locale));
-			return doGet(mav, req, res, locale);
+			return doGet(mav, req, locale);
 		}
-		boolean isRegistered = writeFile(savePath, file, fileName);
+		boolean isRegistered = MultiPartFileUtils.writeFile(savePath, file, fileName);
 
 		CustomHandler customHandler = new CustomHandler();
 		customHandler.setLocale(locale);
@@ -133,25 +129,12 @@ public class XEEandXXEController extends AbstractController {
 			}
             setViewAndCommonObjects(mav, locale, "xxe");
 		}
-		mav.addObject("resultList", customHandler.getResult());
+        if (customHandler.getResult() != null && customHandler.getResult().size() > 0) {
+            mav.addObject("resultList", customHandler.getResult());
+            mav.addObject("note", null);
+        }
 		return mav;
 	}
-
-    private boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
-		boolean isRegistered = false;
-		try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-				InputStream in = filePart.getInputStream()) {
-			int read = 0;
-			final byte[] bytes = new byte[1024];
-			while ((read = in.read(bytes)) != -1) {
-				out.write(bytes, 0, read);
-			}
-		} catch (FileNotFoundException e) {
-			// Ignore because file already exists
-			isRegistered = true;
-		}
-        return isRegistered;
-    }
 
 	public class CustomHandler extends DefaultHandler {
 		ArrayList<Object> resultList = new ArrayList<>();

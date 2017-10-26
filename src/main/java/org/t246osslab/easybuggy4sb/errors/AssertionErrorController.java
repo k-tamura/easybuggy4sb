@@ -8,6 +8,6 @@ public class AssertionErrorController {
 
     @RequestMapping(value = "/asserr")
     public void process() {
-        assert 1 >= 2 : "Invalid!";
+        assert false : "Invalid!";
     }
 }

@@ -60,8 +60,8 @@ public class EndlessWaitingController extends AbstractController {
     private File createBatchFile(int count, String tmpdir) {
 
         String osName = System.getProperty("os.name").toLowerCase();
-        String batFileName = null;
-        String firstLine = null;
+        String batFileName;
+        String firstLine;
         if (osName.toLowerCase().startsWith("windows")) {
             batFileName = "test.bat";
             firstLine = "@echo off";
@@ -70,7 +70,7 @@ public class EndlessWaitingController extends AbstractController {
             firstLine = "#!/bin/sh";
         }
 
-        File batFile = null;
+        File batFile;
         try {
             batFile = new File(tmpdir, batFileName);
         } catch (Exception e) {
@@ -78,7 +78,7 @@ public class EndlessWaitingController extends AbstractController {
             return null;
         }
         try (FileWriter fileWriter = new FileWriter(batFile);
-                BufferedWriter buffwriter = new BufferedWriter(fileWriter);) {
+                BufferedWriter buffwriter = new BufferedWriter(fileWriter)) {
             if (!batFile.setExecutable(true)) {
                 log.debug("batFile.setExecutable(true) returns false.");
             }
@@ -112,7 +112,7 @@ public class EndlessWaitingController extends AbstractController {
                 if (line == null) {
                     break;
                 }
-                sb.append(line + "<br>");
+                sb.append(line).append("<br>");
             }
         }
         return sb.toString();

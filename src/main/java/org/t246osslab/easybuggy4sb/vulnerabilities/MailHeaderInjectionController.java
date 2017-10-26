@@ -13,7 +13,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.commons.lang.StringUtils;
@@ -49,7 +48,7 @@ public class MailHeaderInjectionController extends AbstractController {
 	private JavaMailSender javaMailSender;
 
 	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+	public ModelAndView doGet(ModelAndView mav, Locale locale) {
 	    setViewAndCommonObjects(mav, locale, "mailheaderinjection");
 		if (isReadyToSendEmail()) {
 			mav.addObject("isReady", "yes");
@@ -60,7 +59,7 @@ public class MailHeaderInjectionController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.POST)
-	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
+	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, Locale locale)
 			throws IOException, ServletException {
         setViewAndCommonObjects(mav, locale, "mailheaderinjection");
 
@@ -72,7 +71,7 @@ public class MailHeaderInjectionController extends AbstractController {
 		String content = req.getParameter("content");
 		if (StringUtils.isBlank(subject) || StringUtils.isBlank(content)) {
 			mav.addObject("errmsg", msg.getMessage("msg.mail.is.empty", null, locale));
-			return doGet(mav, req, res, locale);
+			return doGet(mav, locale);
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(msg.getMessage("label.name", null, locale)).append(": ").append(name).append("<br>");
@@ -88,7 +87,7 @@ public class MailHeaderInjectionController extends AbstractController {
 		} finally {
 			deleteUploadFiles(uploadedFiles);
 		}
-		return doGet(mav, req, res, locale);
+		return doGet(mav, locale);
 	}
 
 	private boolean isReadyToSendEmail() {

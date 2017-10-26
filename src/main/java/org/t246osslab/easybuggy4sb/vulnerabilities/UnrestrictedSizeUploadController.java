@@ -3,17 +3,12 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -24,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 
 @Controller
 public class UnrestrictedSizeUploadController extends AbstractController {
@@ -32,13 +28,13 @@ public class UnrestrictedSizeUploadController extends AbstractController {
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ursupload", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "unrestrictedsizeupload");
         return mav;
     }
 
     @RequestMapping(value = "/ursupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
-    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedsizeupload");
 
         // Get absolute path of the web application
@@ -53,12 +49,12 @@ public class UnrestrictedSizeUploadController extends AbstractController {
 
         String fileName = file.getOriginalFilename();
         if (StringUtils.isBlank(fileName)) {
-            return doGet(mav, req, res, locale);
+            return doGet(mav, locale);
         } else if (!isImageFile(fileName)) {
             mav.addObject("errmsg", msg.getMessage("msg.not.image.file", null, locale));
-            return doGet(mav, req, res, locale);
+            return doGet(mav, locale);
         }
-        boolean isConverted = writeFile(savePath, file, fileName);
+        boolean isConverted = MultiPartFileUtils.writeFile(savePath, file, fileName);
 
         if (!isConverted) {
             isConverted = reverseColor(new File(savePath + File.separator + fileName).getAbsolutePath());
@@ -72,22 +68,6 @@ public class UnrestrictedSizeUploadController extends AbstractController {
             mav.addObject("note", msg.getMessage("msg.note.unrestrictedsizeupload", null, locale));
         }
         return mav;
-    }
-
-    private boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
-        boolean isConverted = false;
-        try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-                InputStream in = filePart.getInputStream();) {
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-            while ((read = in.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-        } catch (FileNotFoundException e) {
-            // Ignore because file already exists
-            isConverted = true;
-        }
-        return isConverted;
     }
 
     private boolean isImageFile(String fileName) {
