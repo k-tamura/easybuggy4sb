@@ -25,8 +25,7 @@ public class StringPlusOperationController extends AbstractController {
 
     @RequestMapping(value = "/strplusopr")
     public ModelAndView process(@RequestParam(value = "length", required = false) String strLength,
-            @RequestParam(value = "characters", required = false) String[] characters, ModelAndView mav,
-            Locale locale) {
+            @RequestParam(value = "characters", required = false) String[] characters, ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "strplusopr");
         try {
             int length = NumberUtils.toInt(strLength, 0);

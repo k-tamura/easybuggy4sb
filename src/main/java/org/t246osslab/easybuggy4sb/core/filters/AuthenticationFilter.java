@@ -21,13 +21,6 @@ import org.springframework.stereotype.Component;
 public class AuthenticationFilter implements Filter {
 
     /**
-     * Default constructor.
-     */
-    public AuthenticationFilter() {
-        // Do nothing
-    }
-
-    /**
      * Intercept unauthenticated requests for specific URLs and redirect to login page.
      *
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -48,8 +41,7 @@ public class AuthenticationFilter implements Filter {
             if (queryString == null) {
                 queryString = "";
             } else {
-                /* Remove "logintype" parameter from query string.
-                    (* "logintype" specifies a login servlet) */
+                /* Remove "logintype" parameter from query string. (* "logintype" specifies a login servlet) */
                 queryString = queryString.replace("logintype=" + loginType + "&", "");
                 queryString = queryString.replace("&logintype=" + loginType, "");
                 queryString = queryString.replace("logintype=" + loginType, "");

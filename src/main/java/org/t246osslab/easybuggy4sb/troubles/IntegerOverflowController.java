@@ -37,8 +37,7 @@ public class IntegerOverflowController extends AbstractController {
             StringBuilder description = new StringBuilder();
             description.append(thickness + " mm");
             if (thicknessM != null && thicknessKm != null) {
-                description.append(
-                        thicknessM.intValue() >= 1 && thicknessKm.intValue() < 1 ? " = " + thicknessM + " m" : "");
+                description.append(thicknessM.intValue() >= 1 && thicknessKm.intValue() < 1 ? " = " + thicknessM + " m" : "");
                 description.append(thicknessKm.intValue() >= 1 ? " = " + thicknessKm + " km" : "");
             }
             if (times == 42) {

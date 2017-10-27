@@ -42,8 +42,7 @@ public class XEEandXXEController extends AbstractController {
 	private JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale)
-			throws IOException {
+	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
 
 		Resource resource = new ClassPathResource("/xml/sample_users.xml");
 		mav.addObject("sample_users_xml", IOUtils.toString(resource.getInputStream()));

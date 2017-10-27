@@ -39,13 +39,6 @@ public class SecurityFilter implements Filter {
     private static final int FILE_SIZE_MAX = 1024 * 1024 * 10;
 
     /**
-     * Default constructor.
-     */
-    public SecurityFilter() {
-        // Do nothing
-    }
-
-    /**
      * Prevent several security vulnerabilities.
      * 
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)

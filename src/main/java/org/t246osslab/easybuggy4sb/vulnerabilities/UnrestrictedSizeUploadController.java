@@ -34,7 +34,8 @@ public class UnrestrictedSizeUploadController extends AbstractController {
     }
 
     @RequestMapping(value = "/ursupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
-    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
+    public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
+                               Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedsizeupload");
 
         // Get absolute path of the web application
