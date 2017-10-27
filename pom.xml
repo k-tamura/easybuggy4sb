@@ -30,6 +30,7 @@
 
 	<profiles>
 		<profile>
+			<id>JDK-Switch</id>
 			<activation>
 				<jdk>1.7</jdk>
 			</activation>
