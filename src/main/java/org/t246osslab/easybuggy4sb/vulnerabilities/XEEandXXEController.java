@@ -39,7 +39,7 @@ public class XEEandXXEController extends AbstractController {
 	private static final String SAVE_DIR = "uploadFiles";
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale)
@@ -97,7 +97,7 @@ public class XEEandXXEController extends AbstractController {
 		try {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
 			if ("/xee".equals(req.getServletPath())) {
-				customHandler.setInsert(true);
+				customHandler.setInsert();
 				spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
 				spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 			} else {
@@ -166,8 +166,8 @@ public class XEEandXXEController extends AbstractController {
 			}
 		}
 
-		void setInsert(boolean isInsert) {
-			this.isInsert = isInsert;
+		void setInsert() {
+			this.isInsert = true;
 		}
 
 		void setLocale(Locale locale) {
@@ -182,7 +182,7 @@ public class XEEandXXEController extends AbstractController {
 			return isRegistered;
 		}
 
-		public String upsertUser(Attributes attributes, Locale locale) {
+		String upsertUser(Attributes attributes, Locale locale) {
 			String resultMessage = null;
 			try {
 			    int count = jdbcTemplate.queryForObject(

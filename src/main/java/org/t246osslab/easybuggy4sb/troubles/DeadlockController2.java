@@ -27,7 +27,7 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class DeadlockController2 extends AbstractController {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private PlatformTransactionManager txMgr;

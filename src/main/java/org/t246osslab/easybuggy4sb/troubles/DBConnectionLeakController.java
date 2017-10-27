@@ -22,10 +22,10 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class DBConnectionLeakController extends AbstractController {
 
     @Value("${spring.datasource.url}")
-    String datasourceUrl;
+    private String datasourceUrl;
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
     
     @RequestMapping(value = "/dbconnectionleak")
     public ModelAndView process(ModelAndView mav, Locale locale) {

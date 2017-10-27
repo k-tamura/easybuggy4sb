@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 public class SecurityFilter implements Filter {
 
     @Autowired
-    MessageSource msg;
+    private MessageSource msg;
     
     /**
      * The maximum size permitted for the complete request.

@@ -25,10 +25,10 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class ClickJackingController extends AbstractController {
 
 	@Autowired
-	LdapTemplate ldapTemplate;
+	private LdapTemplate ldapTemplate;
 	
 	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+	public ModelAndView doGet(ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "clickjacking");
 		return mav;
 	}
@@ -61,16 +61,16 @@ public class ClickJackingController extends AbstractController {
 			} catch (Exception e) {
 				log.error("Exception occurs: ", e);
 				mav.addObject("errmsg", msg.getMessage("msg.mail.change.failed", null, locale));
-				return doGet(mav, req, res, locale);
+				return doGet(mav, locale);
 			}
 		} else {
 			mav.addObject("errmsg", msg.getMessage("msg.mail.format.is.invalid", null, locale));
-			return doGet(mav, req, res, locale);
+			return doGet(mav, locale);
 		}
 		return mav;
 	}
 
-	public boolean isValidEmailAddress(String email) {
+	private boolean isValidEmailAddress(String email) {
 		boolean result = true;
 		try {
 			InternetAddress emailAddr = new InternetAddress(email);

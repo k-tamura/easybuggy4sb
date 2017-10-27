@@ -23,7 +23,7 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class SQLInjectionController extends AbstractController {
 
 	@Autowired
-	JdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = "/sqlijc")
     public ModelAndView process(@RequestParam(value = "name", required = false) String name,

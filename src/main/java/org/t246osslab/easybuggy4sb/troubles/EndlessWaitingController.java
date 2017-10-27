@@ -106,7 +106,7 @@ public class EndlessWaitingController extends AbstractController {
 
     private String printInputStream(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(is));) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             while (true) {
                 String line = br.readLine();
                 if (line == null) {

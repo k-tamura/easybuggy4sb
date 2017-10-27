@@ -23,7 +23,7 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class CSRFController extends AbstractController {
 
 	@Autowired
-	LdapTemplate ldapTemplate;
+	private LdapTemplate ldapTemplate;
 	
     @RequestMapping(value = "/admins/csrf", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, Locale locale) {

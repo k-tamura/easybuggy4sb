@@ -29,16 +29,16 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class DefaultLoginController extends AbstractController {
 
     @Value("${account.lock.time}")
-    long accountLockTime;
+    private long accountLockTime;
 
     @Value("${account.lock.count}")
-    long accountLockCount;
+    private long accountLockCount;
 
     @Autowired
     protected LdapTemplate ldapTemplate;
 
     /* User's login history using in-memory account locking */
-    protected ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
@@ -107,7 +107,7 @@ public class DefaultLoginController extends AbstractController {
         admin.setLastLoginFailedTime(null);
     }
 
-    protected User getUser(String userid) {
+    private User getUser(String userid) {
         User admin = userLoginHistory.get(userid);
         if (admin == null) {
             User newAdmin = new User();

@@ -35,14 +35,14 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class MailHeaderInjectionController extends AbstractController {
 
 	@Value("${spring.mail.username}")
-	String username;
+	private String username;
 
 	@Value("${spring.mail.password}")
-	String password;
+	private String password;
 
 	// administrator's mail address
 	@Value("${mail.admin.address}")
-	String adminAddress;
+	private String adminAddress;
 
 	@Autowired
 	private JavaMailSender javaMailSender;
