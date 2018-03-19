@@ -15,12 +15,10 @@ public class FileSystemNotFoundExceptionController  extends AbstractController {
 	@RequestMapping(value = "/fsnfe")
 	public void process() {
 		URI uri = URI.create("jar:file:/not/exist.zip");
-		if (!"file".equals(uri.getScheme())) {
-			try {
-				FileSystems.newFileSystem(uri, new HashMap<String, Object>());
-			} catch (IOException e) {
-				log.error("IOException occurs: ", e);
-			}
+		try {
+			FileSystems.newFileSystem(uri, new HashMap<String, Object>());
+		} catch (IOException e) {
+			log.error("IOException occurs: ", e);
 		}
 	}
 }
