@@ -7,7 +7,7 @@
 		<p th:text="#{description.reverse.string}" /><br />
 		<label th:text="#{label.string}"></label><span>: </span>
 			<input type="text" name="string" size="100" maxlength="100" /><br />
-			<br /> <input type="submit" /><br /><br />
+			<br /> <input type="submit" th:value="#{label.submit}" /><br /><br />
 			<p th:utext="${msg}" /><br />
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign"></span>

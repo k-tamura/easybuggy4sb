@@ -7,7 +7,7 @@
 		<p th:text="#{msg.enter.passwd}" /><br />
 		<label th:text="#{label.password}"></label><span>: </span>
 		<input type="password" name="password" size="30" maxlength="30" autocomplete="off" /><br /><br /> 
-		<input type="submit" /><br /><br />
+		<input type="submit" th:value="#{label.submit}" /><br /><br />
 		<div th:replace="messages"></div>
 	</form>
 	<th:block th:if="${complete != null}" >

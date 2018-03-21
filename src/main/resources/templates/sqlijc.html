@@ -7,7 +7,7 @@
 		<p th:text="#{msg.enter.name.and.passwd}" /><br />
 		<label th:text="#{label.name}"></label> : <input type="text" name="name" size="20" maxlength="20" />
 		<label th:text="#{label.password}"></label> : <input type="password" name="password" size="20" maxlength="20" autocomplete="off" />
-		<br /><br /><input type="submit" /><br /><br />
+		<br /><br /><input type="submit" th:value="#{label.submit}" /><br /><br />
 		<table th:if="${userList != null}" class="table table-striped table-bordered table-hover" style="font-size: small;">
 			<tr>
 				<th th:text="#{label.name}"></th>
