@@ -3,6 +3,7 @@
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
+	<p th:text="#{msg.need.admin.privilege}" />
 	<form method="POST" th:action="${#httpServletRequest.getRequestURI()}">
 		<table  style="width:400px; height:150px">
 			<tr>
