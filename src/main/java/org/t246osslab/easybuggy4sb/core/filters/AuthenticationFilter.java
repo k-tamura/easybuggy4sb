@@ -50,8 +50,8 @@ public class AuthenticationFilter implements Filter {
                 }
             }
             HttpSession session = request.getSession(false);
-            if (session == null || session.getAttribute("authNMsg") == null
-                    || !"authenticated".equals(session.getAttribute("authNMsg"))) {
+            String authNMsg = (String) session.getAttribute("authNMsg");
+			if (session == null || authNMsg == null || !"authenticated".equals(authNMsg)) {
                 /* Not authenticated yet */
                 session = request.getSession(true);
                 session.setAttribute("target", target);

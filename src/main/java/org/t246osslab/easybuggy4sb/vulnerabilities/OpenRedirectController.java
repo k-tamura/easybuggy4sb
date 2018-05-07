@@ -39,7 +39,9 @@ public class OpenRedirectController extends DefaultLoginController {
         
         HttpSession session = req.getSession(true);
         if (isAccountLocked(userid)) {
-            session.setAttribute("authNMsg", "msg.account.locked");
+            /* account lock count +1 */
+            incrementLoginFailedCount(userid);
+            session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
             res.sendRedirect("/openredirect/login" + loginQueryString);
         } else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
@@ -62,9 +64,8 @@ public class OpenRedirectController extends DefaultLoginController {
             }
         } else {
             /* account lock count +1 */
-            incrementAccountLockNum(userid);
-            
-            session.setAttribute("authNMsg", "msg.authentication.fail");
+            incrementLoginFailedCount(userid);
+            session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
             res.sendRedirect("/openredirect/login" + loginQueryString);
         }
         return null;

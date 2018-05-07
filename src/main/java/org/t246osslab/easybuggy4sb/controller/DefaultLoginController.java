@@ -29,16 +29,16 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class DefaultLoginController extends AbstractController {
 
     @Value("${account.lock.time}")
-    private long accountLockTime;
+    protected long accountLockTime;
 
     @Value("${account.lock.count}")
-    private long accountLockCount;
+    protected long accountLockCount;
 
     @Autowired
     protected LdapTemplate ldapTemplate;
 
     /* User's login history using in-memory account locking */
-    private ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
@@ -53,8 +53,9 @@ public class DefaultLoginController extends AbstractController {
         }
 
         HttpSession session = req.getSession(true);
-        if (session.getAttribute("authNMsg") != null && !"authenticated".equals(session.getAttribute("authNMsg"))) {
-            mav.addObject("errmsg", msg.getMessage((String) session.getAttribute("authNMsg"), null, locale));
+        String authNMsg = (String) session.getAttribute("authNMsg");
+		if (authNMsg != null && !"authenticated".equals(authNMsg)) {
+            mav.addObject("errmsg", authNMsg);
             session.setAttribute("authNMsg", null);
         }
         return mav;
@@ -69,8 +70,7 @@ public class DefaultLoginController extends AbstractController {
 
         HttpSession session = req.getSession(true);
         if (isAccountLocked(userid)) {
-            session.setAttribute("authNMsg", "msg.account.locked");
-            res.sendRedirect("/login");
+            session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
         } else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
             resetAccountLock(userid);
@@ -81,21 +81,21 @@ public class DefaultLoginController extends AbstractController {
             String target = (String) session.getAttribute("target");
             if (target == null) {
                 res.sendRedirect("/admins/main");
+                return null;
             } else {
                 session.removeAttribute("target");
                 res.sendRedirect(target);
+                return null;
             }
         } else {
-            /* account lock count +1 */
-            incrementAccountLockNum(userid);
-            
-            session.setAttribute("authNMsg", "msg.authentication.fail");
-            return doGet(mav, req, res, locale);
+            session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
         }
-        return null;
+		/* account lock count +1 */
+	    incrementLoginFailedCount(userid);
+		return doGet(mav, req, res, locale);
     }
 
-    protected void incrementAccountLockNum(String userid) {
+    protected void incrementLoginFailedCount(String userid) {
         User admin = getUser(userid);
         admin.setLoginFailedCount(admin.getLoginFailedCount() + 1);
         admin.setLastLoginFailedTime(new Date());
@@ -119,13 +119,14 @@ public class DefaultLoginController extends AbstractController {
         }
         return admin;
     }
+    
 
     protected boolean isAccountLocked(String userid) {
         if (userid == null) {
             return false;
         }
         User admin = userLoginHistory.get(userid);
-        return admin != null && admin.getLoginFailedCount() == accountLockCount
+        return admin != null && admin.getLoginFailedCount() >= accountLockCount
                 && (new Date().getTime() - admin.getLastLoginFailedTime().getTime() < accountLockTime);
     }
 

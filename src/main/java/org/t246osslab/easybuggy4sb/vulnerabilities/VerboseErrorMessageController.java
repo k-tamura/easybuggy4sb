@@ -38,14 +38,12 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 
 		HttpSession session = req.getSession(true);
 		if (isAccountLocked(userid)) {
-			session.setAttribute("authNMsg", "msg.account.locked");
-			return doGet(mav, req, res, locale);
+			session.setAttribute("authNMsg",
+					msg.getMessage("msg.account.locked", new String[] { String.valueOf(accountLockCount) }, locale));
 		} else if (!isExistUser(userid)) {
-			session.setAttribute("authNMsg", "msg.user.not.exist");
-			return doGet(mav, req, res, locale);
+			session.setAttribute("authNMsg", msg.getMessage("msg.user.not.exist", null, locale));
 		} else if (!password.matches("[0-9a-z]{8}")) {
-			session.setAttribute("authNMsg", "msg.low.alphnum8");
-			return doGet(mav, req, res, locale);
+			session.setAttribute("authNMsg", msg.getMessage("msg.low.alphnum8", null, locale));
 		} else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
 		    resetAccountLock(userid);
@@ -56,18 +54,18 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			String target = (String) session.getAttribute("target");
 			if (target == null) {
 				res.sendRedirect("/admins/main");
+				return null;
 			} else {
 				session.removeAttribute("target");
 				res.sendRedirect(target);
+				return null;
 			}
 		} else {
-			/* account lock count +1 */
-		    incrementAccountLockNum(userid);
-
-			session.setAttribute("authNMsg", "msg.password.not.match");
-			return doGet(mav, req, res, locale);
+			session.setAttribute("authNMsg", msg.getMessage("msg.password.not.match", null, locale));
 		}
-		return null;
+		/* account lock count +1 */
+	    incrementLoginFailedCount(userid);
+		return doGet(mav, req, res, locale);
 	}
 
 	private boolean isExistUser(String username) {
