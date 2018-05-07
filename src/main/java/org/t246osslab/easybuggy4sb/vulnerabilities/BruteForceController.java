@@ -44,10 +44,10 @@ public class BruteForceController extends DefaultLoginController {
                 session.removeAttribute("target");
                 res.sendRedirect(target);
             }
+            return null;
         } else {
             session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
-            return doGet(mav, req, res, locale);
         }
-        return null;
+        return doGet(mav, req, res, locale);
     }
 }

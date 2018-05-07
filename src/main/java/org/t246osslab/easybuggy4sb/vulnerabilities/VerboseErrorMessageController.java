@@ -54,12 +54,11 @@ public class VerboseErrorMessageController extends DefaultLoginController {
 			String target = (String) session.getAttribute("target");
 			if (target == null) {
 				res.sendRedirect("/admins/main");
-				return null;
 			} else {
 				session.removeAttribute("target");
 				res.sendRedirect(target);
-				return null;
 			}
+			return null;
 		} else {
 			session.setAttribute("authNMsg", msg.getMessage("msg.password.not.match", null, locale));
 		}
