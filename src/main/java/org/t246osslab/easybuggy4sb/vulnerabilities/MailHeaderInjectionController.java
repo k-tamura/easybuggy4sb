@@ -34,12 +34,6 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 @Controller
 public class MailHeaderInjectionController extends AbstractController {
 
-	@Value("${spring.mail.username}")
-	private String username;
-
-	@Value("${spring.mail.password}")
-	private String password;
-
 	// administrator's mail address
 	@Value("${mail.admin.address}")
 	private String adminAddress;
@@ -50,11 +44,6 @@ public class MailHeaderInjectionController extends AbstractController {
 	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, Locale locale) {
 	    setViewAndCommonObjects(mav, locale, "mailheaderinjection");
-		if (isReadyToSendEmail()) {
-			mav.addObject("isReady", "yes");
-        } else {
-            mav.addObject("note", msg.getMessage("msg.smtp.server.not.setup", null, locale));
-        }
 		return mav;
 	}
 
@@ -88,10 +77,6 @@ public class MailHeaderInjectionController extends AbstractController {
 			deleteUploadFiles(uploadedFiles);
 		}
 		return doGet(mav, locale);
-	}
-
-	private boolean isReadyToSendEmail() {
-	    return !(StringUtils.isBlank(username) || StringUtils.isBlank(password) || StringUtils.isBlank(adminAddress));
 	}
 
 	private void sendMail(String subject, String text, List<File> uploadedFiles) throws MessagingException {

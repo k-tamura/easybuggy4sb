@@ -3,7 +3,6 @@
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
-	<th:block th:if="${isReady != null}">
 		<form action="mailheaderijct" method="post"
 			enctype="multipart/form-data">
 			<p th:text="#{description.send.mail}" />
@@ -33,7 +32,6 @@
 				</tr>
 			</table>
 		</form>
-	</th:block>
     <div th:replace="messages"></div>
 </body>
 </html>
