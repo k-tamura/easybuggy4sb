@@ -1,0 +1,17 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<div th:if="${dumpAllThreads!= null}">
+		<p th:text="#{description.thread.dump}" />
+		<table th:each="dumpThread: ${dumpAllThreads}" class="tabletable-bordered table-hover" style="font-size: small;">
+			<tr th:each="stacktrace: ${dumpThread.toString().split('\r\n|\r|\n')}">
+				<td th:text="${stacktrace.replaceAll('\t', '&nbsp;&nbsp;&nbsp;&nbsp;')}"></td>
+			</tr>
+		</table>
+	</div>
+	<br/>
+	<div th:replace="messages"></div>
+</body>
+</html>
