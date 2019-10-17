@@ -15,11 +15,15 @@ public class InfiniteLoopController {
     @RequestMapping(value = "/infiniteloop")
     public void process(HttpServletRequest req) {
         while (true) {
-			log.debug("contextPath: {}, contentLength: {}", req.getContextPath(), req.getContentLength());
+            String contextPath = req.getContextPath();
+            int contentLength = req.getContentLength();
+            log.debug("contextPath: {}, contentLength: {}", contextPath, contentLength);
         }
-        // Note: This is more dangerous code
+        // Note: This is more dangerous! (parallel inifinite loop)
 		// IntStream.generate(() -> 0).peek(i -> {
-		// 	log.debug("contextPath: {}, contentLength: {}", req.getContextPath(), req.getContentLength());
+	    //     String contextPath = req.getContextPath();
+        //     int contentLength = req.getContentLength();
+        //     log.debug("contextPath: {}, contentLength: {}", contextPath, contentLength);
 		// }).parallel().noneMatch(i -> false);
     }
 }
