@@ -1,0 +1,19 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<p th:utext="#{description.access.status}" />
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.last.access.time}"></th>
+			<th th:text="#{label.ip.address}"></th>
+			<th th:text="#{label.access.number}"></th>
+		</tr>
+		<tr th:each="access : ${history}">
+			<td th:each="column : ${access}" th:text="${column}"></td>
+		</tr>
+	</table>
+	<div th:replace="messages"></div>
+</body>
+</html>
