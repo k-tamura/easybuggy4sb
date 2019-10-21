@@ -40,12 +40,11 @@ public class FileDescriptorLeakController extends AbstractController {
 
             ArrayList<String[]> history = new ArrayList<>();
             BufferedReader br = new BufferedReader(new FileReader(file));
-            int headerLength = 0;
             String line;
             long currentLineNum = 0;
             while ((line = br.readLine()) != null) {
                 if (count - currentLineNum <= MAX_DISPLAY_COUNT) {
-                    history.add(headerLength, line.split(","));
+                    history.add(0, line.split(","));
                 }
                 currentLineNum++;
             }
