@@ -1,0 +1,19 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<form action="threadunsafe" method="post">
+		<p th:text="#{msg.select.year}" />
+		<select id="year" name="year">
+			<option th:each="i : ${#numbers.sequence(1950, 2050)}" th:value="${i}" th:text="${i}" th:selected="${year} == ${i}"></option>
+		</select>
+		<span>: </span>
+		<span th:text="${isLeapYear}"></span><br /><br /> 
+		<input type="submit" th:value="#{label.determine}" /><br /><br />
+		<div th:replace="messages"></div>
+	</form>
+</body>
+</html>
