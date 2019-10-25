@@ -1,0 +1,19 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<form action="weakreference" method="post">
+		<p th:text="#{msg.select.log.level}" />
+		<select id="logLevel" name="logLevel">
+			<option th:value="INFO" th:text="INFO" th:selected="${logLevel} == INFO"></option>
+			<option th:value="WARNING" th:text="WARNING" th:selected="${logLevel} == WARNING"></option>
+			<option th:value="SEVERE" th:text="SEVERE" th:selected="${logLevel} == SEVERE"></option>
+		</select><br /><br /> 
+		<input type="submit" th:value="#{label.change}" /><br /><br />
+		<div th:replace="messages"></div>
+	</form>
+</body>
+</html>
