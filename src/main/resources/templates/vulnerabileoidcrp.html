@@ -18,8 +18,11 @@
 		</table>
 	</th:block>
 	<th:block th:if="${userInfo == null}">
-		<a href="/start" th:text="${loginMessage}"></a>
-		<br /><br />
+		<th:block th:if="${isSettingsReady}">
+			<a href="/start" th:text="${loginMessage}"></a>
+			<br />
+			<br />
+		</th:block>
 		<div th:replace="messages"></div>
 	</th:block>
 </body>

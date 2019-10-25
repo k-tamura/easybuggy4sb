@@ -20,6 +20,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
@@ -44,6 +45,8 @@ import com.google.gson.Gson;
 
 @Controller
 public class VulnerableOIDCRPController extends AbstractController {
+	
+	private static boolean isSettingsReady = false;
 
 	protected String authzEndpoint;
 
@@ -82,9 +85,12 @@ public class VulnerableOIDCRPController extends AbstractController {
 			endSessionEndpoint = (String) opConfig.get("end_session_endpoint");
 			issuer = (String) opConfig.get("issuer");
 			jwksUri = (String) opConfig.get("jwks_uri");
+			if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(redirectUri)
+					|| StringUtils.isEmpty(opName))) {
+				isSettingsReady = true;
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("OP configuration request failed.", e);
 		}
 	}
 
@@ -97,7 +103,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (ses != null) {
 			Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
 			if (userInfo != null) {
-				mav.addObject("userInfo", userInfo);
+				changeNextPageToUserInfo(mav, locale, userInfo);
 				return mav;
 			}
 			ses.invalidate();
@@ -109,6 +115,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 		mav.addObject("loginMessage",
 				msg.getMessage("msg.login.with.openid.provider", new Object[] { opName }, locale));
+		mav.addObject("isSettingsReady", isSettingsReady);
+		if (!isSettingsReady)
+			mav.addObject("note", msg.getMessage("msg.note.oidc.invalid.config", null, locale));
 
 		return mav;
 	}
@@ -125,7 +134,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 		Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
 		if (userInfo != null) {
-			mav.addObject("userInfo", userInfo);
+			changeNextPageToUserInfo(mav, locale, userInfo);
 			return mav;
 		}
 
@@ -143,12 +152,10 @@ public class VulnerableOIDCRPController extends AbstractController {
 				url.setRedirectUri(new GenericUrl(redirectUri).build());
 				res.sendRedirect(url.build());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error("Authorization code request failed.", e);
 			}
 		}
-
-		return mav;
+        return null;
 	}
 
 	@RequestMapping(value = "/callback")
@@ -163,7 +170,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 		Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
 		if (userInfo != null) {
-			mav.addObject("userInfo", userInfo);
+			changeNextPageToUserInfo(mav, locale, userInfo);
 			return mav;
 		}
 
@@ -228,7 +235,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.setAttribute("accessToken", accessToken);
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
 			userInfo = getUserInfo(accessToken);
-			mav.addObject("userInfo", userInfo);
+			changeNextPageToUserInfo(mav, locale, userInfo);
 			ses.setAttribute("sub", userInfo.get("sub"));
 			return mav;
 		} catch (TokenResponseException e) {
@@ -261,6 +268,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 		ses.invalidate();
 		return "redirect:/";
+	}
+
+	private void changeNextPageToUserInfo(ModelAndView mav, Locale locale, Map<?, ?> userInfo) {
+		mav.addObject("title", msg.getMessage("title.userinfo.page", null, locale));
+		mav.addObject("userInfo", userInfo);
 	}
 
 	private Map<?, ?> getUserInfo(String accessToken) {
@@ -318,6 +330,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				}
 			}
 		} catch (Exception e) {
+			log.error("Cannot get JWK public key.", e);
 		}
 		return null;
 	}
