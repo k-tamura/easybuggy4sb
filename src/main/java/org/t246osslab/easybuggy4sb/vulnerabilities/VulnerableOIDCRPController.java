@@ -90,7 +90,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				isSettingsReady = true;
 			}
 		} catch (IOException e) {
-			log.error("OP configuration request failed.", e);
+			log.debug("OP configuration request failed.", e);
 		}
 	}
 
