@@ -13,8 +13,9 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 @Controller
 public class ThreadUnsafeController extends AbstractController {
 
-	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-	static {
+	private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+
+	public ThreadUnsafeController() {
 		sdf.setLenient(false);
 	}
 

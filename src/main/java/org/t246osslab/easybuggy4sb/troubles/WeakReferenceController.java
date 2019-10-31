@@ -9,9 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +22,7 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class WeakReferenceController extends AbstractController {
 	
     @RequestMapping(value = "/weakreference", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, @ModelAttribute("logLevel") String logLevel, HttpServletRequest req, HttpServletResponse res, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, @ModelAttribute("logLevel") String logLevel, Locale locale) {
 		
     	setViewAndCommonObjects(mav, locale, "weakreference");
 		
@@ -43,7 +40,7 @@ public class WeakReferenceController extends AbstractController {
 
     @RequestMapping(value = "/weakreference", method = RequestMethod.POST)
 	public String process(@RequestParam(value = "logLevel", required = false) String logLevel,
-			RedirectAttributes redirectAttributes, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
+			RedirectAttributes redirectAttributes) throws IOException {
     	
 		Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 		logger.setLevel(Level.parse(logLevel));
@@ -53,6 +50,5 @@ public class WeakReferenceController extends AbstractController {
         handler.setFormatter(formatter);
         redirectAttributes.addFlashAttribute("logLevel", logLevel);
         return "redirect:/weakreference";
-
     }
 }
