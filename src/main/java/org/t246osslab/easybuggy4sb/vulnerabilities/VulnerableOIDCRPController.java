@@ -27,6 +27,8 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.AuthorizationCodeTokenRequest;
+import com.google.api.client.auth.oauth2.RefreshTokenRequest;
+import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.auth.openidconnect.IdToken;
 import com.google.api.client.auth.openidconnect.IdTokenResponse;
@@ -38,6 +40,7 @@ import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.UrlEncodedContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -95,13 +98,12 @@ public class VulnerableOIDCRPController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/vulnerabileoidcrp")
-	public ModelAndView index(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, HttpSession ses,
-			Locale locale) {
+	public ModelAndView index(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
 
 		if (ses != null) {
-			Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
+			Map<?, ?> userInfo = getUserInfo(ses);
 			if (userInfo != null) {
 				changeNextPageToUserInfo(mav, locale, userInfo);
 				return mav;
@@ -129,10 +131,10 @@ public class VulnerableOIDCRPController extends AbstractController {
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
 
 		if (ses == null) {
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		}
 
-		Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
+		Map<?, ?> userInfo = getUserInfo(ses);
 		if (userInfo != null) {
 			changeNextPageToUserInfo(mav, locale, userInfo);
 			return mav;
@@ -141,7 +143,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		String state = (String) ses.getAttribute("state");
 		String nonce = (String) ses.getAttribute("nonce");
 		if (state == null || nonce == null || state.isEmpty() || nonce.isEmpty()) {
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		} else {
 			try {
 				AuthorizationCodeRequestUrl url = new AuthorizationCodeRequestUrl(authzEndpoint, clientId);
@@ -159,16 +161,15 @@ public class VulnerableOIDCRPController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/callback")
-	public ModelAndView callback(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, HttpSession ses,
-			Locale locale) {
+	public ModelAndView callback(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
 
 		if (ses == null) {
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		}
 
-		Map<?, ?> userInfo = getUserInfo((String) ses.getAttribute("accessToken"));
+		Map<?, ?> userInfo = getUserInfo(ses);
 		if (userInfo != null) {
 			changeNextPageToUserInfo(mav, locale, userInfo);
 			return mav;
@@ -177,14 +178,14 @@ public class VulnerableOIDCRPController extends AbstractController {
 		String state = (String) ses.getAttribute("state");
 		String nonce = (String) ses.getAttribute("nonce");
 		if (state == null || nonce == null || state.isEmpty() || nonce.isEmpty()) {
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		}
 
 		// Verify authz code
 		String code = req.getParameter("code");
 		if (code == null || code.isEmpty()) {
 			log.warn("Invalid code"); // Error handling should be Implemented
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		}
 
 		// Verify state
@@ -234,16 +235,16 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 			ses.setAttribute("accessToken", accessToken);
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
-			userInfo = getUserInfo(accessToken);
+			userInfo = getUserInfo(ses);
 			changeNextPageToUserInfo(mav, locale, userInfo);
 			ses.setAttribute("sub", userInfo.get("sub"));
 			return mav;
 		} catch (TokenResponseException e) {
 			log.debug("Invalid token request", e);
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		} catch (Exception e) {
 			log.error("Error occur", e);
-			return index(mav, req, res, null, locale);
+			return index(mav, req, null, locale);
 		}
 	}
 
@@ -275,8 +276,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 		mav.addObject("userInfo", userInfo);
 	}
 
-	private Map<?, ?> getUserInfo(String accessToken) {
-
+	private Map<?, ?> getUserInfo(HttpSession ses) {
+		
+		String accessToken = (String) ses.getAttribute("accessToken");
 		if (accessToken == null) {
 			return null;
 		}
@@ -288,8 +290,34 @@ public class VulnerableOIDCRPController extends AbstractController {
 			request.setHeaders(headers);
 			HttpResponse response = request.execute();
 			return new Gson().fromJson(response.parseAsString(), Map.class);
+		} catch (HttpResponseException e) {
+			Map<?, ?> fromJson = new Gson().fromJson(e.getContent(), Map.class);
+			if (e.getStatusCode() == 401 && fromJson != null && "invalid_token".equals(fromJson.get("error"))) {
+				TokenResponse tokenRes = refreshTokens((String) ses.getAttribute("refreshToken"));
+				ses.setAttribute("accessToken", tokenRes.getAccessToken());
+				ses.setAttribute("refreshToken", tokenRes.getRefreshToken());
+				return getUserInfo(ses);
+			} else {
+				log.error("Userinfo request failed.", e);
+			}
 		} catch (IOException e) {
 			log.error("Userinfo request failed.", e);
+		}
+		return null;
+	}
+
+	private TokenResponse refreshTokens(String refreshToken) {
+		if (refreshToken != null) {
+			/* Access the token endpoint and refresh tokens */
+			RefreshTokenRequest tokenReq = new RefreshTokenRequest(new NetHttpTransport(), new JacksonFactory(),
+					new GenericUrl(tokenEndpoint), refreshToken);
+			tokenReq.setClientAuthentication(new BasicAuthentication(clientId, clientSecret));
+			try {
+				HttpResponse httpRes = tokenReq.executeUnparsed();
+				return httpRes.parseAs(TokenResponse.class);
+			} catch (IOException ioe) {
+				log.error("Refresh token request failed.", ioe);
+			}
 		}
 		return null;
 	}
