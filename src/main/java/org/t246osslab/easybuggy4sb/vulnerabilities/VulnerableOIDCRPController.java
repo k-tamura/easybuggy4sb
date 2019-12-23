@@ -294,9 +294,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			Map<?, ?> fromJson = new Gson().fromJson(e.getContent(), Map.class);
 			if (e.getStatusCode() == 401 && fromJson != null && "invalid_token".equals(fromJson.get("error"))) {
 				TokenResponse tokenRes = refreshTokens((String) ses.getAttribute("refreshToken"));
-				ses.setAttribute("accessToken", tokenRes.getAccessToken());
-				ses.setAttribute("refreshToken", tokenRes.getRefreshToken());
-				return getUserInfo(ses);
+				if (tokenRes != null) {
+					ses.setAttribute("accessToken", tokenRes.getAccessToken());
+					ses.setAttribute("refreshToken", tokenRes.getRefreshToken());
+					return getUserInfo(ses);
+				}
 			} else {
 				log.error("Userinfo request failed.", e);
 			}
