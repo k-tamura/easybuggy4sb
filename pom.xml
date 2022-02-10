@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -25,7 +25,7 @@
 		<!-- default properties (JDK 1.8 or later) -->
 		<jvm.args>-XX:MaxMetaspaceSize=128m -Xloggc:logs/gc_%p_%t.log
 			-XX:NativeMemoryTracking=summary</jvm.args>
-		<derby.version>10.13.1.1</derby.version>
+		<derby.version>10.15.2.0</derby.version>
 	</properties>
 
 	<profiles>
@@ -36,7 +36,7 @@
 			</activation>
 			<properties>
 				<jvm.args>-XX:MaxPermSize=128m -Xloggc:logs/gc.log</jvm.args>
-				<derby.version>10.12.1.1</derby.version>
+				<derby.version>10.15.2.0</derby.version>
 			</properties>
 		</profile>
 	</profiles>
