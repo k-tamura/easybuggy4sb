@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -151,7 +151,7 @@
 			<groupId>com.sun.mail</groupId>
 			<artifactId>javax.mail</artifactId>
 			<!-- Override this with old version to cause mail header injection -->
-			<version>1.5.1</version><!--$NO-MVN-MAN-VER$-->
+			<version>1.6.2</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
 
 	</dependencies>
