@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -25,7 +25,7 @@
 		<!-- default properties (JDK 1.8 or later) -->
 		<jvm.args>-XX:MaxMetaspaceSize=128m -Xloggc:logs/gc_%p_%t.log
 			-XX:NativeMemoryTracking=summary</jvm.args>
-		<derby.version>10.13.1.1</derby.version>
+		<derby.version>10.14.2.0</derby.version>
 	</properties>
 
 	<profiles>
@@ -36,7 +36,7 @@
 			</activation>
 			<properties>
 				<jvm.args>-XX:MaxPermSize=128m -Xloggc:logs/gc.log</jvm.args>
-				<derby.version>10.12.1.1</derby.version>
+				<derby.version>10.14.2.0</derby.version>
 			</properties>
 		</profile>
 	</profiles>
@@ -118,13 +118,13 @@
 		<dependency>
 	  		<groupId>com.google.oauth-client</groupId>
 	  		<artifactId>google-oauth-client</artifactId>
-	  		<version>1.30.3</version>
+	  		<version>1.33.3</version>
 	  	</dependency>
 	
 	  	<dependency>
 	  		<groupId>com.google.api-client</groupId>
 	  		<artifactId>google-api-client-gson</artifactId>
-	  		<version>1.30.3</version>
+	  		<version>1.35.0</version>
 	  	</dependency>
 	
 		<dependency>
@@ -144,7 +144,7 @@
 		<dependency>
 			<groupId>org.owasp.esapi</groupId>
 			<artifactId>esapi</artifactId>
-			<version>2.1.0.1</version>
+			<version>2.3.0.0</version>
 		</dependency>
 
 		<dependency>
