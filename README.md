@@ -18,6 +18,16 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 Access to
 
     http://localhost:8080
+    
+:clock4: Quick Start (Docker)
+-
+
+    $ docker build . -t easybuggy4sb       # Build container image
+    $ docker run -p 8080:8080 easybuggy4sb # Start easybuggy
+
+Access to
+
+    http://localhost:8080
 
 #### To stop:
 

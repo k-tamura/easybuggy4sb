@@ -20,7 +20,16 @@ EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです�
 
     http://localhost:8080
 
+:clock4: クイックスタート (Docker)
+-
 
+    $ docker build . -t easybuggy4sb       # コンテナイメージのビルド
+    $ docker run -p 8080:8080 easybuggy4sb # EasyBuggyの起動
+
+Access to
+
+    http://localhost:8080
+    
 停止するには:
 
   <kbd>CTRL</kbd>+<kbd>C</kbd>をクリック
