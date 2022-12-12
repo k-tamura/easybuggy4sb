@@ -15,6 +15,8 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 
 ( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
 
+:warning: **Java 7 or 8 is needed. Doesn't work with Java 9 or later.**
+
 :clock4: Quick Start (Docker)
 -
 
