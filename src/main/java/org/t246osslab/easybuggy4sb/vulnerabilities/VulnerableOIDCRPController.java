@@ -1,33 +1,9 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.RSAPublicKeySpec;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.controller.AbstractController;
-
 import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.AuthorizationCodeTokenRequest;
 import com.google.api.client.auth.oauth2.RefreshTokenRequest;
+import com.google.api.client.auth.oauth2.TokenRequest;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.auth.oauth2.TokenResponseException;
 import com.google.api.client.auth.openidconnect.IdToken;
@@ -41,10 +17,28 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestFactory;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpResponseException;
-import com.google.api.client.http.UrlEncodedContent;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.*;
 
 @Controller
 public class VulnerableOIDCRPController extends AbstractController {
@@ -59,6 +53,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	protected String endSessionEndpoint;
 
+	protected String registration_endpoint;
+
 	protected String jwksUri;
 
 	protected String issuer;
@@ -69,31 +65,36 @@ public class VulnerableOIDCRPController extends AbstractController {
 	@Value("${oidc.client.secret}")
 	protected String clientSecret;
 
-	@Value("${oidc.redirect.uri}")
-	protected String redirectUri;
-
 	@Value("${oidc.op.name}")
 	protected String opName;
 
+	@Value("${oidc.dynamic.client.registration.enabled}")
+	protected boolean clientRegistrationEnabled = false;
+
 	@Value("${oidc.configuration.endpoint}")
 	public void setOPConfig(String configEndpoint) {
+		log.debug("OP Config Endpoint: " + configEndpoint);
 		try {
 			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
 			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(configEndpoint));
 			HttpResponse response = request.execute();
 			Map<?, ?> opConfig = new Gson().fromJson(response.parseAsString(), Map.class);
+			log.debug("OP Config: " + opConfig.toString());
 			authzEndpoint = (String) opConfig.get("authorization_endpoint");
 			tokenEndpoint = (String) opConfig.get("token_endpoint");
 			userinfoEndpoint = (String) opConfig.get("userinfo_endpoint");
 			endSessionEndpoint = (String) opConfig.get("end_session_endpoint");
+			registration_endpoint = (String) opConfig.get("registration_endpoint");
 			issuer = (String) opConfig.get("issuer");
 			jwksUri = (String) opConfig.get("jwks_uri");
-			if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(redirectUri)
-					|| StringUtils.isEmpty(opName))) {
+			if (clientRegistrationEnabled) {
+				tryRegisterClient();
+			}
+			if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(opName))) {
 				isSettingsReady = true;
 			}
 		} catch (IOException e) {
-			log.debug("OP configuration request failed.", e);
+			log.error("OP configuration request failed.", e);
 		}
 	}
 
@@ -151,7 +152,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				url.setScopes(Arrays.asList("openid", "profile"));
 				url.setState(state);
 				url.set("nonce", nonce);
-				url.setRedirectUri(new GenericUrl(redirectUri).build());
+				url.setRedirectUri(new GenericUrl(req.getRequestURL().toString().replace("/start", "/callback")).build());
 				res.sendRedirect(url.build());
 			} catch (IOException e) {
 				log.error("Authorization code request failed.", e);
@@ -197,12 +198,13 @@ public class VulnerableOIDCRPController extends AbstractController {
 			/* Access the token endpoint and get ID and access token */
 			AuthorizationCodeTokenRequest authzReq = new AuthorizationCodeTokenRequest(new NetHttpTransport(),
 					new JacksonFactory(), new GenericUrl(tokenEndpoint), code);
-			authzReq.setRedirectUri(redirectUri)
+			authzReq.setRedirectUri(req.getRequestURL().toString())
 					.setClientAuthentication(new BasicAuthentication(clientId, clientSecret));
 			HttpResponse httpRes = authzReq.executeUnparsed();
 			IdTokenResponse idTokenRes = httpRes.parseAs(IdTokenResponse.class);
 			String accessToken = idTokenRes.getAccessToken();
-			IdToken idToken = IdToken.parse(idTokenRes.getFactory(), idTokenRes.getIdToken());
+			String idTokenStr = idTokenRes.getIdToken();
+			IdToken idToken = IdToken.parse(idTokenRes.getFactory(), idTokenStr);
 
 			// Verify nonce
 			if (!nonce.equals(idToken.getPayload().getNonce())) {
@@ -234,7 +236,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 			}
 
 			ses.setAttribute("accessToken", accessToken);
+			ses.setAttribute("idToken", idTokenStr);
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
+			ses.setAttribute("state", req.getParameter("state"));
 			userInfo = getUserInfo(ses);
 			changeNextPageToUserInfo(mav, locale, userInfo);
 			ses.setAttribute("sub", userInfo.get("sub"));
@@ -249,26 +253,17 @@ public class VulnerableOIDCRPController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/oidclogout")
-	public String logout(HttpSession ses) {
+	public void logout(HttpServletRequest req, HttpServletResponse res, HttpSession ses) {
 		try {
-			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
-			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(endSessionEndpoint));
-			request.setRequestMethod(HttpMethods.POST);
-			Map<String, String> params = new HashMap<>();
-			params.put("client_id", clientId);
-			params.put("client_secret", clientSecret);
-			params.put("refresh_token", (String) ses.getAttribute("refreshToken"));
-			HttpContent content = new UrlEncodedContent(params);
-			request.setContent(content);
-			HttpResponse response = request.execute();
-			if (response.isSuccessStatusCode()) {
-				log.error("Logout request to OP failed. Response: ", response.parseAsString());
-			}
+			GenericUrl url = new GenericUrl(endSessionEndpoint);
+			url.set("id_token_hint", (String) ses.getAttribute("idToken"));
+			url.set("post_logout_redirect_uri", req.getRequestURL().toString().replace("/oidclogout", "/"));
+			url.set("state", ses.getAttribute("state"));
+			res.sendRedirect(url.build());
 		} catch (IOException e) {
 			log.error("Logout request to OP failed.", e);
 		}
 		ses.invalidate();
-		return "redirect:/";
 	}
 
 	private void changeNextPageToUserInfo(ModelAndView mav, Locale locale, Map<?, ?> userInfo) {
@@ -277,7 +272,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 	}
 
 	private Map<?, ?> getUserInfo(HttpSession ses) {
-		
+
 		String accessToken = (String) ses.getAttribute("accessToken");
 		if (accessToken == null) {
 			return null;
@@ -306,6 +301,40 @@ public class VulnerableOIDCRPController extends AbstractController {
 			log.error("Userinfo request failed.", e);
 		}
 		return null;
+	}
+	private void tryRegisterClient() {
+		log.info("Try Register Client.");
+
+		try {
+			TokenRequest tokenReq = new TokenRequest(new NetHttpTransport(), new JacksonFactory(),
+					new GenericUrl(tokenEndpoint), "password");
+			tokenReq.put("client_id", "admin-cli");
+			tokenReq.put("username", "admin");
+			tokenReq.put("password", "admin");
+			TokenResponse tokenResponse = tokenReq.execute();
+
+			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
+			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(registration_endpoint));
+			request.setRequestMethod(HttpMethods.POST);
+			HttpHeaders headers = new HttpHeaders();
+			headers.setAuthorization("bearer " + tokenResponse.getAccessToken());
+			headers.setContentType("application/json");
+			headers.setAccept("application/json");
+			request.setHeaders(headers);
+			Map<String, Object> params = new HashMap<>();
+			params.put("redirect_uris", Arrays.asList("*"));
+			params.put("post_logout_redirect_uris", Arrays.asList("*"));
+			HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
+			request.setContent(content);
+			HttpResponse response = request.execute();
+			Map map = new Gson().fromJson(response.parseAsString(), Map.class);
+			clientId = (String) map.get("client_id");
+			clientSecret = (String) map.get("client_secret");
+			log.info("Client {} is registered.", clientId);
+
+		} catch (IOException e) {
+			log.error("Registration request to OP failed.", e);
+		}
 	}
 
 	private TokenResponse refreshTokens(String refreshToken) {

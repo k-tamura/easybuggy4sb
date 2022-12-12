@@ -8,13 +8,6 @@ public class StackOverflowErrorController {
 
 	@RequestMapping(value = "/sofe")
 	public void process() {
-		new S().toString();
-	}
-
-	public class S {
-		@Override
-		public String toString() {
-			return "" + this;
-		}
+		process();
 	}
 }

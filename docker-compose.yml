@@ -1,0 +1,57 @@
+version: '3'
+
+volumes:
+  mysql_data:
+      driver: local
+
+services:
+  db:
+      image: mysql:5.7
+      container_name: db
+      volumes:
+        - mysql_data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: keycloak
+        MYSQL_USER: keycloak
+        MYSQL_PASSWORD: password
+      ports:
+        - 3306:3306
+  keycloak:
+      image: quay.io/keycloak/keycloak:legacy
+      environment:
+        DB_VENDOR: MYSQL
+        DB_ADDR: db
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: admin
+        KEYCLOAK_FRONTEND_URL: http://localhost:8180/auth
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "connectTimeout=30000"
+      ports:
+        - 8180:8080
+      healthcheck:
+        test: "curl -f http://keycloak:8080/auth/realms/master/.well-known/openid-configuration || exit 1"
+      depends_on:
+        - db
+  easybuggy:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - 8080:8080
+        - 9009:9009
+      depends_on:
+        keycloak:
+          condition: service_healthy
+      environment:
+        db_url: jdbc:mysql://db:3306/keycloak?useSSL=false
+        db_class_name: com.mysql.jdbc.Driver
+        db_platform: mysql
+        db_username: keycloak
+        db_password: password
+        oidc_op_name: Keycloak
+        oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
+        oidc_dynamic_client_registration_enabled: 'true'
