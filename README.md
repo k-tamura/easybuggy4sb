@@ -15,15 +15,16 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 
 ( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
 
-Access to
-
-    http://localhost:8080
-    
 :clock4: Quick Start (Docker)
 -
 
     $ docker build . -t easybuggy4sb       # Build container image
     $ docker run -p 8080:8080 easybuggy4sb # Start easybuggy
+
+:clock4: Quick Start (Docker Compose)
+-
+
+    $ docker compose up
 
 Access to
 
