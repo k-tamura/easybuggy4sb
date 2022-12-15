@@ -178,10 +178,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 			return index(mav, req, null, locale);
 		}
 
-		String state = (String) ses.getAttribute("state");
-		String nonce = (String) ses.getAttribute("nonce");
-
 		// Verify state
+		String state = (String) ses.getAttribute("state");
 		if (state == null || state.isEmpty() || !state.equals(req.getParameter("state"))) {
 			log.warn("Invalid state"); // Error handling should be Implemented
 		}
@@ -199,6 +197,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			IdToken idToken = IdToken.parse(idTokenRes.getFactory(), idTokenStr);
 
 			// Verify nonce
+			String nonce = (String) ses.getAttribute("nonce");
 			if (nonce == null || nonce.isEmpty() || !nonce.equals(idToken.getPayload().getNonce())) {
 				log.warn("Invalid nonce"); // Error handling should be Implemented
 			}
@@ -230,7 +229,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.setAttribute("accessToken", accessToken);
 			ses.setAttribute("idToken", idTokenStr);
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
-			ses.setAttribute("state", req.getParameter("state"));
 			userInfo = getUserInfo(ses);
 			changeNextPageToUserInfo(mav, locale, userInfo);
 			ses.setAttribute("sub", userInfo.get("sub"));
@@ -246,12 +244,14 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	@RequestMapping(value = "/oidclogout")
 	public void logout(HttpServletRequest req, HttpServletResponse res, HttpSession ses) {
+		String state = UUID.randomUUID().toString();
 		try {
 			GenericUrl url = new GenericUrl(endSessionEndpoint);
 			url.set("id_token_hint", (String) ses.getAttribute("idToken"));
 			url.set("post_logout_redirect_uri", req.getRequestURL().toString().replace("/oidclogout", "/"));
-			url.set("state", ses.getAttribute("state"));
+			url.set("state", state);
 			res.sendRedirect(url.build());
+			ses.setAttribute("state", state);
 		} catch (IOException e) {
 			log.error("Logout request to OP failed.", e);
 		}
