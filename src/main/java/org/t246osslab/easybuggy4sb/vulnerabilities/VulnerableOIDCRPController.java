@@ -113,9 +113,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 		ses = req.getSession(true);
 
-		ses.setAttribute("state", UUID.randomUUID().toString());
-		ses.setAttribute("nonce", UUID.randomUUID().toString());
-
 		mav.addObject("loginMessage",
 				msg.getMessage("msg.login.with.openid.provider", new Object[] { opName }, locale));
 		mav.addObject("isSettingsReady", isSettingsReady);
@@ -141,22 +138,20 @@ public class VulnerableOIDCRPController extends AbstractController {
 			return mav;
 		}
 
-		String state = (String) ses.getAttribute("state");
-		String nonce = (String) ses.getAttribute("nonce");
-		if (state == null || nonce == null || state.isEmpty() || nonce.isEmpty()) {
-			return index(mav, req, null, locale);
-		} else {
-			try {
-				AuthorizationCodeRequestUrl url = new AuthorizationCodeRequestUrl(authzEndpoint, clientId);
-				url.setResponseTypes(Arrays.asList("code"));
-				url.setScopes(Arrays.asList("openid", "profile"));
-				url.setState(state);
-				url.set("nonce", nonce);
-				url.setRedirectUri(new GenericUrl(req.getRequestURL().toString().replace("/start", "/callback")).build());
-				res.sendRedirect(url.build());
-			} catch (IOException e) {
-				log.error("Authorization code request failed.", e);
-			}
+		String state = UUID.randomUUID().toString();
+		String nonce = UUID.randomUUID().toString();
+		try {
+			AuthorizationCodeRequestUrl url = new AuthorizationCodeRequestUrl(authzEndpoint, clientId);
+			url.setResponseTypes(Arrays.asList("code"));
+			url.setScopes(Arrays.asList("openid", "profile"));
+			url.setState(state);
+			url.set("nonce", nonce);
+			url.setRedirectUri(new GenericUrl(req.getRequestURL().toString().replace("/start", "/callback")).build());
+			res.sendRedirect(url.build());
+			ses.setAttribute("state", state);
+			ses.setAttribute("nonce", nonce);
+		} catch (IOException e) {
+			log.error("Authorization code request failed.", e);
 		}
         return null;
 	}
@@ -176,12 +171,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			return mav;
 		}
 
-		String state = (String) ses.getAttribute("state");
-		String nonce = (String) ses.getAttribute("nonce");
-		if (state == null || nonce == null || state.isEmpty() || nonce.isEmpty()) {
-			return index(mav, req, null, locale);
-		}
-
 		// Verify authz code
 		String code = req.getParameter("code");
 		if (code == null || code.isEmpty()) {
@@ -189,8 +178,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			return index(mav, req, null, locale);
 		}
 
+		String state = (String) ses.getAttribute("state");
+		String nonce = (String) ses.getAttribute("nonce");
+
 		// Verify state
-		if (!state.equals(req.getParameter("state"))) {
+		if (state == null || state.isEmpty() || !state.equals(req.getParameter("state"))) {
 			log.warn("Invalid state"); // Error handling should be Implemented
 		}
 
@@ -207,7 +199,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			IdToken idToken = IdToken.parse(idTokenRes.getFactory(), idTokenStr);
 
 			// Verify nonce
-			if (!nonce.equals(idToken.getPayload().getNonce())) {
+			if (nonce == null || nonce.isEmpty() || !nonce.equals(idToken.getPayload().getNonce())) {
 				log.warn("Invalid nonce"); // Error handling should be Implemented
 			}
 			// Verify signature
