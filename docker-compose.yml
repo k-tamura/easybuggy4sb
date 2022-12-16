@@ -55,3 +55,7 @@ services:
         oidc_op_name: Keycloak
         oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
         oidc_dynamic_client_registration_enabled: 'true'
+  attacker_app:
+    build: ./attacker_app
+    ports:
+      - 9999:8080
