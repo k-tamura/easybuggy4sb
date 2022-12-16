@@ -174,7 +174,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		// Verify authz code
 		String code = req.getParameter("code");
 		if (code == null || code.isEmpty()) {
-			log.warn("Invalid code"); // Error handling should be Implemented
+			log.warn("Code is required");
 			return index(mav, req, null, locale);
 		}
 
