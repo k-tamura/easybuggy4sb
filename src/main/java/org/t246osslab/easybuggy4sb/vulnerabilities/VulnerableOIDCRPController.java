@@ -73,28 +73,30 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	@Value("${oidc.configuration.endpoint}")
 	public void setOPConfig(String configEndpoint) {
-		log.debug("OP Config Endpoint: " + configEndpoint);
-		try {
-			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
-			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(configEndpoint));
-			HttpResponse response = request.execute();
-			Map<?, ?> opConfig = new Gson().fromJson(response.parseAsString(), Map.class);
-			log.debug("OP Config: " + opConfig.toString());
-			authzEndpoint = (String) opConfig.get("authorization_endpoint");
-			tokenEndpoint = (String) opConfig.get("token_endpoint");
-			userinfoEndpoint = (String) opConfig.get("userinfo_endpoint");
-			endSessionEndpoint = (String) opConfig.get("end_session_endpoint");
-			registration_endpoint = (String) opConfig.get("registration_endpoint");
-			issuer = (String) opConfig.get("issuer");
-			jwksUri = (String) opConfig.get("jwks_uri");
-			if (clientRegistrationEnabled) {
-				tryRegisterClient();
+		if (configEndpoint != null && !configEndpoint.isEmpty()) {
+			log.debug("OP Config Endpoint: " + configEndpoint);
+			try {
+				HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
+				HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(configEndpoint));
+				HttpResponse response = request.execute();
+				Map<?, ?> opConfig = new Gson().fromJson(response.parseAsString(), Map.class);
+				log.debug("OP Config: " + opConfig.toString());
+				authzEndpoint = (String) opConfig.get("authorization_endpoint");
+				tokenEndpoint = (String) opConfig.get("token_endpoint");
+				userinfoEndpoint = (String) opConfig.get("userinfo_endpoint");
+				endSessionEndpoint = (String) opConfig.get("end_session_endpoint");
+				registration_endpoint = (String) opConfig.get("registration_endpoint");
+				issuer = (String) opConfig.get("issuer");
+				jwksUri = (String) opConfig.get("jwks_uri");
+				if (clientRegistrationEnabled) {
+					tryRegisterClient();
+				}
+				if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(opName))) {
+					isSettingsReady = true;
+				}
+			} catch (IOException e) {
+				log.error("OP configuration request failed.", e);
 			}
-			if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(opName))) {
-				isSettingsReady = true;
-			}
-		} catch (IOException e) {
-			log.error("OP configuration request failed.", e);
 		}
 	}
 
