@@ -30,6 +30,7 @@
 		</th:block>
 		<div th:replace="messages"></div>
 	</th:block>
+	<br />
 	<th:block th:if="${userInfo != null}">
 		<input type="button" onClick='history.back();'  th:value="#{label.history.back}" />
 	</th:block>

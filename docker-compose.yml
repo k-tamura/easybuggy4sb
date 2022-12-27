@@ -21,6 +21,7 @@ services:
       image: quay.io/keycloak/keycloak:legacy
       volumes:
         - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
+        - ./keycloak/register.ftl:/opt/jboss/keycloak/themes/base/login/register.ftl
       environment:
         DB_VENDOR: MYSQL
         DB_ADDR: db
