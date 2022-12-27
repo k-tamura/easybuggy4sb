@@ -1,22 +1,9 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
-import com.google.api.client.auth.oauth2.AuthorizationCodeTokenRequest;
-import com.google.api.client.auth.oauth2.RefreshTokenRequest;
-import com.google.api.client.auth.oauth2.TokenRequest;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.google.api.client.auth.oauth2.TokenResponseException;
+import com.google.api.client.auth.oauth2.*;
 import com.google.api.client.auth.openidconnect.IdToken;
 import com.google.api.client.auth.openidconnect.IdTokenResponse;
-import com.google.api.client.http.BasicAuthentication;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpContent;
-import com.google.api.client.http.HttpHeaders;
-import com.google.api.client.http.HttpMethods;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestFactory;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpResponseException;
+import com.google.api.client.http.*;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -24,11 +11,16 @@ import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import org.t246osslab.easybuggy4sb.core.model.Forum;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +30,17 @@ import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Controller
 public class VulnerableOIDCRPController extends AbstractController {
 	
 	private static boolean isSettingsReady = false;
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
 	protected String authzEndpoint;
 
@@ -59,14 +56,17 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	protected String issuer;
 
+	@Value("${attacker.app.url}")
+	protected String attackerAppUrl;
+
+	@Value("${manage.account.page.url}")
+	protected String manageAccountPageUrl;
+
 	@Value("${oidc.client.id}")
 	protected String clientId;
 
 	@Value("${oidc.client.secret}")
 	protected String clientSecret;
-
-	@Value("${oidc.op.name}")
-	protected String opName;
 
 	@Value("${oidc.dynamic.client.registration.enabled}")
 	protected boolean clientRegistrationEnabled = false;
@@ -91,7 +91,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				if (clientRegistrationEnabled) {
 					tryRegisterClient();
 				}
-				if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret) || StringUtils.isEmpty(opName))) {
+				if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret))) {
 					isSettingsReady = true;
 				}
 			} catch (IOException e) {
@@ -103,12 +103,21 @@ public class VulnerableOIDCRPController extends AbstractController {
 	@RequestMapping(value = "/vulnerabileoidcrp")
 	public ModelAndView index(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
-		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
+		String type = req.getParameter("type");
+		String[] placeholders = null;
+		if (type == null) {
+			placeholders = new String[]{ req.getRequestURL().toString() };
+		} else if ("2".equals(type)) {
+			placeholders = new String[]{ attackerAppUrl };
+		}
+		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp2");
+		mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + (type == null ? "" : type), placeholders, locale));
+		searchMessages(mav, locale);
 
 		if (ses != null) {
 			Map<?, ?> userInfo = getUserInfo(ses);
 			if (userInfo != null) {
-				changeNextPageToUserInfo(mav, locale, userInfo);
+				mav.addObject("userInfo", userInfo);
 				return mav;
 			}
 			ses.invalidate();
@@ -116,7 +125,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		ses = req.getSession(true);
 
 		mav.addObject("loginMessage",
-				msg.getMessage("msg.login.with.openid.provider", new Object[] { opName }, locale));
+				msg.getMessage("msg.login.with.openid.provider", null, locale));
 		mav.addObject("isSettingsReady", isSettingsReady);
 		if (!isSettingsReady)
 			mav.addObject("note", msg.getMessage("msg.note.oidc.invalid.config", null, locale));
@@ -128,16 +137,13 @@ public class VulnerableOIDCRPController extends AbstractController {
 	public ModelAndView start(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, HttpSession ses,
 			Locale locale) {
 
-		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
-
 		if (ses == null) {
 			return index(mav, req, null, locale);
 		}
-
 		Map<?, ?> userInfo = getUserInfo(ses);
 		if (userInfo != null) {
-			changeNextPageToUserInfo(mav, locale, userInfo);
-			return mav;
+			mav.addObject("userInfo", userInfo);
+			return index(mav, req, null, locale);
 		}
 
 		String state = UUID.randomUUID().toString();
@@ -148,7 +154,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 			url.setScopes(Arrays.asList("openid", "profile"));
 			url.setState(state);
 			url.set("nonce", nonce);
-			url.setRedirectUri(new GenericUrl(req.getRequestURL().toString().replace("/start", "/callback")).build());
+			url.setRedirectUri(new GenericUrl(req.getRequestURL().toString()
+					.replace("/start", "/callback")).build());
 			res.sendRedirect(url.build());
 			ses.setAttribute("state", state);
 			ses.setAttribute("nonce", nonce);
@@ -161,15 +168,15 @@ public class VulnerableOIDCRPController extends AbstractController {
 	@RequestMapping(value = "/callback")
 	public ModelAndView callback(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
-		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
-
 		if (ses == null) {
 			return index(mav, req, null, locale);
 		}
 
+		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
+
 		Map<?, ?> userInfo = getUserInfo(ses);
 		if (userInfo != null) {
-			changeNextPageToUserInfo(mav, locale, userInfo);
+			mav.addObject("userInfo", userInfo);
 			return mav;
 		}
 
@@ -232,7 +239,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.setAttribute("idToken", idTokenStr);
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
 			userInfo = getUserInfo(ses);
-			changeNextPageToUserInfo(mav, locale, userInfo);
+			mav.addObject("userInfo", userInfo);
 			ses.setAttribute("sub", userInfo.get("sub"));
 			return mav;
 		} catch (TokenResponseException e) {
@@ -260,9 +267,41 @@ public class VulnerableOIDCRPController extends AbstractController {
 		ses.invalidate();
 	}
 
-	private void changeNextPageToUserInfo(ModelAndView mav, Locale locale, Map<?, ?> userInfo) {
-		mav.addObject("title", msg.getMessage("title.userinfo.page", null, locale));
-		mav.addObject("userInfo", userInfo);
+	@RequestMapping(value = "/addMessage")
+	public ModelAndView forum(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
+		if (ses == null) {
+			return index(mav, req, null, locale);
+		}
+		Map<?, ?> userInfo = getUserInfo(ses);
+		if (userInfo == null) {
+			return index(mav, req, null, locale);
+		} else {
+			mav.addObject("userInfo", userInfo);
+		}
+		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp2");
+		String username = (String) userInfo.get("name");
+		String picture = (String) userInfo.get("picture");
+		if (picture == null) picture = "images/avatar_man.png";
+		String message = req.getParameter("message");
+		insertMessage(username, picture, message, mav, locale);
+		searchMessages(mav, locale);
+		return mav;
+	}
+
+	@RequestMapping(value = "/userinfo")
+	public ModelAndView userinfo(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
+		if (ses == null) {
+			return index(mav, req, null, locale);
+		}
+		Map<?, ?> userInfo = getUserInfo(ses);
+		if (userInfo == null) {
+			return index(mav, req, null, locale);
+		} else {
+			mav.addObject("userInfo", userInfo);
+		}
+		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp3");
+		mav.addObject("manageAccountPageUrl", manageAccountPageUrl);
+		return mav;
 	}
 
 	private Map<?, ?> getUserInfo(HttpSession ses) {
@@ -387,4 +426,49 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 		return null;
 	}
+
+	private List<Forum> searchMessages(ModelAndView mav, Locale locale) {
+		List<Forum> messages = null;
+		try {
+			messages = jdbcTemplate.query("select * from forum order by time desc", new RowMapper<Forum>() {
+				public Forum mapRow(ResultSet rs, int rowNum) throws SQLException {
+					Forum forum = new Forum();
+					forum.setTime(rs.getTime("time"));
+					forum.setUsername(rs.getString("username"));
+					forum.setPicture(rs.getString("picture"));
+					forum.setMessage(rs.getString("message"));
+					return forum;
+				}
+			});
+			mav.addObject("messages", messages);
+		} catch (DataAccessException e) {
+			mav.addObject("errmsg",
+					msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
+			log.error("DataAccessException occurs: ", e);
+		} catch (Exception e) {
+			mav.addObject("errmsg",
+					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+			log.error("Exception occurs: ", e);
+		}
+		return messages;
+	}
+
+	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale) {
+		String resultMessage = null;
+		try {
+			int insertCount = jdbcTemplate.update("insert into forum values (CURRENT_TIMESTAMP, ?, ?, ?)",
+					username, picture, message);
+			if (insertCount != 1) {
+				resultMessage = msg.getMessage("msg.user.already.exist", null, locale);
+			}
+		} catch (DataAccessException e) {
+			resultMessage = msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, locale);
+			log.error("DataAccessException occurs: ", e);
+		} catch (Exception e) {
+			resultMessage = msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale);
+			log.error("Exception occurs: ", e);
+		}
+		mav.addObject("errmsg", resultMessage);
+	}
+
 }

@@ -19,6 +19,8 @@ services:
         - 3306:3306
   keycloak:
       image: quay.io/keycloak/keycloak:legacy
+      volumes:
+        - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
       environment:
         DB_VENDOR: MYSQL
         DB_ADDR: db
@@ -33,7 +35,7 @@ services:
       ports:
         - 8180:8080
       healthcheck:
-        test: "curl -f http://keycloak:8080/auth/realms/master/.well-known/openid-configuration || exit 1"
+        test: '/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password admin;/opt/jboss/keycloak/bin/kcadm.sh update realms/master -s registrationAllowed=true;/opt/jboss/keycloak/bin/kcadm.sh update "realms/master" -s accountTheme=keycloak || exit 1'
       depends_on:
         - db
   easybuggy:
@@ -52,9 +54,10 @@ services:
         db_platform: mysql
         db_username: keycloak
         db_password: password
-        oidc_op_name: Keycloak
         oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
         oidc_dynamic_client_registration_enabled: 'true'
+        attacker_app_url: http://localhost:9999/attacker_app
+        manage_account_page_url: http://localhost:8180/auth/realms/master/account/#/personal-info
   attacker_app:
     build: ./attacker_app
     ports:

@@ -1,0 +1,40 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<meta name="referrer" content="unsafe-url"></meta>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+	th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<th:block th:if="${userInfo != null}">
+		<form action="addMessage" method="post">
+			<table tclass="table table-striped table-bordered table-hover" style="font-size: small;">
+				<tr>
+					<td><textarea rows="3" cols="100" name="message"></textarea></td>
+					<td>&emsp;<input type="submit" th:value="#{label.post}" /></td>
+				</tr>
+			</table>
+		</form>
+	</th:block>
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr th:each="message, stat : ${messages}">
+			<td th:text="${stat.size} - ${stat.index}"></td>
+			<td th:text="${message.username}"></td>
+			<td><img th:src="${message.picture}" width="64" height="64"/></td>
+			<td th:utext="${message.message}"></td>
+			<td th:text="${message.time}"></td>
+		</tr>
+	</table>
+	<th:block th:if="${userInfo == null}">
+		<th:block th:if="${isSettingsReady}">
+			<a href="/start" th:text="${loginMessage}"></a>
+			<br />
+			<br />
+		</th:block>
+		<div th:replace="messages"></div>
+	</th:block>
+	<th:block th:if="${userInfo != null}">
+		<input type="button" onClick='history.back();' th:value="#{label.history.back}" />
+	</th:block>
+</body>
+</html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <meta name="referrer" content="unsafe-url"></meta>
+
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
 	th:lang="${lang}">
@@ -7,16 +8,11 @@
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
 	<th:block th:if="${userInfo != null}">
-		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
-			<tr>
-				<th th:text="#{label.attribute.name}"></th>
-				<th th:text="#{label.attribute.value}"></th>
-			</tr>
-			<tr th:each="mapEntry : ${userInfo}">
-				<td th:text="${mapEntry.key}"></td>
-				<td th:text="${mapEntry.value}"></td>
-			</tr>
-		</table>
+		<p th:text="#{msg.available.functions}" />
+		<ul>
+			<li><a href="vulnerabileoidcrp" th:text="#{label.forum}"></a></li>
+			<li><a href="userinfo" th:text="#{label.edit.profile}"></a></li>
+		</ul>
 	</th:block>
 	<th:block th:if="${userInfo == null}">
 		<th:block th:if="${isSettingsReady}">
