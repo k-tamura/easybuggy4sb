@@ -1,3 +1,1 @@
-drop schema if exists demo;
-drop table if exists users;
-drop table if exists forum;
+ALTER TABLE forum MODIFY COLUMN message varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL;

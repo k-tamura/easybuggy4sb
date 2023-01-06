@@ -7,9 +7,8 @@ volumes:
 services:
   db:
       image: mysql:5.7
+      command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
       container_name: db
-      volumes:
-        - mysql_data:/var/lib/mysql
       environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: keycloak
@@ -31,8 +30,6 @@ services:
         KEYCLOAK_USER: admin
         KEYCLOAK_PASSWORD: admin
         KEYCLOAK_FRONTEND_URL: http://localhost:8180/auth
-        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the MySQL JDBC driver documentation in order to use it.
-        #JDBC_PARAMS: "connectTimeout=30000"
       ports:
         - 8180:8080
       healthcheck:

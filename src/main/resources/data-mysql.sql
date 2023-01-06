@@ -1,3 +1,0 @@
-insert into forum (time, username, picture, message) values (CURRENT_TIMESTAMP - INTERVAL 7777 SECOND,'admin','images/avatar_man.png','Feel free to write any questions you may have.');
-insert into forum (time, username, picture, message) values (CURRENT_TIMESTAMP - INTERVAL 99 SECOND,'Ichiro Suzuki','images/avatar_man.png','I am using PDO after migrating away from the mysql library. What do I use in place of the old real_escape_string function?');
-insert into forum (time, username, picture, message) values (CURRENT_TIMESTAMP,'Rekca 2Ta','http://localhost:9999/attacker_app/img/avatar_woman.png','>>#2<br>PDO offers an alternative designed to replace mysql_escape_string() with the PDO::quote() method.');
