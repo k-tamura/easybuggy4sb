@@ -183,7 +183,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		// Verify authz code
 		String code = req.getParameter("code");
 		if (code == null || code.isEmpty()) {
-			log.warn("Code is required");
+			log.warn("code is required");
 			return index(mav, req, null, locale);
 		}
 
@@ -279,11 +279,16 @@ public class VulnerableOIDCRPController extends AbstractController {
 			mav.addObject("userInfo", userInfo);
 		}
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp2");
-		String username = (String) userInfo.get("name");
-		String picture = (String) userInfo.get("picture");
-		if (picture == null) picture = "images/avatar_man.png";
 		String message = req.getParameter("message");
-		insertMessage(username, picture, message, mav, locale);
+		if (message != null && !message.isEmpty()) {
+			String username = (String) userInfo.get("name");
+			if (username == null || message.isEmpty()) {
+				username = (String) userInfo.get("preferred_username");
+			}
+			String picture = (String) userInfo.get("picture");
+			if (picture == null) picture = "images/avatar_man.png";
+			insertMessage(username, picture, message, mav, locale);
+		}
 		searchMessages(mav, locale);
 		return mav;
 	}
