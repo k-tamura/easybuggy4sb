@@ -34,7 +34,7 @@
 		<div th:replace="messages"></div>
 	</th:block>
 	<th:block th:if="${userInfo != null}">
-		<input type="button" onClick='history.back();' th:value="#{label.history.back}" />
+		<a href="/callback" th:text="#{label.history.back}"></a>
 	</th:block>
 </body>
 </html>
