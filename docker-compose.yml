@@ -6,7 +6,7 @@ volumes:
 
 services:
   db:
-      image: mysql:5.7
+      image: mysql:8
       command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
       container_name: db
       environment:
