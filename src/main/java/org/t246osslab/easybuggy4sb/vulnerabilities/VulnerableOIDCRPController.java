@@ -425,7 +425,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 					Forum forum = new Forum();
 					forum.setTime(rs.getTime("time"));
 					forum.setUsername(rs.getString("username"));
-					forum.setPicture(rs.getString("picture") + "?d=" + System.currentTimeMillis());
+					forum.setPicture(rs.getString("picture"));
 					forum.setMessage(rs.getString("message"));
 					return forum;
 				}
