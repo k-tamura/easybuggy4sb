@@ -173,6 +173,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp");
+		mav.addObject("manageAccountPageUrl", manageAccountPageUrl);
 
 		Map<?, ?> userInfo = getUserInfo(ses);
 		if (userInfo != null) {
@@ -290,22 +291,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			insertMessage(username, picture, message, mav, locale);
 		}
 		searchMessages(mav, locale);
-		return mav;
-	}
-
-	@RequestMapping(value = "/userinfo")
-	public ModelAndView userinfo(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
-		if (ses == null) {
-			return index(mav, req, null, locale);
-		}
-		Map<?, ?> userInfo = getUserInfo(ses);
-		if (userInfo == null) {
-			return index(mav, req, null, locale);
-		} else {
-			mav.addObject("userInfo", userInfo);
-		}
-		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp3");
-		mav.addObject("manageAccountPageUrl", manageAccountPageUrl);
 		return mav;
 	}
 

@@ -11,7 +11,9 @@
 		<p th:text="#{msg.available.functions}" />
 		<ul>
 			<li><a href="vulnerabileoidcrp" th:text="#{label.forum}"></a></li>
-			<li><a href="userinfo" th:text="#{label.edit.profile}"></a></li>
+			<th:block th:if="${manageAccountPageUrl != null}">
+				<li><a th:href="${manageAccountPageUrl}" th:text="#{label.edit.profile}" target="_blank"></a></li>
+			</th:block>
 		</ul>
 	</th:block>
 	<th:block th:if="${userInfo == null}">
