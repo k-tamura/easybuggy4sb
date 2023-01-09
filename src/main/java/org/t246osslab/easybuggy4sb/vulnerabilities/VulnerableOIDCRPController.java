@@ -108,7 +108,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (type == null) {
 			placeholders = new String[]{ attackerAppUrl };
 		} else if ("2".equals(type)) {
-			placeholders = new String[]{ req.getRequestURL().toString() };
+			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
 		}
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp2");
 		mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + (type == null ? "" : type), placeholders, locale));
