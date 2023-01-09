@@ -3,22 +3,18 @@
 <%@ page import="java.io.File"%>
 <% displayImage(response); %>
 <%!
-  public void displayImage(HttpServletResponse resp) throws Exception {
+	public void displayImage(HttpServletResponse resp) throws Exception {
 
-    ServletContext sc = getServletContext();
-    String filename = sc.getRealPath("img/avatar_woman.png");
-    String mimeType = "image/png";
-    resp.setContentType(mimeType);
-    File file = new File(filename);
-    resp.setContentLength((int)file.length());
-    FileInputStream in = new FileInputStream(file);
-    OutputStream out = resp.getOutputStream();
-    byte[] buf = new byte[1024];
-    int count = 0;
-    while ((count = in.read(buf)) >= 0) {
-      out.write(buf, 0, count);
-    }
-    in .close();
-    out.close();
-  }
+		ServletContext sc = getServletContext();
+		File file = new File(sc.getRealPath("img/avatar_woman.png"));
+		try (FileInputStream in = new FileInputStream(file);OutputStream out = resp.getOutputStream();){
+			resp.setContentType("image/png");
+			resp.setContentLength((int) file.length());
+			byte[] buf = new byte[1024];
+			int count = 0;
+			while ((count = in.read(buf)) >= 0) {
+				out.write(buf, 0, count);
+			}
+		}
+	}
 %>
