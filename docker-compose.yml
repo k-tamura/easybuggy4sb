@@ -8,7 +8,7 @@ services:
   db:
       image: mysql:8
       command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-      container_name: db
+      #container_name: db
       environment:
         MYSQL_ROOT_PASSWORD: root
         MYSQL_DATABASE: keycloak
@@ -61,3 +61,8 @@ services:
     build: ./attacker_app
     ports:
       - 9999:8080
+  mail:
+    image: python:3
+    ports:
+      - 1025:1025
+    command: python -m smtpd -d -n -c DebuggingServer 0.0.0.0:1025
