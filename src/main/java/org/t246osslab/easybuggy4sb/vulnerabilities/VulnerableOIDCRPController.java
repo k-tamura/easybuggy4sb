@@ -283,11 +283,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 		String message = req.getParameter("message");
 		if (message != null && !message.isEmpty()) {
 			String username = (String) userInfo.get("name");
-			if (username == null || message.isEmpty()) {
-				username = (String) userInfo.get("preferred_username");
-			}
+			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
 			String picture = (String) userInfo.get("picture");
-			if (picture == null) picture = "images/avatar_man.png";
+			if (picture == null || picture.isEmpty()) picture = "images/avatar_man.png";
 			insertMessage(username, picture, message, mav, locale);
 		}
 		searchMessages(mav, locale);
