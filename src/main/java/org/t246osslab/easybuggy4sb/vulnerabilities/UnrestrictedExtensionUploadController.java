@@ -27,6 +27,9 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
+        String exitJspURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/exit.jsp");
+        String[] placeholders = new String[]{ exitJspURL};
+        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", placeholders, locale));
         if (req.getAttribute("errorMessage") != null) {
             mav.addObject("errmsg", req.getAttribute("errorMessage"));
         }
@@ -41,7 +44,11 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         }
 
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
-        
+
+        String exitJspURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/exit.jsp");
+        String[] placeholders = new String[]{ exitJspURL};
+        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", placeholders, locale));
+
         // Get absolute path of the web application
         String appPath = req.getServletContext().getRealPath("");
 
@@ -66,7 +73,6 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
             mav.addObject("msg", msg.getMessage("msg.convert.grayscale.complete", null, locale));
             mav.addObject("upladFilePath", SAVE_DIR + "/" + fileName);
         } else {
-            mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", null, locale));
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));
         }
         return mav;
