@@ -8,6 +8,16 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 
 ![logo](https://raw.githubusercontent.com/wiki/k-tamura/easybuggy/images/mov_ebsb.gif)
 
+:clock4: Quick Start (Docker Compose) with Keycloak, MySQL, Attacker's app
+-
+
+    $ echo HOST=192.168.1.17 > .env # if you run EasyBuggy Boot not on localhost (e.g. 192.168.1.17)
+    $ docker compose up
+
+Access to
+
+    http://192.168.1.17:8080
+
 :clock4: Quick Start
 -
 
@@ -22,11 +32,6 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 
     $ docker build . -t easybuggy4sb       # Build container image
     $ docker run -p 8080:8080 easybuggy4sb # Start easybuggy
-
-:clock4: Quick Start (Docker Compose)
--
-
-    $ docker compose up
 
 Access to
 
