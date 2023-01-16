@@ -1,14 +1,14 @@
 <table style="width: 100%;">
 	<tr>
 		<td><h2><span class="glyphicon glyphicon-globe"></span> <span th:text="${title}"></span></h2></td>
-		<td align="right" th:if="${#httpSession == null or (#httpSession.getAttribute('userid') == null and #httpSession.getAttribute('sub') == null)}">
+		<td align="right" th:if="${#httpSession == null or (#httpSession.getAttribute('userid') == null and #httpSession.getAttribute('username') == null)}">
 			<a href="/" th:text="#{label.go.to.main}"></a></td>
 		<td align="right" th:if="${#httpSession != null and #httpSession.getAttribute('userid') != null}">
 			<p th:text="#{label.login.user.id} + ': ' + ${#httpSession.getAttribute('userid')}" />
 			<a href="/logout" th:text="#{label.logout}"></a>
 		</td>
-		<td align="right" th:if="${#httpSession != null and #httpSession.getAttribute('sub') != null}">
-			<p th:text="#{label.login.user.id} + ': ' + ${#httpSession.getAttribute('sub')}" />
+		<td align="right" th:if="${#httpSession != null and #httpSession.getAttribute('username') != null}">
+			<p th:text="#{label.login.user.id} + ': ' + ${#httpSession.getAttribute('username')}" />
 			<a href="/oidclogout" th:text="#{label.logout}"></a>
 		</td>
 	</tr>

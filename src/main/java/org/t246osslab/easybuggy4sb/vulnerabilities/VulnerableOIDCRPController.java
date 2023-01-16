@@ -10,6 +10,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -241,7 +242,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
 			userInfo = getUserInfo(ses);
 			mav.addObject("userInfo", userInfo);
-			ses.setAttribute("sub", userInfo.get("sub"));
+			String username = (String) userInfo.get("name");
+			if (username == null) username = (String) userInfo.get("preferred_username");
+			ses.setAttribute("username", username);
 			return mav;
 		} catch (TokenResponseException e) {
 			log.debug("Invalid token request", e);
@@ -286,6 +289,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
 			String picture = (String) userInfo.get("picture");
 			if (picture == null || picture.isEmpty()) picture = "images/avatar_man.png";
+			message =  StringEscapeUtils.escapeHtml(message);
+			message = message.replaceAll("\r\n", " <br>");
+			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
 			insertMessage(username, picture, message, mav, locale);
 		}
 		searchMessages(mav, locale);
