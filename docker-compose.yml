@@ -35,8 +35,11 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       KEYCLOAK_FRONTEND_URL: http://${HOST:-localhost}:8180/auth
+      DEBUG_PORT: '*:8787'
+      DEBUG: 'true'
     ports:
       - 8180:8080
+      - 8787:8787
     healthcheck:
       test: '/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password admin;/opt/jboss/keycloak/bin/kcadm.sh update realms/master -s registrationAllowed=true;/opt/jboss/keycloak/bin/kcadm.sh update "realms/master" -s accountTheme=keycloak || exit 1'
     depends_on:
