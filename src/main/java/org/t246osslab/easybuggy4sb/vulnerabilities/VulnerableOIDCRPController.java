@@ -110,6 +110,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 			placeholders = new String[]{ attackerAppUrl };
 		} else if ("2".equals(type)) {
 			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
+		} else if ("3".equals(type)) {
+			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/start?redirect_path=/vulnerabileoidcrp") };
 		}
 		setViewAndCommonObjects(mav, locale, "vulnerabileoidcrp2");
 		mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + (type == null ? "" : type), placeholders, locale));
@@ -155,8 +157,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			url.setScopes(Arrays.asList("openid", "profile"));
 			url.setState(state);
 			url.set("nonce", nonce);
-			url.setRedirectUri(new GenericUrl(req.getRequestURL().toString()
-					.replace("/start", "/callback")).build());
+			String redirectPath = req.getParameter("redirect_path");
+			if (redirectPath == null || redirectPath.isEmpty()) redirectPath = "/callback";
+			String redirectUri = req.getRequestURL().toString().replace("/start", redirectPath);
+			ses.setAttribute("redirectUri", redirectUri);
+			url.setRedirectUri(new GenericUrl(redirectUri).build());
 			res.sendRedirect(url.build());
 			ses.setAttribute("state", state);
 			ses.setAttribute("nonce", nonce);
@@ -199,7 +204,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			/* Access the token endpoint and get ID and access token */
 			AuthorizationCodeTokenRequest authzReq = new AuthorizationCodeTokenRequest(new NetHttpTransport(),
 					new JacksonFactory(), new GenericUrl(tokenEndpoint), code);
-			authzReq.setRedirectUri(req.getRequestURL().toString())
+			authzReq.setRedirectUri((String) ses.getAttribute("redirectUri"))
 					.setClientAuthentication(new BasicAuthentication(clientId, clientSecret));
 			HttpResponse httpRes = authzReq.executeUnparsed();
 			IdTokenResponse idTokenRes = httpRes.parseAs(IdTokenResponse.class);

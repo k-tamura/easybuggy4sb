@@ -18,7 +18,7 @@
 	</th:block>
 	<th:block th:if="${userInfo == null}">
 		<th:block th:if="${isSettingsReady}">
-			<a href="/start" th:text="${loginMessage}"></a>
+			<a href="/start?redirect_path=/callback" th:text="${loginMessage}"></a>
 			<br />
 			<br />
 		</th:block>
