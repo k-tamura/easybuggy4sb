@@ -6,7 +6,7 @@
 	public void displayImage(HttpServletResponse resp) throws Exception {
 
 		ServletContext sc = getServletContext();
-		File file = new File(sc.getRealPath("img/avatar_woman.png"));
+		File file = new File(sc.getRealPath("img/avatar_attacker.png"));
 		try (FileInputStream in = new FileInputStream(file);OutputStream out = resp.getOutputStream();){
 			resp.setContentType("image/png");
 			resp.setContentLength((int) file.length());
