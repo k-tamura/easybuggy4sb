@@ -58,7 +58,7 @@
 
         <div class="form-group">
            <div class="col-sm-2 col-md-2">
-               <label for="user.attributes.picture" class="control-label">Picture URL</label>
+               <label for="user.attributes.picture" class="control-label">Picture</label>
            </div>
            <div class="col-sm-10 col-md-10">
                <input type="text" class="form-control" id="user.attributes.picture" name="user.attributes.picture" value="${(account.attributes.picture!'')}"/>

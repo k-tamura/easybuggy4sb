@@ -8,7 +8,7 @@ services:
   db:
     image: mysql:8
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    #container_name: db
+    container_name: db
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
@@ -22,6 +22,7 @@ services:
       - 3306:3306
   keycloak:
     image: quay.io/keycloak/keycloak:legacy
+    container_name: keycloak
     volumes:
       - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
       - ./keycloak/register.ftl:/opt/jboss/keycloak/themes/base/login/register.ftl
@@ -48,6 +49,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: easybuggy
     ports:
       - 8080:8080
       - 9009:9009
@@ -67,12 +69,14 @@ services:
       TZ: ${TZ:-Asia/Tokyo}
   attacker_app:
     build: ./attacker_app
+    container_name: attacker_app
     ports:
       - 9999:8080
     environment:
       TZ: ${TZ:-Asia/Tokyo}
   mail:
     image: python:3
+    container_name: mail
     ports:
       - 1025:1025
     command: python -m smtpd -d -n -c DebuggingServer 0.0.0.0:1025
