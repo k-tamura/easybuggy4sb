@@ -208,7 +208,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			/* Access the token endpoint and get ID and access token */
 			AuthorizationCodeTokenRequest authzReq = new AuthorizationCodeTokenRequest(new NetHttpTransport(),
 					new JacksonFactory(), new GenericUrl(tokenEndpoint), code);
-			authzReq.setRedirectUri((String) ses.getAttribute("redirectUri"))
+			String redirectUri = (String) ses.getAttribute("redirectUri");
+			if (redirectUri == null) {
+				redirectUri = req.getRequestURL().toString();
+			}
+			authzReq.setRedirectUri(redirectUri)
 					.setClientAuthentication(new BasicAuthentication(clientId, clientSecret));
 			HttpResponse httpRes = authzReq.executeUnparsed();
 			IdTokenResponse idTokenRes = httpRes.parseAs(IdTokenResponse.class);
