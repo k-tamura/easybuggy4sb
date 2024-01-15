@@ -21,7 +21,7 @@ services:
     ports:
       - 3306:3306
   keycloak:
-    image: quay.io/keycloak/keycloak:legacy
+    image: quay.io/keycloak/keycloak:16.1.1
     container_name: keycloak
     volumes:
       - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
@@ -40,9 +40,13 @@ services:
       TZ: ${TZ}
     ports:
       - 8180:8080
+      - 443:8443
       - 8787:8787
     healthcheck:
       test: '/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password admin;/opt/jboss/keycloak/bin/kcadm.sh update realms/master -s registrationAllowed=true;/opt/jboss/keycloak/bin/kcadm.sh update "realms/master" -s accountTheme=keycloak || exit 1'
+      start_period: "30s"
+      retries: 7
+      interval: "10s" 
     depends_on:
       - db
   easybuggy:
