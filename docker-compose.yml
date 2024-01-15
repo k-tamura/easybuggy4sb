@@ -75,7 +75,7 @@ services:
     environment:
       TZ: ${TZ}
   mail:
-    image: python:3
+    image: python:3.6-alpine
     container_name: mail
     ports:
       - 1025:1025
