@@ -21,22 +21,38 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.7</java.version>
-		<!-- default properties (JDK 1.8 or later) -->
-		<jvm.args>-XX:MaxMetaspaceSize=128m -Xloggc:logs/gc_%p_%t.log
+		<java.version>8</java.version>
+		<jvm.args>-XX:MaxMetaspaceSize=128m -Xloggc:logs/gc_%p_%t.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails
+                        -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=10M
 			-XX:NativeMemoryTracking=summary</jvm.args>
 		<derby.version>10.13.1.1</derby.version>
 	</properties>
 
 	<profiles>
 		<profile>
-			<id>JDK-Switch</id>
+			<id>JDK7-Switch</id>
 			<activation>
 				<jdk>1.7</jdk>
 			</activation>
 			<properties>
-				<jvm.args>-XX:MaxPermSize=128m -Xloggc:logs/gc.log</jvm.args>
+				<jvm.args>-XX:MaxPermSize=128m -Xloggc:logs/gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails
+                                        -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5
+                                        -XX:GCLogFileSize=10M</jvm.args>
 				<derby.version>10.12.1.1</derby.version>
+			</properties>
+		</profile>
+		<profile>
+			<id>JDK9-or-Higher-Switch</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<jvm.args>-XX:MaxMetaspaceSize=128m -Xlog:gc*:file=logs/gc_%p_%t.log
+                                        -Xlog:gc+heap=info:file=logs/gc_%p_%t.log:utctime,pid,level,tags:filecount=5,filesize=10m
+					-XX:NativeMemoryTracking=summary -Dspring.devtools.restart.enabled=false
+                                        --add-opens java.base/java.lang=ALL-UNNAMED
+                                        --add-exports java.naming/com.sun.jndi.ldap=ALL-UNNAMED</jvm.args>
+				<derby.version>10.13.1.1</derby.version>
 			</properties>
 		</profile>
 	</profiles>
@@ -89,10 +105,20 @@
 		</dependency>
 
 		<dependency>
+		        <groupId>org.springframework.hateoas</groupId>
+		        <artifactId>spring-hateoas</artifactId>
+		</dependency>
+
+		<dependency>
+		        <groupId>org.springframework.plugin</groupId>
+		        <artifactId>spring-plugin-core</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -164,12 +190,6 @@
 						-Xmx256m
 						-XX:MaxDirectMemorySize=90m
 						-XX:+UseSerialGC
-						-XX:+PrintHeapAtGC
-						-XX:+PrintGCDetails
-						-XX:+PrintGCDateStamps
-						-XX:+UseGCLogFileRotation
-						-XX:NumberOfGCLogFiles=5
-						-XX:GCLogFileSize=10M
 						-XX:GCTimeLimit=15
 						-XX:GCHeapFreeLimit=50
 						-XX:+HeapDumpOnOutOfMemoryError
