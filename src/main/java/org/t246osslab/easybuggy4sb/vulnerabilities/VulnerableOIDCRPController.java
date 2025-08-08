@@ -302,6 +302,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			String username = (String) userInfo.get("name");
 			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
 			String picture = (String) userInfo.get("picture");
+			if (username.equals("admin")) picture = "images/avatar_woman.png";
 			if (picture == null || picture.isEmpty()) picture = "images/avatar_man.png";
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");

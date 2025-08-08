@@ -15,7 +15,6 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      #MYSQL_DATABASE: keycloak,easybuggy
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
       TZ: ${TZ}
