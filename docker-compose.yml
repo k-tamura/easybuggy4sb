@@ -12,10 +12,11 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: keycloak
-      MYSQL_USER: keycloak
+      #MYSQL_DATABASE: keycloak,easybuggy
+      MYSQL_USER: admin
       MYSQL_PASSWORD: password
       TZ: ${TZ}
     ports:
@@ -30,7 +31,7 @@ services:
       DB_VENDOR: MYSQL
       DB_ADDR: db
       DB_DATABASE: keycloak
-      DB_USER: keycloak
+      DB_USER: admin
       DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
@@ -61,10 +62,10 @@ services:
       keycloak:
         condition: service_healthy
     environment:
-      db_url: jdbc:mysql://db:3306/keycloak?useSSL=false
+      db_url: jdbc:mysql://db:3306/easybuggy?useSSL=false
       db_class_name: com.mysql.jdbc.Driver
       db_platform: mysql
-      db_username: keycloak
+      db_username: admin
       db_password: password
       oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
       oidc_dynamic_client_registration_enabled: 'true'
