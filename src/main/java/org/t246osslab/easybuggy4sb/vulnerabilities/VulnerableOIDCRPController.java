@@ -352,7 +352,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 					new GenericUrl(tokenEndpoint), "password");
 			tokenReq.put("client_id", "admin-cli");
 			tokenReq.put("username", "admin");
-			tokenReq.put("password", "admin");
+			tokenReq.put("password", "password");
 			TokenResponse tokenResponse = tokenReq.execute();
 
 			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
