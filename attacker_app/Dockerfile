@@ -3,9 +3,13 @@ RUN apt update && apt install -y openjdk-8-jdk python3-pip vim
 RUN pip install playwright requests
 WORKDIR /opt/attacker_app
 RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.108/bin/apache-tomcat-9.0.108.tar.gz
+RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
 RUN tar -zxvf apache-tomcat-9.0.108.tar.gz
+RUN tar -zxvf apache-jmeter-5.6.3.tgz
 RUN mv apache-tomcat-9.0.108 tomcat
+RUN mv apache-jmeter-5.6.3 jmeter
 RUN rm -f apache-tomcat-9.0.108.tar.gz
+RUN rm -f apache-jmeter-5.6.3.tgz
 COPY server.xml tomcat/conf
 COPY index.jsp tomcat/webapps/attacker_app/
 COPY css/ tomcat/webapps/attacker_app/css/
@@ -13,6 +17,8 @@ COPY fonts/ tomcat/webapps/attacker_app/fonts/
 COPY img/ tomcat/webapps/attacker_app/img/
 COPY picture/ tomcat/webapps/attacker_app/picture/
 COPY brute-force-attack.py ./
+COPY attack.jmx ./
+COPY credentials.csv ./
 RUN chmod +x ./brute-force-attack.py
 COPY password_list.txt ./
 CMD ["./tomcat/bin/catalina.sh", "run"]
