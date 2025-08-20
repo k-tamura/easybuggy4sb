@@ -8,7 +8,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
-        <intProp name="ThreadGroup.num_threads">1</intProp>
+        <intProp name="ThreadGroup.num_threads">2</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -51,7 +51,8 @@
           <hashTree/>
         </hashTree>
         <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller">
-          <stringProp name="WhileController.condition">${__groovy((vars.get(&quot;code&quot;) == null || vars.get(&quot;code&quot;).isEmpty()) &amp;&amp; vars.get(&quot;username&quot;) != &quot;&lt;EOF&gt;&quot;)}</stringProp>
+          <stringProp name="WhileController.condition">${__groovy((vars.get(&quot;code&quot;) == null || vars.get(&quot;code&quot;).isEmpty()) &amp;&amp; vars.get(&quot;username&quot;) != &quot;&lt;EOF&gt;&quot;)}
+</stringProp>
         </WhileController>
         <hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/auth">
@@ -195,7 +196,7 @@
           </CounterConfig>
           <hashTree/>
           <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
-            <stringProp name="filename">/opt/attacker_app/credentials.csv</stringProp>
+            <stringProp name="filename">credentials.csv</stringProp>
             <stringProp name="fileEncoding">UTF-8</stringProp>
             <stringProp name="variableNames">username,password</stringProp>
             <boolProp name="ignoreFirstLine">true</boolProp>
@@ -210,16 +211,19 @@
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">if ((vars.get(&quot;code&quot;) != null &amp;&amp; !vars.get(&quot;code&quot;).isEmpty())) {
-	log.info(&quot;Login success!&quot;);
-     log.info(&quot;Username: &quot; + vars.get(&quot;username&quot;));
-     log.info(&quot;Password: &quot; + vars.get(&quot;password&quot;));
-     log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
+            <stringProp name="script">if (vars.get(&quot;code&quot;) != null &amp;&amp; !vars.get(&quot;code&quot;).isEmpty()) {
+    log.info(&quot;Login success!&quot;);
+    log.info(&quot;Username: &quot; + vars.get(&quot;username&quot;));
+    log.info(&quot;Password: &quot; + vars.get(&quot;password&quot;));
+    log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
+    ctx.getEngine().stopTest(true);
 }
+/*
 if (vars.get(&quot;username&quot;) == &quot;&lt;EOF&gt;&quot;) {
      log.info(&quot;All login failed...&quot;);
      log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
 }
+*/
 </stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Sampler>
