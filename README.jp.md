@@ -18,7 +18,7 @@ Keycloak、MySQL、攻撃者のアプリと連携して起動
 
 以下にアクセス
 
-    http://192.168.1.17:8080
+    http://192.168.1.17
 
 :clock4: クイックスタート
 -
@@ -29,17 +29,17 @@ Keycloak、MySQL、攻撃者のアプリと連携して起動
 
 以下にアクセス
 
-    http://localhost:8080
+    http://localhost
 
 :clock4: クイックスタート (Docker)
 -
 
     $ docker build . -t easybuggy4sb       # コンテナイメージのビルド
-    $ docker run -p 8080:8080 easybuggy4sb # EasyBuggyの起動
+    $ docker run -p 80:80 easybuggy4sb # EasyBuggyの起動
 
 以下にアクセス
 
-    http://localhost:8080
+    http://localhost
     
 停止するには:
 
