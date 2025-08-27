@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# --- 変数の設定 ---
-# KeycloakサーバーのURL
+# --- Variables ---
+# Keycloak server URL
 KEYCLOAK_URL="http://localhost:8080/auth"
-# ターゲットレルム名
+# Target realm name
 REALM_NAME="master"
-# Adminユーザーの認証情報
+# Admin user credentials
 ADMIN_USERNAME="admin"
 ADMIN_PASSWORD="password"
 
-# --- アクセストークンの取得 ---
+# --- Obtain access token ---
 TOKEN_ENDPOINT="${KEYCLOAK_URL}/realms/${REALM_NAME}/protocol/openid-connect/token"
 
 ADMIN_TOKEN=$(curl -s -X POST "${TOKEN_ENDPOINT}" \
@@ -26,7 +26,7 @@ fi
 
 echo "Access token obtained."
 
-# --- ユーザー登録関数 ---
+# --- User registration function ---
 create_user() {
   local USERNAME=$1
   local PASSWORD=$2
@@ -59,7 +59,7 @@ EOF
   echo "User ${USERNAME} created."
 }
 
-# --- ユーザーの作成 ---
+# --- Create users ---
 create_user "test" "123"
 create_user "user" "user"
 
