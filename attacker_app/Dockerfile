@@ -16,9 +16,10 @@ COPY css/ tomcat/webapps/attacker_app/css/
 COPY fonts/ tomcat/webapps/attacker_app/fonts/
 COPY img/ tomcat/webapps/attacker_app/img/
 COPY picture/ tomcat/webapps/attacker_app/picture/
-COPY brute-force-attack.py ./
-COPY attack.jmx ./
+COPY dictionary-attack.py ./
+COPY password-list-attack.jmx ./
+COPY brute-force-attack.jmx ./
 COPY credentials.csv ./
-RUN chmod +x ./brute-force-attack.py
-COPY password_list.txt ./
+RUN chmod +x ./dictionary-attack.py
+COPY passwords.txt ./
 CMD ["./tomcat/bin/catalina.sh", "run"]

