@@ -19,7 +19,9 @@ COPY picture/ tomcat/webapps/attacker_app/picture/
 COPY dictionary-attack.py ./
 COPY password-list-attack.jmx ./
 COPY brute-force-attack.jmx ./
+COPY joe-account-attack.jmx ./
 COPY credentials.csv ./
-RUN chmod +x ./dictionary-attack.py
 COPY passwords.txt ./
+COPY usernames.txt ./
+RUN chmod +x ./dictionary-attack.py
 CMD ["./tomcat/bin/catalina.sh", "run"]
