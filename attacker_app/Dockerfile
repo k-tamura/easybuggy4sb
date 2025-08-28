@@ -17,6 +17,7 @@ COPY fonts/ tomcat/webapps/attacker_app/fonts/
 COPY img/ tomcat/webapps/attacker_app/img/
 COPY picture/ tomcat/webapps/attacker_app/picture/
 COPY dictionary-attack.py ./
+COPY dos-attack.jmx ./
 COPY password-list-attack.jmx ./
 COPY brute-force-attack.jmx ./
 COPY joe-account-attack.jmx ./

@@ -61,6 +61,6 @@ EOF
 
 # --- Create users ---
 create_user "test" "123"
-create_user "user1" "user1"
+create_user "user" "user"
 
 echo "Script finished."
