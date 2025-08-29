@@ -62,5 +62,7 @@ EOF
 # --- Create users ---
 create_user "test" "123"
 create_user "user" "user"
+create_user "123" "P@ssw0rd"
+create_user "manager" "admin"
 
 echo "Script finished."

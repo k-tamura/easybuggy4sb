@@ -20,9 +20,11 @@ COPY dictionary-attack.py ./
 COPY dos-attack.jmx ./
 COPY password-list-attack.jmx ./
 COPY brute-force-attack.jmx ./
+COPY reverse-brute-force-attack.jmx ./
 COPY joe-account-attack.jmx ./
 COPY credentials.csv ./
 COPY passwords.txt ./
 COPY usernames.txt ./
 RUN chmod +x ./dictionary-attack.py
+ENV PATH="/opt/attacker_app/jmeter/bin:${PATH}"
 CMD ["./tomcat/bin/catalina.sh", "run"]
