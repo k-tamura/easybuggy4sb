@@ -5,8 +5,6 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
-      <boolProp name="TestPlan.functional_mode">false</boolProp>
-      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -20,7 +18,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account" enabled="true">
           <stringProp name="HTTPSampler.path">/auth/realms/master/account</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -31,7 +29,7 @@
           </elementProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - host">
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - host" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
             <stringProp name="RegexExtractor.refname">host</stringProp>
             <stringProp name="RegexExtractor.regex">Host: ([a-zA-Z0-9_\.]+)</stringProp>
@@ -41,7 +39,7 @@
             <stringProp name="RegexExtractor.match_number">1</stringProp>
           </RegexExtractor>
           <hashTree/>
-          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - port">
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - port" enabled="true">
             <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
             <stringProp name="RegexExtractor.refname">port</stringProp>
             <stringProp name="RegexExtractor.regex">Host: [a-zA-Z0-9_\.]+:(\d+)</stringProp>
@@ -56,7 +54,7 @@
           <stringProp name="WhileController.condition">${__groovy(vars.get(&quot;loop_count&quot;) == null || Integer.parseInt(vars.get(&quot;loop_count&quot;)) &lt; 10000)}</stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/auth">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/auth" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/protocol/openid-connect/auth</stringProp>
@@ -142,7 +140,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/authenticate">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/authenticate" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/login-actions/authenticate?session_code=${session_code}&amp;execution=${execution}&amp;client_id=account&amp;tab_id=${tab_id}</stringProp>
@@ -187,7 +185,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter">
+          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
             <stringProp name="CounterConfig.start">0</stringProp>
             <stringProp name="CounterConfig.end"></stringProp>
             <stringProp name="CounterConfig.incr">1</stringProp>
@@ -201,25 +199,20 @@
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">if (vars.get(&quot;code&quot;) != null &amp;&amp; !vars.get(&quot;code&quot;).isEmpty()) {
-    log.info(&quot;Login success!&quot;);
     def username = props.get(&quot;username&quot;, &quot;admin&quot;);
+    def loop_count = props.get(&quot;loop_count&quot;);
+    log.info(&quot;Login success!&quot;);
     log.info(&quot;Username: &quot; + username);
-    log.info(&quot;Password: &quot; + vars.get(&quot;loop_count&quot;));
-    log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
+    log.info(&quot;Password: &quot; + loop_count);
+    log.info(&quot;Failed login attempts: &quot; + loop_count);
     ctx.getEngine().stopTest(true);
 }
-/*
-if (vars.get(&quot;username&quot;) == &quot;&lt;EOF&gt;&quot;) {
-     log.info(&quot;All login failed...&quot;);
-     log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
-}
-*/
 </stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Sampler>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/logout">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/logout" enabled="true">
           <stringProp name="HTTPSampler.path">/auth/realms/master/protocol/openid-connect/logout</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -378,13 +371,13 @@ if (vars.get(&quot;username&quot;) == &quot;&lt;EOF&gt;&quot;) {
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager">
+        <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
           <collectionProp name="CookieManager.cookies"/>
           <boolProp name="CookieManager.clearEachIteration">false</boolProp>
           <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
         </CookieManager>
         <hashTree/>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager">
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
           <collectionProp name="HeaderManager.headers">
             <elementProp name="Accept-Language" elementType="Header">
               <stringProp name="Header.name">Accept-Language</stringProp>
@@ -413,7 +406,7 @@ if (vars.get(&quot;username&quot;) == &quot;&lt;EOF&gt;&quot;) {
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <stringProp name="HTTPSampler.domain">keycloak</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>

@@ -2,7 +2,7 @@
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan">
-      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="ユーザー定義変数">
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
@@ -14,13 +14,13 @@
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
-        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="ループコントローラ">
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account" enabled="true">
           <stringProp name="HTTPSampler.path">/auth/realms/master/account</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -142,7 +142,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/authenticate">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/authenticate" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/login-actions/authenticate?session_code=${session_code}&amp;execution=${execution}&amp;client_id=account&amp;tab_id=${tab_id}</stringProp>
@@ -187,7 +187,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter">
+          <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="true">
             <stringProp name="CounterConfig.start">0</stringProp>
             <stringProp name="CounterConfig.end"></stringProp>
             <stringProp name="CounterConfig.incr">1</stringProp>
@@ -196,24 +196,19 @@
             <boolProp name="CounterConfig.per_user">false</boolProp>
           </CounterConfig>
           <hashTree/>
-          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler" enabled="true">
+          <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="JSR223 Sampler">
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
             <stringProp name="script">if (vars.get(&quot;code&quot;) != null &amp;&amp; !vars.get(&quot;code&quot;).isEmpty()) {
     log.info(&quot;Login success!&quot;);
     def username = props.get(&quot;username&quot;, &quot;admin&quot;);
+    def loop_count = vars.get(&quot;loop_count&quot;);
     log.info(&quot;Username: &quot; + username);
-    log.info(&quot;Password: &quot; + vars.get(&quot;loop_count&quot;));
-    log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
+    log.info(&quot;Password: &quot; + loop_count);
+    log.info(&quot;Failed login attempts: &quot; + loop_count);
     ctx.getEngine().stopTest(true);
 }
-/*
-if (vars.get(&quot;username&quot;) == &quot;&lt;EOF&gt;&quot;) {
-     log.info(&quot;All login failed...&quot;);
-     log.info(&quot;Failed login attempts: &quot; + vars.get(&quot;loop_count&quot;));
-}
-*/
 </stringProp>
             <stringProp name="scriptLanguage">groovy</stringProp>
           </JSR223Sampler>

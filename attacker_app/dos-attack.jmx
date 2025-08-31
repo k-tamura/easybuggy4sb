@@ -5,6 +5,8 @@
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments"/>
       </elementProp>
+      <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group">
@@ -18,12 +20,11 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller">
-          <stringProp name="WhileController.condition">${__groovy(vars.get(&quot;username&quot;) != &quot;&lt;EOF&gt;&quot;)}
-</stringProp>
+        <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+          <stringProp name="WhileController.condition"></stringProp>
         </WhileController>
         <hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/account" enabled="true">
             <stringProp name="HTTPSampler.path">/auth/realms/master/account</stringProp>
             <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
             <stringProp name="HTTPSampler.method">GET</stringProp>
@@ -34,7 +35,7 @@
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - host">
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - host" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
               <stringProp name="RegexExtractor.refname">host</stringProp>
               <stringProp name="RegexExtractor.regex">Host: ([a-zA-Z0-9_\.]+)</stringProp>
@@ -44,7 +45,7 @@
               <stringProp name="RegexExtractor.match_number">1</stringProp>
             </RegexExtractor>
             <hashTree/>
-            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - port">
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - port" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">request_headers</stringProp>
               <stringProp name="RegexExtractor.refname">port</stringProp>
               <stringProp name="RegexExtractor.regex">Host: [a-zA-Z0-9_\.]+:(\d+)</stringProp>
@@ -55,7 +56,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/auth">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/auth" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/protocol/openid-connect/auth</stringProp>
@@ -141,7 +142,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/registration">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/registration" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/login-actions/registration?client_id=account&amp;tab_id=${tab_id}</stringProp>
@@ -227,7 +228,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/registration">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/login-actions/registration" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/login-actions/registration?session_code=${session_code}&amp;execution=${execution}&amp;client_id=account&amp;tab_id=${tab_id}</stringProp>
@@ -259,14 +260,14 @@
                 </elementProp>
                 <elementProp name="password" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${username}</stringProp>
+                  <stringProp name="Argument.value">Pas2w0rd</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">password</stringProp>
                 </elementProp>
                 <elementProp name="password-confirm" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                  <stringProp name="Argument.value">${username}</stringProp>
+                  <stringProp name="Argument.value">Pas2w0rd</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                   <stringProp name="Argument.name">password-confirm</stringProp>
@@ -282,7 +283,7 @@
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree>
-            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - isExist">
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - isExist" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">false</stringProp>
               <stringProp name="RegexExtractor.refname">isExist</stringProp>
               <stringProp name="RegexExtractor.regex">Username already exists.</stringProp>
@@ -293,7 +294,7 @@
             </RegexExtractor>
             <hashTree/>
           </hashTree>
-          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/logout">
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/auth/realms/master/protocol/openid-connect/logout" enabled="true">
             <stringProp name="HTTPSampler.domain">${host}</stringProp>
             <stringProp name="HTTPSampler.port">${port}</stringProp>
             <stringProp name="HTTPSampler.path">/auth/realms/master/protocol/openid-connect/logout</stringProp>
@@ -306,15 +307,15 @@
             </elementProp>
           </HTTPSamplerProxy>
           <hashTree/>
-          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config">
+          <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="CSV Data Set Config" enabled="true">
             <stringProp name="filename">usernames.txt</stringProp>
             <stringProp name="fileEncoding">UTF-8</stringProp>
             <stringProp name="variableNames">username</stringProp>
-            <boolProp name="ignoreFirstLine">true</boolProp>
+            <boolProp name="ignoreFirstLine">false</boolProp>
             <stringProp name="delimiter">,</stringProp>
             <boolProp name="quotedData">false</boolProp>
             <boolProp name="recycle">false</boolProp>
-            <boolProp name="stopThread">false</boolProp>
+            <boolProp name="stopThread">true</boolProp>
             <stringProp name="shareMode">shareMode.all</stringProp>
           </CSVDataSet>
           <hashTree/>
@@ -322,8 +323,7 @@
             <stringProp name="cacheKey">true</stringProp>
             <stringProp name="filename"></stringProp>
             <stringProp name="parameters"></stringProp>
-            <stringProp name="script">log.info(&quot;Username: &quot; + vars.get(&quot;username&quot;));
-if (vars.get(&quot;isExist&quot;) != null &amp;&amp; !vars.get(&quot;isExist&quot;).isEmpty()) {
+            <stringProp name="script">if (vars.get(&quot;isExist&quot;) != null &amp;&amp; !vars.get(&quot;isExist&quot;).isEmpty()) {
     log.info(&quot;Username &apos;&quot; + vars.get(&quot;username&quot;) + &quot;&apos; already exists.&quot;);
     vars.remove(&quot;isExist&quot;);
     //ctx.getEngine().stopTest(true);
@@ -407,7 +407,7 @@ if (vars.get(&quot;isExist&quot;) != null &amp;&amp; !vars.get(&quot;isExist&quo
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table">
+        <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -444,7 +444,7 @@ if (vars.get(&quot;isExist&quot;) != null &amp;&amp; !vars.get(&quot;isExist&quo
           <stringProp name="filename"></stringProp>
         </ResultCollector>
         <hashTree/>
-        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+        <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
@@ -516,7 +516,7 @@ if (vars.get(&quot;isExist&quot;) != null &amp;&amp; !vars.get(&quot;isExist&quo
           </collectionProp>
         </HeaderManager>
         <hashTree/>
-        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults">
+        <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <stringProp name="HTTPSampler.domain">keycloak</stringProp>
           <stringProp name="HTTPSampler.port">8080</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
