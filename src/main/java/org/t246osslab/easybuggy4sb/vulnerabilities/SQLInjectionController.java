@@ -26,15 +26,15 @@ public class SQLInjectionController extends AbstractController {
 	private JdbcTemplate jdbcTemplate;
 
 	@RequestMapping(value = "/sqlijc")
-    public ModelAndView process(@RequestParam(value = "name", required = false) String name,
+    public ModelAndView process(@RequestParam(value = "mail", required = false) String mail,
             @RequestParam(value = "password", required = false) String password, ModelAndView mav,
             HttpServletRequest req, Locale locale) {
 	    setViewAndCommonObjects(mav, locale, "sqlijc");
-		String trimedName = StringUtils.trim(name);
-		String trimedPassword = StringUtils.trim(password);
-		if (!StringUtils.isBlank(trimedName) && !StringUtils.isBlank(trimedPassword) && trimedPassword.length() >= 8) {
+		mail = StringUtils.trim(mail);
+		password = StringUtils.trim(password);
+		if (!StringUtils.isBlank(mail) && !StringUtils.isBlank(password) && password.length() >= 8) {
 			try {
-				List<User> users = selectUsers(trimedName, trimedPassword);
+				List<User> users = selectUsers(mail, password);
 				if (users == null || users.isEmpty()) {
 					mav.addObject("errmsg", msg.getMessage("msg.error.user.not.exist", null, locale));
 				} else {
@@ -46,19 +46,20 @@ public class SQLInjectionController extends AbstractController {
             }
 		} else {
             if (req.getMethod().equalsIgnoreCase("POST")) {
-                mav.addObject("errmsg", msg.getMessage("msg.warn.enter.name.and.passwd", null, locale));
+                mav.addObject("errmsg", msg.getMessage("msg.warn.enter.mail.and.passwd", null, locale));
             }
         }
 		return mav;
 	}
 
-	private List<User> selectUsers(String name, String password) {
+	private List<User> selectUsers(String mail, String password) {
 
-		return jdbcTemplate.query("SELECT name, secret FROM users WHERE ispublic = 'true' AND name='" + name
+		return jdbcTemplate.query("SELECT mail, secret FROM users " +
+				"WHERE ispublic = 'true' AND mail='" + mail
 				+ "' AND password='" + password + "'", new RowMapper<User>() {
                     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
                         User user = new User();
-                        user.setName(rs.getString("name"));
+                        user.setMail(rs.getString("mail"));
                         user.setSecret(rs.getString("secret"));
                         return user;
                     }

@@ -18,9 +18,8 @@ public class XSSController extends AbstractController {
         mav.setViewName("xss");
         mav.addObject("title", msg.getMessage("title.xss.page", null, locale));
         if (!StringUtils.isBlank(string)) {
-            // Reverse the given string
-            String reversedName = StringUtils.reverse(string);
-            mav.addObject("msg", msg.getMessage("label.reversed.string", null, locale) + " : " + reversedName);
+            String reversedStr = StringUtils.reverse(string); // Reverse the given string
+            mav.addObject("msg", msg.getMessage("label.reversed.string", null, locale) + " : " + reversedStr);
         } else {
             mav.addObject("msg", msg.getMessage("msg.enter.string", null, locale));
         }
