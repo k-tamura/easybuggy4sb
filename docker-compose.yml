@@ -74,6 +74,7 @@ services:
       attacker_app_url: http://${HOST:-localhost}:9999/attacker_app
       manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
       #manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
+      mail_host: mail
       TZ: ${TZ}
   attacker_app:
     build: ./attacker_app
@@ -87,6 +88,6 @@ services:
     container_name: mail
     ports:
       - 1025:1025
-    command: python -m smtpd -d -n -c DebuggingServer 0.0.0.0:1025
+    command: python -u -m smtpd -d -n -c DebuggingServer 0.0.0.0:1025
     environment:
       TZ: ${TZ}
