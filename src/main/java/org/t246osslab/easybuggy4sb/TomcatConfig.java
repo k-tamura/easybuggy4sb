@@ -13,14 +13,12 @@ public class TomcatConfig {
     @Bean
     public EmbeddedServletContainerFactory servletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
-        tomcat.addContextCustomizers(tomcatContextCustomizer());
+        tomcat.addContextCustomizers(new TomcatContextCustomizer() {
+            @Override
+            public void customize(Context context) {
+                context.setUseHttpOnly(false);
+            }
+        });
         return tomcat;
-    }
-
-    @Bean
-    public TomcatContextCustomizer tomcatContextCustomizer() {
-        return (context) -> {
-            context.setUseHttpOnly(false);
-        };
     }
 }
