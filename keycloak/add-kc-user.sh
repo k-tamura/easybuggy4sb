@@ -108,7 +108,7 @@ EOF
 create_user "test" "123" "Ichiro" "Suzuki"
 create_user "user" "user" "Satoshi" "Nakamoto"
 create_user "123" "P@ssw0rd" "Shunsuke" "Nakamura"
-create_user "manager" "admin" "admin" "Akira" "Kurosawa"
+create_user "manager" "admin" "Akira" "Kurosawa" "admin"
 
 echo "Script finished."
 
