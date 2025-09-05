@@ -14,4 +14,4 @@ insert into users (id, name, password, secret, ispublic, mail) values ('user08',
 insert into users (id, name, password, secret, ispublic, mail) values ('user09','Michelle','pas2w0rd','3849201763','true','michelle@gmail.com');
 
 delete from forum;
-insert into forum (time, username, picture, message) values (CURRENT_TIMESTAMP,'admin','images/avatar_woman.png','Feel free to write any questions you may have.');
+insert into forum (time, username, picture, message, isadmin) values (CURRENT_TIMESTAMP,'admin','images/avatar_woman.png','Feel free to write any questions you may have.', 'true');

@@ -8,6 +8,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.http.json.JsonHttpContent;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -28,12 +30,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.StreamSupport;
 
 @Controller
 public class VulnerableOIDCRPController extends AbstractController {
@@ -118,7 +122,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (type != null) {
 			mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + type, placeholders, locale));
 		}
-		searchMessages(mav, locale);
+		searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
 
 		if (ses != null) {
 			Map<?, ?> userInfo = getUserInfo(ses);
@@ -307,9 +311,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
-			insertMessage(username, picture, message, mav, locale);
+			insertMessage(username, picture, message, mav, locale, "on".equals(req.getParameter("forAdmin")));
 		}
-		searchMessages(mav, locale);
+		searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
 		return mav;
 	}
 
@@ -319,6 +323,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (accessToken == null) {
 			return null;
 		}
+
 		try {
 			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
 			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(userinfoEndpoint));
@@ -326,7 +331,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 			headers.setAuthorization("bearer " + accessToken);
 			request.setHeaders(headers);
 			HttpResponse response = request.execute();
-			return new Gson().fromJson(response.parseAsString(), Map.class);
+			Map userinfo = new Gson().fromJson(response.parseAsString(), Map.class);
+			userinfo.put("isAdmin", String.valueOf(isAdmin(accessToken)));
+			return userinfo;
 		} catch (HttpResponseException e) {
 			Map<?, ?> fromJson = new Gson().fromJson(e.getContent(), Map.class);
 			if (e.getStatusCode() == 401 && fromJson != null && "invalid_token".equals(fromJson.get("error"))) {
@@ -436,10 +443,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return null;
 	}
 
-	private List<Forum> searchMessages(ModelAndView mav, Locale locale) {
+	private List<Forum> searchMessages(ModelAndView mav, Locale locale, boolean isAdmin) {
 		List<Forum> messages = null;
 		try {
-			messages = jdbcTemplate.query("select * from forum order by time desc", new RowMapper<Forum>() {
+			String sql = "select * from forum " + (isAdmin ? "" : "where isadmin = 'false' ") + "order by time desc";
+			messages = jdbcTemplate.query(sql, new RowMapper<Forum>() {
 				public Forum mapRow(ResultSet rs, int rowNum) throws SQLException {
 					Forum forum = new Forum();
 					forum.setTime(rs.getTime("time"));
@@ -462,11 +470,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return messages;
 	}
 
-	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale) {
+	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale, boolean isAdmin) {
 		String resultMessage = null;
 		try {
-			int insertCount = jdbcTemplate.update("insert into forum values (CURRENT_TIMESTAMP, ?, ?, ?)",
-					username, picture, message);
+			int insertCount = jdbcTemplate.update("insert into forum values (CURRENT_TIMESTAMP, ?, ?, ?, ?)",
+					username, picture, message, String.valueOf(isAdmin));
 			if (insertCount != 1) {
 				resultMessage = msg.getMessage("msg.user.already.exist", null, locale);
 			}
@@ -480,4 +488,23 @@ public class VulnerableOIDCRPController extends AbstractController {
 		mav.addObject("errmsg", resultMessage);
 	}
 
+	private boolean isAdmin(String accessToken) {
+
+		if (accessToken == null) return false;
+		String payloadBase64Url = accessToken.split("\\.")[1];
+		byte[] decodedBytes = Base64.decodeBase64(payloadBase64Url);
+		String decodedPayload = new String(decodedBytes, StandardCharsets.UTF_8);
+
+		JsonObject payloadJson = new Gson().fromJson(decodedPayload, JsonObject.class);
+		JsonObject realmAccess = payloadJson.getAsJsonObject("realm_access");
+
+		if (realmAccess != null && realmAccess.has("roles")) {
+			JsonElement rolesElement = realmAccess.get("roles");
+			return StreamSupport.stream(rolesElement.getAsJsonArray().spliterator(), false)
+					.map(JsonElement::getAsString)
+					.anyMatch(role -> role.equals("admin"));
+		} else {
+			return false;
+		}
+	}
 }

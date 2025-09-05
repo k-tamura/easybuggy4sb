@@ -26,18 +26,23 @@ fi
 
 echo "Access token obtained."
 
+
 # --- User registration function ---
 create_user() {
   local USERNAME=$1
   local PASSWORD=$2
+  local FIRST_NAME=$3
+  local LAST_NAME=$4
+  local ROLE_NAME=$5
 
+  # Creating user
   USER_DATA=$(cat <<EOF
 {
   "username": "${USERNAME}",
   "enabled": true,
   "email": "${USERNAME}@example.com",
-  "firstName": "Test",
-  "lastName": "User",
+  "firstName": "${FIRST_NAME}",
+  "lastName": "${LAST_NAME}",
   "credentials": [
     {
       "type": "password",
@@ -50,19 +55,60 @@ EOF
 )
 
   echo "Creating user: ${USERNAME}..."
-
   curl -s -X POST "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/users" \
     -H "Authorization: Bearer ${ADMIN_TOKEN}" \
     -H "Content-Type: application/json" \
     -d "${USER_DATA}"
 
   echo "User ${USERNAME} created."
+
+  # Assigning role
+  if [ -n "$ROLE_NAME" ]; then
+    USER_ID=$(curl -s -X GET "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/users?username=${USERNAME}" \
+      -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+      -H "Content-Type: application/json" | jq -r '.[0].id')
+    
+    if [ -z "$USER_ID" ]; then
+      echo "Error: Failed to get user ID for ${USERNAME}."
+      exit 1
+    fi
+    echo "User ID obtained: ${USER_ID}"
+
+    ROLE_ID=$(curl -s -X GET "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/roles?search=${ROLE_NAME}" \
+      -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+      -H "Content-Type: application/json" | jq -r '.[0].id')
+
+    if [ -z "$ROLE_ID" ]; then
+      echo "Error: Failed to get role ID for ${ROLE_NAME}."
+      exit 1
+    fi
+    echo "Role ID obtained: ${ROLE_ID}"
+
+    ROLE_DATA=$(cat <<EOF
+[
+  {
+    "id": "${ROLE_ID}",
+    "name": "${ROLE_NAME}"
+  }
+]
+EOF
+)
+    echo "Assigning '${ROLE_NAME}' role to ${USERNAME}..."
+    curl -s -X POST "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/users/${USER_ID}/role-mappings/realm" \
+      -H "Authorization: Bearer ${ADMIN_TOKEN}" \
+      -H "Content-Type: application/json" \
+      -d "${ROLE_DATA}"
+
+    echo "Role '${ROLE_NAME}' assigned to ${USERNAME}."
+  else
+    echo "No role specified. Skipping role assignment for ${USERNAME}."
+  fi
 }
 
-# --- Create users ---
-create_user "test" "123"
-create_user "user" "user"
-create_user "123" "P@ssw0rd"
-create_user "manager" "admin"
+create_user "test" "123" "Ichiro" "Suzuki"
+create_user "user" "user" "Satoshi" "Nakamoto"
+create_user "123" "P@ssw0rd" "Shunsuke" "Nakamura"
+create_user "manager" "admin" "admin" "Akira" "Kurosawa"
 
 echo "Script finished."
+

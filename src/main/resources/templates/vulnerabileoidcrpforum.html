@@ -11,6 +11,12 @@
 				<tr>
 					<td><textarea rows="3" cols="100" name="message"></textarea></td>
 					<td>&emsp;<input type="submit" th:value="#{label.post}" /></td>
+					<th:block th:if="${userInfo != null and userInfo.isAdmin == 'true'}">
+						<td colspan="2">
+							<input type="checkbox" name="forAdmin" id="forAdmin" />
+							<label for="forAdmin" th:text="#{label.forAdmin}"></label>
+						</td>
+					</th:block>
 				</tr>
 			</table>
 		</form>
