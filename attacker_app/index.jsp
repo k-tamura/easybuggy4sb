@@ -98,6 +98,16 @@
                     </div>
                 </div>
             </div>
+            <div id="kc-info" class="login-pf-signup">
+              <div id="kc-info-wrapper" class="">
+                <div id="kc-registration-container">
+                  <div id="kc-registration">
+                    <span>New user? <a tabindex="6"
+                      href="/auth/realms/master/login-actions/registration?client_id=security-admin-console&amp;tab_id=ahoE_IRO3jw">Register</a></span>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
     </div>
 </div>

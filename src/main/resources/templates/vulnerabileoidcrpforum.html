@@ -9,14 +9,13 @@
 		<form action="addMessage" method="post">
 			<table tclass="table table-striped table-bordered table-hover" style="font-size: small;">
 				<tr>
-					<td><textarea rows="3" cols="100" name="message"></textarea></td>
+					<td><textarea rows="4" cols="100" name="message"></textarea></td>
+					<td>
 					<th:block th:if="${userInfo != null and userInfo.isAdmin == 'true'}">
-						<td colspan="2">&emsp;
-							<input type="checkbox" name="forAdmin" id="forAdmin" />&emsp;
-							<label for="forAdmin" th:text="#{label.forAdmin}"></label>
-						</td><br /><br />
+						&emsp;<input type="checkbox" name="forAdmin" id="forAdmin" checked="checked" />
+							<label for="forAdmin" th:text="#{label.forAdmin}"></label><br />
 					</th:block>
-					<td>&emsp;<input type="submit" th:value="#{label.post}" /></td>
+					&emsp;<input type="submit" th:value="#{label.post}" /></td>
 				</tr>
 			</table>
 		</form>
