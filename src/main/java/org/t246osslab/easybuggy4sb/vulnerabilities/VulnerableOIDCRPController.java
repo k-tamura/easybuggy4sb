@@ -302,18 +302,18 @@ public class VulnerableOIDCRPController extends AbstractController {
 		mav.setViewName("vulnerabileoidcrpforum");
 		mav.addObject("title", msg.getMessage("title.vulnerabileoidcrp.forum.page", null, locale));
 		String message = req.getParameter("message");
+		boolean isAdmin = isAdmin((String) ses.getAttribute("accessToken"));
 		if (message != null && !message.isEmpty()) {
 			String username = (String) userInfo.get("name");
 			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
 			String picture = (String) userInfo.get("picture");
-			if (username.equals("admin")) picture = "images/avatar_woman.png";
-			if (picture == null || picture.isEmpty()) picture = "images/avatar_man.png";
+			if (picture == null || picture.isEmpty()) picture = "images/avatar_anon.png";
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
-			insertMessage(username, picture, message, mav, locale, "on".equals(req.getParameter("forAdmin")));
+			insertMessage(username, picture, message, mav, locale, isAdmin);
 		}
-		searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
+		searchMessages(mav, locale, isAdmin);
 		return mav;
 	}
 
@@ -332,7 +332,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			request.setHeaders(headers);
 			HttpResponse response = request.execute();
 			Map userinfo = new Gson().fromJson(response.parseAsString(), Map.class);
-			userinfo.put("isAdmin", String.valueOf(isAdmin(accessToken)));
 			return userinfo;
 		} catch (HttpResponseException e) {
 			Map<?, ?> fromJson = new Gson().fromJson(e.getContent(), Map.class);

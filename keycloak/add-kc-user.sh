@@ -33,7 +33,8 @@ create_user() {
   local PASSWORD=$2
   local FIRST_NAME=$3
   local LAST_NAME=$4
-  local ROLE_NAME=$5
+  local PICTURE=$5
+  local ROLE_NAME=$6
 
   # Creating user
   USER_DATA=$(cat <<EOF
@@ -43,6 +44,9 @@ create_user() {
   "email": "${USERNAME}@example.com",
   "firstName": "${FIRST_NAME}",
   "lastName": "${LAST_NAME}",
+  "attributes": {
+    "picture": [ "$PICTURE" ]
+  },
   "credentials": [
     {
       "type": "password",
@@ -105,10 +109,10 @@ EOF
   fi
 }
 
-create_user "test" "123" "Ichiro" "Suzuki"
-create_user "user" "user" "Satoshi" "Nakamoto"
-create_user "123" "P@ssw0rd" "Shunsuke" "Nakamura"
-create_user "manager" "admin" "Akira" "Kurosawa" "admin"
+create_user "test" "123" "" "" "images/avatar_man.png"
+create_user "user" "user" "Naomi" "Sato" "images/avatar_woman.png"
+create_user "123" "P@ssw0rd" "Ichiro" "Suzuki" ""
+create_user "manager" "admin" "" "" ""  "admin"
 
 echo "Script finished."
 

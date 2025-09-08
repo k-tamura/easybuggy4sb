@@ -6,6 +6,7 @@ RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.108/bin/apache-tomcat-9.0
 RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
 RUN tar -zxvf apache-tomcat-9.0.108.tar.gz
 RUN tar -zxvf apache-jmeter-5.6.3.tgz
+RUN rm -fr apache-tomcat-9.0.108/webapps/*
 RUN mv apache-tomcat-9.0.108 tomcat
 RUN mv apache-jmeter-5.6.3 jmeter
 RUN rm -f apache-tomcat-9.0.108.tar.gz
