@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/playwright:v1.54.0-jammy
 RUN apt update && apt install -y openjdk-8-jdk python3-pip vim
 RUN pip install playwright requests
 WORKDIR /opt/attacker_app
-RUN wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.108/bin/apache-tomcat-9.0.108.tar.gz
+RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.108/bin/apache-tomcat-9.0.108.tar.gz
 RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
 RUN tar -zxvf apache-tomcat-9.0.108.tar.gz
 RUN tar -zxvf apache-jmeter-5.6.3.tgz

@@ -27,7 +27,7 @@
 <hr style="margin-top: 0" />
 <!-- header section start -->
 <c:catch var="ex">
-	<c:if test="${param.template != null && !fn:startsWith(param.template,'http')}">
+    <c:if test="${param.template != null && !fn:startsWith(param.template,'file:') && !fn:startsWith(param.template,'jar:')}">
 		<c:import url="<%=request.getParameter(\"template\") +\"_header.html\"%>" />
 	</c:if>
 </c:catch>
@@ -56,7 +56,7 @@
 </div>
 <!-- footer section start -->
 <c:catch var="ex">
-	<c:if test="${param.template != null && !fn:startsWith(param.template,'http')}">
+    <c:if test="${param.template != null && !fn:startsWith(param.template,'file:') && !fn:startsWith(param.template,'jar:')}">
 		<c:import url="<%=request.getParameter(\"template\") +\"_footer.html\"%>" />
 	</c:if>
 </c:catch>

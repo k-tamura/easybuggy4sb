@@ -11,7 +11,7 @@
     <title><fmt:message key="title.design.test.page" /></title>
     <link rel="icon" type="image/vnd.microsoft.icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     <c:catch var="ex">
-        <c:if test="${param.template != null && !fn:contains(param.template,'../') && !fn:startsWith(param.template,'/')}">
+    	<c:if test="${param.template != null && !fn:startsWith(param.template,'http')}">
             <c:import url="<%=request.getParameter(\"template\")%>" />
         </c:if>
     </c:catch>
@@ -57,7 +57,7 @@
 <br>
 <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign"></span>&nbsp;
-    <fmt:message key="msg.note.local.file.inclusion" />
+    <fmt:message key="msg.note.dangerous.file.inclusion" />
 </div>
 <hr>
 <footer>
