@@ -57,7 +57,7 @@
 <br>
 <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign"></span>&nbsp;
-    <fmt:message key="msg.note.dangerous.file.inclusion" />
+    <fmt:message key="msg.note.local.file.inclusion" />
 </div>
 <hr>
 <footer>
