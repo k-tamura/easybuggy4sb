@@ -30,16 +30,11 @@
 </table>
 <hr style="margin-top: 0" />
 <header>
-    <table style="width: 720px;">
-        <tr>
-            <td><img src="${pageContext.request.contextPath}/images/easybuggy.png"></td>
-            <td><fmt:message key="description.design.page" /></td>
-        </tr>
-    </table>
+    <img src="${pageContext.request.contextPath}/images/easybuggy.png">
 </header>
 <hr style="margin-top: 10px" />
 <p>
-    <fmt:message key="description.design.test" />
+    <fmt:message key="description.design.page" />
 </p>
 <ul>
     <li><p>
@@ -66,7 +61,7 @@
 </div>
 <hr>
 <footer>
-    <img src="/images/easybuggyL.png">Copyright &copy; 2016-2023 T246 OSS Lab, all rights reserved.
+    <img src="/images/easybuggyL.png">Copyright &copy; 2016-2025 T246 OSS Lab, all rights reserved.
 </footer>
 </body>
 </html>

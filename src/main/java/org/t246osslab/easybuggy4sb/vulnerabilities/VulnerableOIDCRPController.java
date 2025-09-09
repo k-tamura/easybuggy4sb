@@ -122,9 +122,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (type != null) {
 			mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + type, placeholders, locale));
 		}
-		searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
 
 		if (ses != null) {
+			searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
 			Map<?, ?> userInfo = getUserInfo(ses);
 			if (userInfo != null) {
 				mav.addObject("userInfo", userInfo);
@@ -133,6 +133,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.invalidate();
 		}
 		ses = req.getSession(true);
+		searchMessages(mav, locale, isAdmin((String) ses.getAttribute("accessToken")));
 
 		mav.addObject("loginMessage",
 				msg.getMessage("msg.login.with.openid.provider", null, locale));
@@ -278,7 +279,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		try {
 			GenericUrl url = new GenericUrl(endSessionEndpoint);
 			url.set("id_token_hint", (String) ses.getAttribute("idToken"));
-			url.set("post_logout_redirect_uri", req.getRequestURL().toString().replace("/oidclogout", "/"));
+			url.set("post_logout_redirect_uri", req.getRequestURL().toString().replace("/oidclogout", "/callback"));
 			url.set("state", state);
 			res.sendRedirect(url.build());
 			ses.setAttribute("state", state);
@@ -307,6 +308,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			String username = (String) userInfo.get("name");
 			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
 			String picture = (String) userInfo.get("picture");
+			//if (username.equals("admin")) picture = "images/avatar_woman.png";
 			if (picture == null || picture.isEmpty()) picture = "images/avatar_anon.png";
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");

@@ -33,7 +33,7 @@
 </c:catch>
 <!-- header section end -->
 <p>
-	<fmt:message key="description.design.test" />
+	<fmt:message key="description.design.page" />
 </p>
 <ul>
 	<li><p>
