@@ -38,26 +38,26 @@
 </p>
 <ul>
     <li><p>
-        <a href="includable.jsp"><fmt:message key="style.name.nonstyle" /></a>:
+        <a href="index.jsp"><fmt:message key="style.name.nonstyle" /></a>:
         <fmt:message key="style.description.nonstyle" />
     </p></li>
     <li><p>
-        <a href="includable.jsp?template=style_bootstrap.html"><fmt:message key="style.name.bootstrap" /></a>:
+        <a href="index.jsp?template=style_bootstrap.html"><fmt:message key="style.name.bootstrap" /></a>:
         <fmt:message key="style.description.bootstrap" />
     </p></li>
     <li><p>
-        <a href="includable.jsp?template=style_google_mdl.html"><fmt:message key="style.name.google.mdl" /></a>:
+        <a href="index.jsp?template=style_google_mdl.html"><fmt:message key="style.name.google.mdl" /></a>:
         <fmt:message key="style.description.google.mdl" />
     </p></li>
     <li><p>
-        <a href="includable.jsp?template=style_materialize.html"><fmt:message key="style.name.materialize" /></a>:
+        <a href="index.jsp?template=style_materialize.html"><fmt:message key="style.name.materialize" /></a>:
         <fmt:message key="style.description.materialize" />
     </p></li>
 </ul>
 <br>
 <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign"></span>&nbsp;
-    <fmt:message key="msg.note.dangerous.file.inclusion" />
+    <fmt:message key="msg.note.local.file.inclusion" />
 </div>
 <hr>
 <footer>

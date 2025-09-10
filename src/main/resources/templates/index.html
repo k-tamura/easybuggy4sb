@@ -69,8 +69,8 @@
 		<li><p><a href="admins/main?logintype=bruteforce" th:text="#{function.name.brute.force}"></a>: <span th:text="#{function.description.brute.force}"></span></p></li>
 		<li><p><a th:href="@{'admins/main?logintype=sessionfixation'}" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></p></li>
 		<li><p><a href="admins/main?logintype=verbosemsg" th:text="#{function.name.verbose.error.message}"></a>: <span th:text="#{function.description.verbose.error.message}"></span></p></li>
-		<li><p><a href="/dfi/includable.jsp?template=style_bootstrap.html" th:text="#{function.name.local.file.inclusion}"></a>: <span th:text="#{function.description.local.file.inclusion}"></span></p></li>
-		<li><p><a href="/dt/includable.jsp?template=basic" th:text="#{function.name.ssrf}"></a>: <span th:text="#{function.description.ssrf}"></span></p></li>
+		<li><p><a href="/lfi/index.jsp?template=style_bootstrap.html" th:text="#{function.name.local.file.inclusion}"></a>: <span th:text="#{function.description.local.file.inclusion}"></span></p></li>
+		<li><p><a href="/ssrf/index.jsp?template=basic" th:text="#{function.name.ssrf}"></a>: <span th:text="#{function.description.ssrf}"></span></p></li>
 		<li><p><a href="/uid/clientinfo.jsp" th:text="#{function.name.unintended.file.disclosure}"></a>: <span th:text="#{function.description.unintended.file.disclosure}"></span></p></li>
 		<li><p><a href="/admins/csrf" th:text="#{function.name.csrf}"></a>: <span th:text="#{function.description.csrf}"></span></p></li>
 		<li><p><a href="/admins/clickjacking" th:text="#{function.name.clickjacking}"></a>: <span th:text="#{function.description.clickjacking}"></span></p></li>

@@ -10,7 +10,7 @@
 <head>
 	<title><fmt:message key="title.design.test.page" /></title>
 	<link rel="icon" type="image/vnd.microsoft.icon" href="${pageContext.request.contextPath}/images/favicon.ico">
-	<c:import url="/dfi/style_bootstrap.html" />
+	<c:import url="/lfi/style_bootstrap.html" />
 </head>
 <body style="margin-left: 20px; margin-right: 20px;">
 <table style="width: 100%;">
@@ -37,22 +37,22 @@
 </p>
 <ul>
 	<li><p>
-		<a href="includable.jsp"><fmt:message key="style.name.noframe" /></a>:
+		<a href="index.jsp"><fmt:message key="style.name.noframe" /></a>:
 		<fmt:message key="style.description.noframe" />
 	</p></li>
 	<li><p>
-		<a href="includable.jsp?template=basic"><fmt:message key="style.name.basic" /></a>:
+		<a href="index.jsp?template=basic"><fmt:message key="style.name.basic" /></a>:
 		<fmt:message key="style.description.basic" />
 	</p></li>
 	<li><p>
-		<a href="includable.jsp?template=monochro"><fmt:message key="style.name.monochro" /></a>:
+		<a href="index.jsp?template=monochro"><fmt:message key="style.name.monochro" /></a>:
 		<fmt:message key="style.description.monochro" />
 	</p></li>
 </ul>
 <br>
 <div class="alert alert-info" role="alert">
 	<span class="glyphicon glyphicon-info-sign"></span>&nbsp;
-	<fmt:message key="msg.note.path.traversal" />
+	<fmt:message key="msg.note.ssrf" />
 </div>
 <!-- footer section start -->
 <c:catch var="ex">
