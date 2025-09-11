@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class UnintendedFileDisclosureController extends AbstractController {
 
-    @RequestMapping(value = "/clientinfo")
-    public ModelAndView clientinfo(ModelAndView mav, HttpServletRequest req, Locale locale) {
-        setViewAndCommonObjects(mav, locale, "clientinfo");
-        String uidURL = req.getRequestURL().toString().replaceAll("/clientinfo*.+", "/uid/");
-        String backupURL = uidURL + "backup/";
-        String[] placeholders = new String[]{ backupURL, backupURL + "adminpassword.txt", uidURL + "serverinfo.jsp"};
-        mav.addObject("note", msg.getMessage("msg.note.clientinfo", placeholders, locale));
+    @RequestMapping(value = "/unintendedfiledisclosure")
+    public ModelAndView unintendedfiledisclosure(ModelAndView mav, HttpServletRequest req, Locale locale) {
+        setViewAndCommonObjects(mav, locale, "unintendedfiledisclosure");
+        String baseURL = req.getRequestURL().toString().replaceAll("/unintendedfiledisclosure*.+", "");
+        String[] placeholders = new String[]{ baseURL};
+        mav.addObject("note", msg.getMessage("msg.note.unintendedfiledisclosure", placeholders, locale));
         return mav;
     }
     
