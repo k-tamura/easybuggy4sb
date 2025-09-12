@@ -81,15 +81,30 @@ public class UnrestrictedSizeUploadController extends AbstractController {
         boolean isConverted = false;
         try {
             BufferedImage image = ImageIO.read(new File(fileName));
-            WritableRaster raster = image.getRaster();
-            int[] pixelBuffer = new int[raster.getNumDataElements()];
-            for (int y = 0; y < raster.getHeight(); y++) {
-                for (int x = 0; x < raster.getWidth(); x++) {
-                    raster.getPixel(x, y, pixelBuffer);
-                    pixelBuffer[0] = ~pixelBuffer[0];
-                    pixelBuffer[1] = ~pixelBuffer[1];
-                    pixelBuffer[2] = ~pixelBuffer[2];
-                    raster.setPixel(x, y, pixelBuffer);
+            if (image == null) {
+                throw new IOException("Unsupported image format: " + fileName);
+            }
+
+            int width = image.getWidth();
+            int height = image.getHeight();
+
+            // ピクセルごとに処理
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    int rgba = image.getRGB(x, y);
+                    int alpha = (rgba >> 24) & 0xff;
+                    int red   = (rgba >> 16) & 0xff;
+                    int green = (rgba >> 8)  & 0xff;
+                    int blue  = rgba & 0xff;
+
+                    // 色を反転
+                    red   = 255 - red;
+                    green = 255 - green;
+                    blue  = 255 - blue;
+
+                    // 新しい色を再構成
+                    int inverted = (alpha << 24) | (red << 16) | (green << 8) | blue;
+                    image.setRGB(x, y, inverted);
                 }
             }
             // Output the image
