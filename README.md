@@ -7,6 +7,8 @@
 This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.com/k-tamura/easybuggy) is a broken web application in order to understand behavior of bugs and vulnerabilities, for example, [memory leak, deadlock, JVM crash, SQL injection and so on](https://github.com/k-tamura/easybuggy4sb/wiki).
 
 ![logo](https://raw.githubusercontent.com/wiki/k-tamura/easybuggy/images/mov_ebsb.gif)
+![EasyBugyyBootGo](https://github.com/user-attachments/assets/35673848-fe6f-4ef2-81ca-45b9ebec4920)
+
 
 :clock4: Quick Start (Docker Compose) with Keycloak, MySQL, Attacker's app
 -
