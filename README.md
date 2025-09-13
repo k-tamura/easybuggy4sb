@@ -6,9 +6,7 @@
 
 This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.com/k-tamura/easybuggy) is a broken web application in order to understand behavior of bugs and vulnerabilities, for example, [memory leak, deadlock, JVM crash, SQL injection and so on](https://github.com/k-tamura/easybuggy4sb/wiki).
 
-![logo](https://raw.githubusercontent.com/wiki/k-tamura/easybuggy/images/mov_ebsb.gif)
 ![EasyBugyyBootGo](https://github.com/user-attachments/assets/35673848-fe6f-4ef2-81ca-45b9ebec4920)
-
 
 :clock4: Quick Start (Docker Compose) with Keycloak, MySQL, Attacker's app
 -
@@ -28,12 +26,6 @@ Access to
 ( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
 
 :warning: **Java 7 or 8 is needed. Doesn't work with Java 9 or later.**
-
-:clock4: Quick Start (Docker)
--
-
-    $ docker build . -t easybuggy4sb       # Build container image
-    $ docker run -p 80:80 easybuggy4sb # Start easybuggy
 
 Access to
 
