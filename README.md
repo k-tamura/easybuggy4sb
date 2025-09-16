@@ -9,6 +9,7 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 
 :clock4: Quick Start (Docker Compose) with Keycloak, MySQL, Attacker's app
 -
+When running EasyBuggy Boot with Keycloak, MySQL, and an attacker's application
 
     $ echo HOST=192.168.1.17 > .env # if you run EasyBuggy Boot not on localhost (e.g. 192.168.1.17)
     $ docker compose up
@@ -19,6 +20,7 @@ Access to
 
 :clock4: Quick Start
 -
+When running EasyBuggy Boot alone (less vulnerabilities than `docker compose up`)
 
     $ mvn spring-boot:run
 
