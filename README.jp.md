@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/k-tamura/easybuggy4sb.svg?branch=master)](https://travis-ci.org/k-tamura/easybuggy4sb)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub release](https://img.shields.io/github/release/k-tamura/easybuggy4sb.svg)](https://github.com/k-tamura/easybuggy4sb/releases/latest)
 
@@ -7,11 +6,11 @@ EasyBuggy Boot :four_leaf_clover:
 
 EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです。[EasyBuggy](https://github.com/k-tamura/easybuggy)は、[メモリリーク、デッドロック、JVMクラッシュ、SQLインジェクションなど](https://github.com/k-tamura/easybuggy4sb/wiki)、バグや脆弱性の動作を理解するためにつくられたバグだらけのWebアプリケーションです。
 
-![logo](https://raw.githubusercontent.com/wiki/k-tamura/easybuggy/images/mov_ebsb.gif)
+![EasyBugyyBootGo](https://github.com/user-attachments/assets/70ce9fa2-7bc0-45a8-b554-4d75d0ab69b0)
 
 :clock4: クイックスタート (Docker Compose)
 -
-Keycloak、MySQL、攻撃者のアプリと連携して起動
+Keycloak、MySQL、攻撃者のアプリと連携して起動する場合
 
     $ echo HOST=192.168.1.17 > .env # localhost以外でEasyBuggy Bootを実行する場合 (例: 192.168.1.17)
     $ docker compose up
@@ -22,6 +21,7 @@ Keycloak、MySQL、攻撃者のアプリと連携して起動
 
 :clock4: クイックスタート
 -
+EasyBuggy Boot単独で起動する場合（`docker compose up`より攻撃できる脆弱性が減ります）
 
     $ mvn spring-boot:run
 
@@ -30,17 +30,7 @@ Keycloak、MySQL、攻撃者のアプリと連携して起動
 以下にアクセス
 
     http://localhost
-
-:clock4: クイックスタート (Docker)
--
-
-    $ docker build . -t easybuggy4sb       # コンテナイメージのビルド
-    $ docker run -p 80:80 easybuggy4sb # EasyBuggyの起動
-
-以下にアクセス
-
-    http://localhost
-    
+  
 停止するには:
 
   <kbd>CTRL</kbd>+<kbd>C</kbd>をクリック
