@@ -45,7 +45,7 @@ services:
       - 8443:8443
       - 8787:8787
     healthcheck:
-      test: '/opt/jboss/keycloak/bin/kcadm.sh config credentials --server http://localhost:8080/auth --realm master --user admin --password password;/opt/jboss/keycloak/bin/kcadm.sh update realms/master -s registrationAllowed=true -s accountTheme=keycloak;/opt/jboss/add-kc-user.sh || exit 1'
+      test: '/opt/jboss/setup-keycloak.sh || exit 1'
       start_period: "30s"
       retries: 7
       interval: "10s" 
