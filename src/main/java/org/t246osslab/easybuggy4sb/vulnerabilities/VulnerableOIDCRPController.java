@@ -116,6 +116,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
 		} else if ("3".equals(type)) {
 			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/start?redirect_path=/vulnerabileoidcrp") };
+		} else if ("7".equals(type)) {
+			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/callback/*"),
+					req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/vulnerabileoidcrp"),
+					attackerAppUrl + "/picture",
+					req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/callback/%252E%252E/vulnerabileoidcrp")};
 		}
 		mav.setViewName("vulnerabileoidcrpforum");
 		mav.addObject("title", msg.getMessage("title.vulnerabileoidcrp.forum.page", null, locale));
@@ -372,6 +377,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			headers.setAccept("application/json");
 			request.setHeaders(headers);
 			Map<String, Object> params = new HashMap<>();
+			params.put("client_name", "easy-buggy-boot");
 			params.put("redirect_uris", Arrays.asList("*"));
 			params.put("post_logout_redirect_uris", Arrays.asList("*"));
 			HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
