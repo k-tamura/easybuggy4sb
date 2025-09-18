@@ -1,0 +1,19 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<p th:text="#{description.show.images}" />
+	<script type="text/javascript">
+	<!--
+		var unintendedfiledisclosure = $.ajax({
+			type : "GET",
+			url : "../dl/images",
+			async : false
+		}).responseText;
+		document.write(unintendedfiledisclosure);
+	// -->
+	</script>
+	<br/><div th:replace="messages"></div>
+</body>
+</html>
