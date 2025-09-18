@@ -1,7 +1,9 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import java.util.Locale;
-
+import ognl.DefaultMemberAccess;
+import ognl.Ognl;
+import ognl.OgnlContext;
+import ognl.OgnlException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.stereotype.Controller;
@@ -10,24 +12,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
-import ognl.Ognl;
-import ognl.OgnlContext;
-import ognl.OgnlException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Locale;
 
 @Controller
 public class OGNLExpressionInjectionController extends AbstractController {
 
     @RequestMapping(value = "/ognleijc")
     public ModelAndView process(@RequestParam(value = "expression", required = false) String expression,
-            ModelAndView mav, Locale locale) {
+                                ModelAndView mav, Locale locale) throws InterruptedException, IOException {
         setViewAndCommonObjects(mav, locale, "commandinjection");
         Object value = null;
         String errMessage = "";
         OgnlContext ctx = new OgnlContext();
+        ctx.setMemberAccess(new DefaultMemberAccess(false));
         if (!StringUtils.isBlank(expression)) {
             try {
                 Object expr = Ognl.parseExpression(expression.replaceAll("Math\\.", "@Math@"));
                 value = Ognl.getValue(expr, ctx);
+
+                // Wait until the process is complete and get the output if value is not string
+                if (value instanceof Process) {
+                    Process p = (Process) value;
+                    p.waitFor();
+                    String line;
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
+                        while ((line = reader.readLine()) != null) {
+                            value = line;
+                        }
+                    }
+                }
             } catch (OgnlException e) {
                 if (e.getReason() != null) {
                     errMessage = e.getReason().getMessage();
@@ -43,7 +59,7 @@ public class OGNLExpressionInjectionController extends AbstractController {
             mav.addObject("expression", expression);
             if (value == null) {
                 mav.addObject("errmsg",
-                        msg.getMessage("msg.invalid.expression", new String[] { errMessage }, null, locale));
+                        msg.getMessage("msg.invalid.expression", new String[]{errMessage}, null, locale));
             }
         }
         if (value != null && NumberUtils.isNumber(value.toString())) {
