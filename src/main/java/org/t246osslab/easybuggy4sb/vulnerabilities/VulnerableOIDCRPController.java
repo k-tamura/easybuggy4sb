@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
@@ -358,36 +359,60 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return null;
 	}
 	private void tryRegisterClient() {
-		log.info("Try Register Client.");
 
 		try {
+			log.info("Check if this app is registered as OIDC client.");
+			Map clientInfo = null;
 			TokenRequest tokenReq = new TokenRequest(new NetHttpTransport(), new JacksonFactory(),
 					new GenericUrl(tokenEndpoint), "password");
 			tokenReq.put("client_id", "admin-cli");
 			tokenReq.put("username", "admin");
 			tokenReq.put("password", "password");
 			TokenResponse tokenResponse = tokenReq.execute();
-
-			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
-			HttpRequest request = requestFactory.buildGetRequest(new GenericUrl(registration_endpoint));
-			request.setRequestMethod(HttpMethods.POST);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setAuthorization("bearer " + tokenResponse.getAccessToken());
 			headers.setContentType("application/json");
 			headers.setAccept("application/json");
-			request.setHeaders(headers);
-			Map<String, Object> params = new HashMap<>();
-			params.put("client_name", "easy-buggy-boot");
-			params.put("redirect_uris", Arrays.asList("*"));
-			params.put("post_logout_redirect_uris", Arrays.asList("*"));
-			HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
-			request.setContent(content);
-			HttpResponse response = request.execute();
-			Map map = new Gson().fromJson(response.parseAsString(), Map.class);
-			clientId = (String) map.get("client_id");
-			clientSecret = (String) map.get("client_secret");
-			log.info("Client {} is registered.", clientId);
+			HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
 
+			Map<String, Object> clientCredential = selectClientCredential();
+			if (clientCredential != null && !clientCredential.isEmpty() && StringUtils.isNotEmpty((String) clientCredential.get("client_id"))) {
+				clientId = (String) clientCredential.get("client_id");
+				clientSecret = (String) clientCredential.get("client_secret");
+
+				String readEndpoint = registration_endpoint.replace("/realms/", "/admin/realms/");
+				readEndpoint = readEndpoint.replace("/clients-registrations/openid-connect", "/clients/" + clientId);
+				HttpRequest searchRequest = requestFactory.buildGetRequest(new GenericUrl(readEndpoint));
+				searchRequest.setHeaders(headers);
+				try {
+					HttpResponse searchResponse = searchRequest.execute();
+					clientInfo = new Gson().fromJson(searchResponse.parseAsString(), Map.class);
+				} catch (HttpResponseException e) {
+					if (404 == e.getStatusCode()){
+						log.info("Client not found.");
+					} else {
+						log.warn("Client read request to OP failed.", e);
+					}
+				}
+			}
+			if (clientInfo == null || clientInfo.isEmpty() || StringUtils.isEmpty((String) clientInfo.get("clientId"))) {
+				log.info("Register this app as OIDC client.");
+				Map<String, Object> params = new HashMap<>();
+				params.put("client_name", "EasyBuggy Boot");
+				params.put("redirect_uris", Arrays.asList("*"));
+				params.put("post_logout_redirect_uris", Arrays.asList("*"));
+				HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
+				HttpRequest registerRequest = requestFactory.buildPostRequest(new GenericUrl(registration_endpoint), content);
+				registerRequest.setHeaders(headers);
+				HttpResponse response = registerRequest.execute();
+				clientInfo = new Gson().fromJson(response.parseAsString(), Map.class);
+				clientId = (String) clientInfo.get("client_id");
+				clientSecret = (String) clientInfo.get("client_secret");
+				insertClientCredential(clientId, clientSecret);
+				log.info("Client {} is registered.", clientId);
+			} else {
+				log.info("This app was already registered.");
+			}
 		} catch (IOException e) {
 			log.error("Registration request to OP failed.", e);
 		}
@@ -493,6 +518,32 @@ public class VulnerableOIDCRPController extends AbstractController {
 			log.error("Exception occurs: ", e);
 		}
 		mav.addObject("errmsg", resultMessage);
+	}
+
+	private Map<String, Object> selectClientCredential() {
+		Map<String, Object> clientCredential = null;
+		try {
+			String sql = "select client_id, client_secret from client_credential";
+			clientCredential = jdbcTemplate.queryForMap(sql);
+		} catch (EmptyResultDataAccessException e) {
+			log.debug("Client is not yet registered. ");
+		} catch (DataAccessException e) {
+			log.error("DataAccessException occurs: ", e);
+		} catch (Exception e) {
+			log.error("Exception occurs: ", e);
+		}
+		return clientCredential;
+	}
+
+	private void insertClientCredential(String client_id, String client_secret) {
+		try {
+			jdbcTemplate.update("delete from client_credential");
+			jdbcTemplate.update("insert into client_credential values (?, ?)", client_id, client_secret);
+		} catch (DataAccessException e) {
+			log.error("DataAccessException occurs: ", e);
+		} catch (Exception e) {
+			log.error("Exception occurs: ", e);
+		}
 	}
 
 	private boolean isAdmin(String accessToken) {
