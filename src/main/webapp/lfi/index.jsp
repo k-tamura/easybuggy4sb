@@ -11,7 +11,7 @@
     <title><fmt:message key="title.design.test.page" /></title>
     <link rel="icon" type="image/vnd.microsoft.icon" href="${pageContext.request.contextPath}/images/favicon.ico">
     <c:catch var="ex">
-    	<c:if test="${param.template != null && !fn:startsWith(param.template,'http')}">
+    	<c:if test="${param.template != null && !fn:startsWith(param.template,'http:') && !fn:startsWith(param.template,'https:') && !fn:startsWith(param.template,'ftp:')}">
             <c:import url="<%=request.getParameter(\"template\")%>" />
         </c:if>
     </c:catch>
