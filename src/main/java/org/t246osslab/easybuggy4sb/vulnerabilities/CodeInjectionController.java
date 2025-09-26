@@ -42,7 +42,7 @@ public class CodeInjectionController extends AbstractController {
         	mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
         } catch (ScriptException e) {
         	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
-        			new String[] { e.getMessage().replaceAll("\n", "<br />") }, null, locale));
+        			new String[] { e.getMessage() }, null, locale));
         } catch (Exception e) {
         	log.error("Exception occurs: ", e);
         	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
