@@ -91,8 +91,8 @@ public class DeadlockController2 extends AbstractController {
                     msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
             log.error("DataAccessException occurs: ", e);
         } catch (Exception e) {
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+            mav.addObject("detailmsg", e.getMessage());
             log.error("Exception occurs: ", e);
         }
         return users;
@@ -125,7 +125,8 @@ public class DeadlockController2 extends AbstractController {
         } catch (Exception e) {
             txMgr.rollback(trnStatus);
             mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+                    msg.getMessage("msg.unknown.exception.occur", null,locale));
+            mav.addObject("detailmsg", e.getMessage());
             log.error("Exception occurs: ", e);
         }
     }

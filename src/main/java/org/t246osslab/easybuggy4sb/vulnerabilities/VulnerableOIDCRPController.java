@@ -495,29 +495,29 @@ public class VulnerableOIDCRPController extends AbstractController {
 					msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
 			log.error("DataAccessException occurs: ", e);
 		} catch (Exception e) {
-			mav.addObject("errmsg",
-					msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+			mav.addObject("detailmsg", e.getMessage());
 			log.error("Exception occurs: ", e);
 		}
 		return messages;
 	}
 
 	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale, boolean isAdmin) {
-		String resultMessage = null;
 		try {
 			int insertCount = jdbcTemplate.update("insert into forum values (CURRENT_TIMESTAMP, ?, ?, ?, ?)",
 					username, picture, message, String.valueOf(isAdmin));
 			if (insertCount != 1) {
-				resultMessage = msg.getMessage("msg.user.already.exist", null, locale);
+				mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
 			}
 		} catch (DataAccessException e) {
-			resultMessage = msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, locale);
+			mav.addObject("errmsg", msg.getMessage("msg.db.access.error.occur", null, locale));
+			mav.addObject("detailmsg", e.getMessage());
 			log.error("DataAccessException occurs: ", e);
 		} catch (Exception e) {
-			resultMessage = msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale);
+			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+			mav.addObject("detailmsg", e.getMessage());
 			log.error("Exception occurs: ", e);
 		}
-		mav.addObject("errmsg", resultMessage);
 	}
 
 	private Map<String, Object> selectClientCredential() {

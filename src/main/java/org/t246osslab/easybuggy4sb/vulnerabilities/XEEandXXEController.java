@@ -214,10 +214,10 @@ public class XEEandXXEController extends AbstractController {
 					}
 				}
 			} catch (DataAccessException e) {
-				resultMessage = msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, locale);
+				resultMessage = msg.getMessage("msg.db.access.error.occur", null, locale) + e.getMessage();
 				log.error("DataAccessException occurs: ", e);
 			} catch (Exception e) {
-				resultMessage = msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, locale);
+				resultMessage = msg.getMessage("msg.unknown.exception.occur", null, locale) + e.getMessage();
 				log.error("Exception occurs: ", e);
 			}
 			return resultMessage;

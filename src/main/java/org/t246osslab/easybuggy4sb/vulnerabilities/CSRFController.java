@@ -58,8 +58,8 @@ public class CSRFController extends AbstractController {
             if (StringUtils.isBlank(password) || password.length() < 8) {
                 mav.addObject("errmsg", msg.getMessage("msg.passwd.is.too.short", null, locale));
             } else {
-                mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur",
-                        new String[] { "userid: " + userid }, null, locale));
+                mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+                mav.addObject("detailmsg", "userid: " + userid);
             }
             return doGet(mav, locale);
         }

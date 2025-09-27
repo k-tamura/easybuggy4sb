@@ -47,8 +47,8 @@ public class EndlessWaitingController extends AbstractController {
                             printInputStream(process.getInputStream()) + printInputStream(process.getErrorStream()));
                 } catch (InterruptedException e) {
                     log.error("InterruptedException occurs: ", e);
-                    mav.addObject("errmsg",
-                            msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+                    mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+                    mav.addObject("detailmsg", e.getMessage());
                 }
             }
         } else {

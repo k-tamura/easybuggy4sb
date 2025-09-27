@@ -43,7 +43,7 @@ public class CodeInjectionController extends AbstractController {
         	scriptEngine.eval("JSON.parse('" + escapedJsonString + "')");
         	mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
         } catch (ScriptException e) {
-			mav.addObject("errmsg", msg.getMessage("msg.invalid.json",null, null, locale));
+			mav.addObject("errmsg", msg.getMessage("msg.invalid.json", null, locale));
 			mav.addObject("detailmsg", e.getMessage()
 					.replaceAll(":([0-9]+):([0-9]+)", " at line $1, column $2.")
 					.replaceAll(" in <eval> at line number 1", ""));

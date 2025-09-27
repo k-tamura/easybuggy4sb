@@ -3,7 +3,7 @@
         </div>
         <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-warning-sign"></span> 
-            <th:block th:text="${errmsg}"></th:block>
+            <th:block th:text="${errmsg}"></th:block><br />
             <span style="font-family: monospace; white-space: pre;"><th:block th:text="${detailmsg}"></th:block></span>
         </div>
         <div th:if="${note != null}" class="alert alert-info" role="alert">

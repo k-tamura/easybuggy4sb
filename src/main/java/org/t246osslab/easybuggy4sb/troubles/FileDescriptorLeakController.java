@@ -52,8 +52,8 @@ public class FileDescriptorLeakController extends AbstractController {
 
         } catch (Exception e) {
             log.error("Exception occurs: ", e);
-            mav.addObject("errmsg",
-                    msg.getMessage("msg.unknown.exception.occur", new String[] { e.getMessage() }, null, locale));
+            mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+            mav.addObject("detailmsg", e.getMessage());
         }
         return mav;
     }

@@ -66,7 +66,7 @@ public class ThreadStarvationController extends AbstractController {
 
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);
-			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, null, locale));
+			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
 
 		}
 
