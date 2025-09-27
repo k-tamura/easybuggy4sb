@@ -59,7 +59,8 @@ public class OGNLExpressionInjectionController extends AbstractController {
             mav.addObject("expression", expression);
             if (value == null) {
                 mav.addObject("errmsg",
-                        msg.getMessage("msg.invalid.expression", new String[]{errMessage}, null, locale));
+                        msg.getMessage("msg.invalid.expression", null, null, locale));
+                mav.addObject("detailmsg", errMessage);
             }
         }
         if (value != null && NumberUtils.isNumber(value.toString())) {
