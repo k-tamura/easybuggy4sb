@@ -71,7 +71,7 @@ public class MailHeaderInjectionController extends AbstractController {
 			mav.addObject("msg", msg.getMessage("msg.sent.mail", null, locale));
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);
-			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, null, locale));
+			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
 			mav.addObject("detailmsg", e.getMessage());
 		} finally {
 			deleteUploadFiles(uploadedFiles);
