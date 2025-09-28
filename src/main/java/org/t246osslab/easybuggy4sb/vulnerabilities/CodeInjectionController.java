@@ -33,7 +33,6 @@ public class CodeInjectionController extends AbstractController {
         /* Escape to parse as JSON */
 		String escapedJsonString = jsonString
 				.replace("\\", "\\\\")
-				.replace("'", "\\'")
 				.replace("\n", "\\n")
 				.replace("\r", "\\r");
         try {
