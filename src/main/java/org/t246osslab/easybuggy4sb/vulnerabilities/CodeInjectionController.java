@@ -44,8 +44,8 @@ public class CodeInjectionController extends AbstractController {
         } catch (ScriptException e) {
 			mav.addObject("errmsg", msg.getMessage("msg.invalid.json", null, locale));
 			mav.addObject("detailmsg", e.getMessage()
-					.replaceAll(":([0-9]+):([0-9]+)", " at line $1, column $2.")
-					.replaceAll(" in <eval> at line number 1", ""));
+					.replaceAll(":([0-9]+):([0-9]+)", " at line number $1, column number $2.")
+					.replaceAll(" in <eval> at line number 1.*", ""));
         } catch (Exception e) {
         	log.error("Exception occurs: ", e);
         	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
