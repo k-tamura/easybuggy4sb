@@ -1,16 +1,16 @@
 FROM mcr.microsoft.com/playwright:v1.54.0-jammy
 RUN apt update && apt install -y openjdk-8-jdk python3-pip vim
-RUN pip install playwright requests
+RUN pip install playwright==1.54.0 requests
 WORKDIR /opt/attacker_app
 RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.108/bin/apache-tomcat-9.0.108.tar.gz
-RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.1.1.tgz
 RUN tar -zxvf apache-tomcat-9.0.108.tar.gz
-RUN tar -zxvf apache-jmeter-5.6.3.tgz
+RUN tar -zxvf apache-jmeter-5.1.1.tgz
 RUN rm -fr apache-tomcat-9.0.108/webapps/*
 RUN mv apache-tomcat-9.0.108 tomcat
-RUN mv apache-jmeter-5.6.3 jmeter
+RUN mv apache-jmeter-5.1.1 jmeter
 RUN rm -f apache-tomcat-9.0.108.tar.gz
-RUN rm -f apache-jmeter-5.6.3.tgz
+RUN rm -f apache-jmeter-5.1.1.tgz
 COPY server.xml tomcat/conf
 COPY index.jsp tomcat/webapps/attacker_app/
 COPY css/ tomcat/webapps/attacker_app/css/
