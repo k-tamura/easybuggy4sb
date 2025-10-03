@@ -5,3 +5,4 @@ USER root
 RUN chown jboss:jboss /opt/jboss/setup-keycloak.sh && chmod +x /opt/jboss/setup-keycloak.sh
 RUN microdnf install jq
 USER jboss
+WORKDIR /opt/jboss/keycloak
