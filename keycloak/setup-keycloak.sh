@@ -12,18 +12,6 @@ ADMIN_PASSWORD="password"
 # Target URL
 HEALTH_CHECK_URL="${KEYCLOAK_URL}/realms/${REALM_NAME}/.well-known/openid-configuration"
 
-if [[ "$(tail -n 1 /opt/jboss/setup.log)" == "Setup script finished." ]]; then
-  # Get the HTTP status code
-  STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" "$HEALTH_CHECK_URL")
-
-  # Check if the status code is 200
-  if [ "$STATUS_CODE" -no 200 ]; then
-    exit 0
-  else
-    exit 1
-  fi
-fi
-
 # Retry count and interval
 MAX_RETRIES=5
 INTERVAL=5 # seconds
