@@ -5,7 +5,9 @@
 	<div th:replace="header"></div>
 	<form th:if="${mail == null}" action="/admins/clickjacking" method="post">
 		<p th:text="#{msg.enter.mail}" /><br />
-		<label th:text="#{label.mail}"></label><span>: </span>
+		<label th:text="#{label.current.mail}"></label><span>: </span>
+		<span th:text="${currentMail}"></span><br />
+		<label th:text="#{label.new.mail}"></label><span>: </span>
 			<input type="text" name="mail" size="30" maxlength="30" /><br />
 			<br /> <input type="submit" th:value="#{label.submit}" /><br /><br />
 		<div th:replace="messages"></div>

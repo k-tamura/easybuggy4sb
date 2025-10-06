@@ -17,6 +17,8 @@ COPY css/ tomcat/webapps/attacker_app/css/
 COPY fonts/ tomcat/webapps/attacker_app/fonts/
 COPY img/ tomcat/webapps/attacker_app/img/
 COPY picture/ tomcat/webapps/attacker_app/picture/
+COPY clickjacking/ tomcat/webapps/attacker_app/clickjacking/
+COPY WEB-INF/ tomcat/webapps/attacker_app/WEB-INF/
 COPY dictionary-attack.py ./
 COPY dos-attack.jmx ./
 COPY password-list-attack.jmx ./

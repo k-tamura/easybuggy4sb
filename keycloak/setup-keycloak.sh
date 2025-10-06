@@ -27,7 +27,7 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
   # Get the HTTP status code
   STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" "$HEALTH_CHECK_URL")
 
-  # Check if the status code equarks 200
+  # Check if the status code equals 200
   if [ "$STATUS_CODE" -eq 200 ]; then
     echo "Script finished successfully. HTTP status code: $STATUS_CODE" >> /opt/jboss/setup.log
     break
@@ -60,7 +60,6 @@ if [ -z "$ADMIN_TOKEN" ]; then
 fi
 
 echo "Access token obtained." >> /opt/jboss/setup.log
-
 
 # --- User registration function ---
 create_user() {

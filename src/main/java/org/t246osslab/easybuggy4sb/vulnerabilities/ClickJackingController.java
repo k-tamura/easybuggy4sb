@@ -1,7 +1,15 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import java.io.IOException;
-import java.util.Locale;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.NamingException;
+import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -11,25 +19,25 @@ import javax.naming.directory.ModificationItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import java.io.IOException;
+import java.util.Locale;
 
 @Controller
 public class ClickJackingController extends AbstractController {
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
-	
+
 	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.GET)
-	public ModelAndView doGet(ModelAndView mav, Locale locale) {
-        setViewAndCommonObjects(mav, locale, "clickjacking");
+	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, HttpSession session, Locale locale) throws IOException {
+		String userid = (String) session.getAttribute("userid");
+		if (userid == null) {
+			res.sendRedirect("/");
+			return null;
+		}
+		mav.addObject("currentMail", getCurrentMail(userid));
+		setViewAndCommonObjects(mav, locale, "clickjacking");
+		mav.addObject("note", msg.getMessage("msg.note.clickjacking", new Object[]{req.getServerName()}, locale));
 		return mav;
 	}
 
@@ -61,11 +69,11 @@ public class ClickJackingController extends AbstractController {
 			} catch (Exception e) {
 				log.error("Exception occurs: ", e);
 				mav.addObject("errmsg", msg.getMessage("msg.mail.change.failed", null, locale));
-				return doGet(mav, locale);
+				return doGet(mav, req, res, session, locale);
 			}
 		} else {
 			mav.addObject("errmsg", msg.getMessage("msg.mail.format.is.invalid", null, locale));
-			return doGet(mav, locale);
+			return doGet(mav, req, res, session, locale);
 		}
 		return mav;
 	}
@@ -81,4 +89,37 @@ public class ClickJackingController extends AbstractController {
 		}
 		return result;
 	}
+
+	/**
+	 * Retrieves the specified user's email address from LDAP.
+	 * @param userid: The user ID retrieved from the session.
+	 * @return: The retrieved email address. If not found, returns null.
+	 */
+	private String getCurrentMail(String userid) {
+		if (StringUtils.isBlank(userid)) {
+			return null;
+		}
+		String currentMail = null;
+		try {
+			String dn = "uid=" + encodeForLDAP(userid.trim()) + ",ou=people,dc=t246osslab,dc=org";
+
+			currentMail = ldapTemplate.lookup(
+					dn,
+					new String[] {"mail"},
+					(AttributesMapper<String>) attrs -> {
+						javax.naming.directory.Attribute a = attrs.get("mail");
+						if (a == null) return null;
+						try {
+							Object val = a.get();
+							return val != null ? val.toString() : null;
+						} catch (NamingException e) {
+							throw new RuntimeException(e);
+						}
+					}
+			);
+		} catch (Exception e) {
+			log.error("Failed to retrieve mail address from LDAP for user: " + userid, e);
+		}
+        return currentMail;
+    }
 }

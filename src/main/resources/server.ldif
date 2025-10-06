@@ -14,6 +14,7 @@ objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
+mail: admin@gmail.com
 cn: Ben Alex
 sn: Alex
 uid: admin
@@ -24,6 +25,7 @@ objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
+mail: admin2@gmail.com
 cn: Bob Hamilton
 sn: Hamilton
 uid: admin2
@@ -34,6 +36,7 @@ objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
+mail: admin3@gmail.com
 cn: Joe Smeth
 sn: Smeth
 uid: admin3
@@ -44,6 +47,7 @@ objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
+mail: admin4@gmail.com
 cn: Mouse, Jerry
 sn: Mouse
 uid: admin4
