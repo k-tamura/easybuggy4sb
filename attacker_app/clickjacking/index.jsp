@@ -55,7 +55,7 @@
         </td>
         <td align="right">
           <p>Login user ID: admin</p>
-          <a href="/logout">Logout</a>
+          <a href="http://<%=request.getServerName()%>/logout">Logout</a>
         </td>
       </tr>
     </table>
