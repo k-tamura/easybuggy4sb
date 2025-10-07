@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 volumes:
   mysql_data:
@@ -45,9 +45,9 @@ services:
       - 8443:8443
       - 8787:8787
     healthcheck:
-      test: '/opt/jboss/setup-keycloak.sh || exit 1'
+      test: ["CMD", "/opt/jboss/health-check.sh"]
       start_period: "30s"
-      retries: 7
+      retries: 5
       interval: "10s" 
     depends_on:
       - db

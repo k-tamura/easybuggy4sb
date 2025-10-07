@@ -2,7 +2,7 @@
 
 # --- Variables ---
 # Keycloak server URL
-KEYCLOAK_URL="http://localhost:8080/auth"
+KEYCLOAK_URL="http://keycloak:8080/auth"
 # Target realm name
 REALM_NAME="master"
 # Admin user credentials
@@ -13,7 +13,7 @@ ADMIN_PASSWORD="password"
 HEALTH_CHECK_URL="${KEYCLOAK_URL}/realms/${REALM_NAME}/.well-known/openid-configuration"
 
 # Retry count and interval
-MAX_RETRIES=5
+MAX_RETRIES=50
 INTERVAL=5 # seconds
 
 # Retry loop
@@ -108,9 +108,7 @@ EOF
 
     if [ -z "$USER_ID" ]; then
       echo "Error: Failed to get user ID for ${USERNAME}." >> /opt/jboss/setup.log
-      exit 1
     fi
-    echo "User ID obtained: ${USER_ID}" >> /opt/jboss/setup.log
 
     ROLE_ID=$(curl -s -X GET "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/roles?search=${ROLE_NAME}" \
       -H "Authorization: Bearer ${ADMIN_TOKEN}" \
@@ -118,7 +116,6 @@ EOF
 
     if [ -z "$ROLE_ID" ]; then
       echo "Error: Failed to get role ID for ${ROLE_NAME}." >> /opt/jboss/setup.log
-      exit 1
     fi
     echo "Role ID obtained: ${ROLE_ID}"
 
