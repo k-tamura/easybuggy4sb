@@ -5,13 +5,14 @@
 
 This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.com/k-tamura/easybuggy) is a broken web application in order to understand behavior of bugs and vulnerabilities, for example, [memory leak, deadlock, JVM crash, SQL injection and so on](https://github.com/k-tamura/easybuggy4sb/wiki).
 
-![EasyBugyyBootGo](https://github.com/user-attachments/assets/70ce9fa2-7bc0-45a8-b554-4d75d0ab69b0)
+![EasyBuggyBootGo](https://github.com/user-attachments/assets/70ce9fa2-7bc0-45a8-b554-4d75d0ab69b0)
 
 :clock4: Quick Start (Docker Compose) with Keycloak, MySQL, Attacker's app
 -
 When running EasyBuggy Boot with Keycloak, MySQL, and an attacker's application
 
     $ echo HOST=192.168.1.17 > .env # if you run EasyBuggy Boot not on localhost (e.g. 192.168.1.17)
+    $ echo TZ=America/New_York >> .env # Added to eliminate container time skew
     $ docker compose up
 
 Access to
@@ -20,7 +21,7 @@ Access to
 
 :clock4: Quick Start
 -
-When running EasyBuggy Boot alone (less vulnerabilities than `docker compose up`)
+When running EasyBuggy Boot alone (fewer vulnerabilities than `docker compose up`)
 
     $ mvn spring-boot:run
 

@@ -74,7 +74,7 @@ public class XEEandXXEController extends AbstractController {
 		// Get absolute path of the web application
 		String appPath = req.getServletContext().getRealPath("");
 
-		// Create a directory to save the uploaded file if it does not exists
+		// Create a directory to save the uploaded file if it does not exist
 		String savePath = (appPath == null ? System.getProperty("user.dir") : appPath) + File.separator + SAVE_DIR;
 		File fileSaveDir = new File(savePath);
 		if (!fileSaveDir.exists()) {
@@ -128,7 +128,7 @@ public class XEEandXXEController extends AbstractController {
 			}
             setViewAndCommonObjects(mav, locale, "xxe");
 		}
-        if (customHandler.getResult() != null && customHandler.getResult().size() > 0) {
+        if (customHandler.getResult() != null && !customHandler.getResult().isEmpty()) {
             mav.addObject("resultList", customHandler.getResult());
             mav.addObject("note", null);
         }
@@ -143,8 +143,7 @@ public class XEEandXXEController extends AbstractController {
 		private Locale locale = null;
 
 		@Override
-		public void startElement(String uri, String localName, String qName, Attributes attributes)
-				throws SAXException {
+		public void startElement(String uri, String localName, String qName, Attributes attributes) {
 			if ("users".equals(qName)) {
 				isUsersExist = true;
 

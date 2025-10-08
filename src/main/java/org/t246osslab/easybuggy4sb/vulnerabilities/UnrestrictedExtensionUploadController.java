@@ -79,7 +79,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     }
 
     // Convert color image into gray scale image.
-    private boolean convert2GrayScale(String fileName) throws IOException {
+    private boolean convert2GrayScale(String fileName) {
         boolean isConverted = false;
         try {
             // Convert the file into gray scale image.

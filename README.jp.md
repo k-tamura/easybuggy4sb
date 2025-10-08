@@ -6,13 +6,14 @@ EasyBuggy Boot :four_leaf_clover:
 
 EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです。[EasyBuggy](https://github.com/k-tamura/easybuggy)は、[メモリリーク、デッドロック、JVMクラッシュ、SQLインジェクションなど](https://github.com/k-tamura/easybuggy4sb/wiki)、バグや脆弱性の動作を理解するためにつくられたバグだらけのWebアプリケーションです。
 
-![EasyBugyyBootGo](https://github.com/user-attachments/assets/70ce9fa2-7bc0-45a8-b554-4d75d0ab69b0)
+![EasyBuggyBootGo](https://github.com/user-attachments/assets/70ce9fa2-7bc0-45a8-b554-4d75d0ab69b0)
 
 :clock4: クイックスタート (Docker Compose)
 -
 Keycloak、MySQL、攻撃者のアプリと連携して起動する場合
 
     $ echo HOST=192.168.1.17 > .env # localhost以外でEasyBuggy Bootを実行する場合 (例: 192.168.1.17)
+    $ echo TZ=Asia/Tokyo >> .env # コンテナーの時刻のずれを無くすために追加
     $ docker compose up
 
 以下にアクセス

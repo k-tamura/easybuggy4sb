@@ -28,7 +28,7 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 /**
  * A servlet that takes message details from user and send it as a new mail
- * through an SMTP server. The mail may contain a attachment which is the file
+ * through an SMTP server. The mail may contain an attachment which is the file
  * uploaded from client.
  */
 @Controller
@@ -129,7 +129,7 @@ public class MailHeaderInjectionController extends AbstractController {
 	}
 
 	/**
-	 * Retrieves file name of a upload part from its HTTP header
+	 * Retrieves file name of an upload part from its HTTP header
 	 */
 	private String extractFileName(Part part) {
 		String contentDisp = part.getHeader("content-disposition");

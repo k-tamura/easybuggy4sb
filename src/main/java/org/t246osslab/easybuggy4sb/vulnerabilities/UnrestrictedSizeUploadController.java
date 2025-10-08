@@ -1,7 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -41,7 +40,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
         // Get absolute path of the web application
         String appPath = req.getServletContext().getRealPath("");
 
-        // Create a directory to save the uploaded file if it does not exists
+        // Create a directory to save the uploaded file if it does not exist
         String savePath = (appPath == null ? System.getProperty("user.dir") : appPath) + File.separator + SAVE_DIR;
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
@@ -77,7 +76,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
     }
     
     // Reverse the color of the image file
-    private boolean reverseColor(String fileName) throws IOException {
+    private boolean reverseColor(String fileName) {
         boolean isConverted = false;
         try {
             BufferedImage image = ImageIO.read(new File(fileName));

@@ -45,13 +45,13 @@ public class AuthenticationFilter implements Filter {
                 queryString = queryString.replace("logintype=" + loginType + "&", "");
                 queryString = queryString.replace("&logintype=" + loginType, "");
                 queryString = queryString.replace("logintype=" + loginType, "");
-                if (queryString.length() > 0) {
+                if (!queryString.isEmpty()) {
                     queryString = "?" + queryString;
                 }
             }
             HttpSession session = request.getSession(false);
             String authNMsg = (session == null) ? null : (String) session.getAttribute("authNMsg");
-			if (authNMsg == null || !"authenticated".equals(authNMsg)) {
+			if (!"authenticated".equals(authNMsg)) {
                 /* Not authenticated yet */
                 session = request.getSession(true);
                 session.setAttribute("target", target);
@@ -74,7 +74,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig arg0) {
         // Do nothing
     }
 }

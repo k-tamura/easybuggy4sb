@@ -52,7 +52,7 @@ public class SecurityFilter implements Filter {
         
          /* Prevent clickjacking if target is not /admins/clickjacking ... */
         if (!target.startsWith("/admins/clickjacking")) {
-            response.addHeader("X-FRAME-OPTIONS", "DENY");
+            response.addHeader("Content-Security-Policy", "frame-ancestors 'self'");
         }
         /* Prevent Content-Type sniffing */
         response.addHeader("X-Content-Type-Options", "nosniff");
@@ -85,7 +85,7 @@ public class SecurityFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig arg0) throws ServletException {
+    public void init(FilterConfig arg0) {
         // Do nothing
     }
 }

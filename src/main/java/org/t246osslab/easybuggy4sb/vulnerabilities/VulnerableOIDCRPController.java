@@ -339,8 +339,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			headers.setAuthorization("bearer " + accessToken);
 			request.setHeaders(headers);
 			HttpResponse response = request.execute();
-			Map userinfo = new Gson().fromJson(response.parseAsString(), Map.class);
-			return userinfo;
+            return new Gson().fromJson(response.parseAsString(), Map.class);
 		} catch (HttpResponseException e) {
 			Map<?, ?> fromJson = new Gson().fromJson(e.getContent(), Map.class);
 			if (e.getStatusCode() == 401 && fromJson != null && "invalid_token".equals(fromJson.get("error"))) {
