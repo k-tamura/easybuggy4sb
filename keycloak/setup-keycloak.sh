@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ -f /opt/jboss/setup.log ]] && [[ "$(tail -n 1 /opt/jboss/setup.log)" == "Setup script finished." ]]; then
+  exit 0
+fi
+
 # --- Variables ---
 # Keycloak server URL
 KEYCLOAK_URL="http://keycloak:8080/auth"
@@ -16,20 +20,21 @@ HEALTH_CHECK_URL="${KEYCLOAK_URL}/realms/${REALM_NAME}/.well-known/openid-config
 MAX_RETRIES=50
 INTERVAL=5 # seconds
 
+# Keycloak takes at least 15 seconds to start up
+sleep  10
+
 # Retry loop
 for ((i=1; i<=MAX_RETRIES; i++)); do
-  # Wait on all attempts after the first
-  if [ "$i" -gt 1 ]; then
-    echo "Waiting for $INTERVAL seconds, then retrying... (Attempt $i/$MAX_RETRIES)"  >> /opt/jboss/setup.log
-    sleep "$INTERVAL"
-  fi
+  # Wait on all attempts
+  echo "Waiting for $INTERVAL seconds, then retrying... (Attempt $i/$MAX_RETRIES)"  >> /opt/jboss/setup.log
+  sleep "$INTERVAL"
 
   # Get the HTTP status code
   STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}\n" "$HEALTH_CHECK_URL")
 
   # Check if the status code equals 200
   if [ "$STATUS_CODE" -eq 200 ]; then
-    echo "Script finished successfully. HTTP status code: $STATUS_CODE" >> /opt/jboss/setup.log
+    echo "Keycloak started successfully. HTTP status code: $STATUS_CODE" >> /opt/jboss/setup.log
     break
   elif [ "$i" -eq "$MAX_RETRIES" ]; then
     # Check if this is the last attempt and the check failed
