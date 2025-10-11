@@ -107,10 +107,13 @@ public class XEEandXXEController extends AbstractController {
 			isRegistered = true;
 		} catch (ParserConfigurationException e) {
 			log.error("ParserConfigurationException occurs: ", e);
+			mav.addObject("detailmsg", e.getMessage());
 		} catch (SAXException e) {
 			log.error("SAXException occurs: ", e);
+			mav.addObject("detailmsg", e.getMessage());
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);
+			mav.addObject("detailmsg", e.getMessage());
 		}
 
 		if ("/xee".equals(req.getServletPath())) {
@@ -158,7 +161,17 @@ public class XEEandXXEController extends AbstractController {
 					user.setMail(attributes.getValue("mail"));
 					resultList.add(user);
 				} else {
-					resultList.add(attributes.getValue("uid") + " :: " + executeResult);
+					String uid = attributes.getValue("uid");
+					if (uid == null) {
+						StringBuilder attributeString = new StringBuilder();
+						for (int i = 0; i < attributes.getLength(); i++) {
+							attributeString.append(attributes.getQName(i) + "=" + attributes.getValue(i));
+							if (i < attributes.getLength() - 1) attributeString.append(",");
+						}
+						resultList.add(new String[]{attributeString.toString(), executeResult});
+					} else {
+						resultList.add(new String[]{attributes.getValue("uid"), executeResult});
+					}
 				}
 				isRegistered = true;
 			}
@@ -183,8 +196,14 @@ public class XEEandXXEController extends AbstractController {
 		String upsertUser(Attributes attributes, Locale locale) {
 			String resultMessage = null;
 			try {
-			    int count = jdbcTemplate.queryForObject(
-			            "select count(*) from users where id = ?", Integer.class, attributes.getValue("uid"));
+				String uid = attributes.getValue("uid");
+				if (uid == null) return msg.getMessage("msg.uid.not.exist", null, locale);
+				String name = attributes.getValue("name");
+				String password = attributes.getValue("password");
+				String phone = attributes.getValue("phone");
+				String mail = attributes.getValue("mail");
+				int count = jdbcTemplate.queryForObject(
+						"select count(*) from users where id = ?", Integer.class, uid);
 
 				if (count == 1) {
 					if (isInsert) {
@@ -197,17 +216,14 @@ public class XEEandXXEController extends AbstractController {
 				}
 				if (isInsert) {
 					int insertCount = jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?, ?)",
-							attributes.getValue("uid"), attributes.getValue("name"), attributes.getValue("password"),
-							RandomStringUtils.randomNumeric(10), "true", attributes.getValue("phone"),
-							attributes.getValue("mail"));
+							uid, name, password, RandomStringUtils.randomNumeric(10), "true", phone, mail);
 					if (insertCount != 1) {
 						return msg.getMessage("msg.user.already.exist", null, locale);
 					}
 				} else {
 					int updateCount = jdbcTemplate.update(
 							"update users set name = ?, password = ?, phone = ?, mail = ? where id = ?",
-							attributes.getValue("name"), attributes.getValue("password"), attributes.getValue("phone"),
-							attributes.getValue("mail"), attributes.getValue("uid"));
+							name, password, phone, mail, uid);
 					if (updateCount != 1) {
 						return msg.getMessage("msg.user.not.exist", null, locale);
 					}

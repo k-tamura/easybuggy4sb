@@ -29,9 +29,11 @@
 					<td th:text="${result.phone}" ></td>
 					<td th:text="${result.mail}" ></td>
 				</th:block>
-				<th:block th:if="${result instanceof T(java.lang.String)}">
-					<td th:text="${#strings.arraySplit(result, ' :: ')[0]}" colspan="1"></td>
-					<td th:text="${#strings.arraySplit(result, ' :: ')[1]}" colspan="4"></td>
+				<th:block th:if="${result instanceof T(java.lang.String[])}">
+					<th:block th:if="${#arrays.length(result) >= 2}">
+						<td th:text="${result[0]}" colspan="1"></td>
+						<td th:text="${result[1]}" colspan="4"></td>
+					</th:block>
 				</th:block>
 			</tr>
 		</table>
