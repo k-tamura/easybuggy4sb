@@ -15,6 +15,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
@@ -41,6 +42,9 @@ public class XEEandXXEController extends AbstractController {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@Value("${attacker.app.url}")
+	protected String attackerAppUrl;
+
 	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
 
@@ -52,8 +56,10 @@ public class XEEandXXEController extends AbstractController {
 			mav.addObject("xee_xml", IOUtils.toString(resource.getInputStream()));
 		} else {
             setViewAndCommonObjects(mav, locale, "xxe");
+			String[] placeholders = new String[]{ attackerAppUrl + "/xxe/vulnerable.dtd" };
+			mav.addObject("step1", msg.getMessage("msg.note.xxe.step1", placeholders, locale));
 			resource = new ClassPathResource("/xml/xxe.xml");
-			mav.addObject("xxe_xml", IOUtils.toString(resource.getInputStream()));
+			mav.addObject("xxe_xml", IOUtils.toString(resource.getInputStream()).replace("http://attacker.site", attackerAppUrl));
 			resource = new ClassPathResource("/xml/xxe.dtd");
 			mav.addObject("xxe_dtd", IOUtils.toString(resource.getInputStream()));
 		}
