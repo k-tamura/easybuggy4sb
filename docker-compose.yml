@@ -47,7 +47,7 @@ services:
     healthcheck:
       test: ["CMD", "/opt/jboss/health-check.sh"]
       start_period: "30s"
-      retries: 5
+      retries: 20
       interval: "10s" 
     depends_on:
       - db
@@ -76,6 +76,10 @@ services:
       #manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
       mail_host: mail
       TZ: ${TZ}
+    #ulimits:
+      #nofile:
+        #soft: 65535
+        #hard: 65535
   attacker_app:
     build: ./attacker_app
     container_name: attacker_app
