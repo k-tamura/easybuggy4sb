@@ -26,7 +26,7 @@ services:
     volumes:
       - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
       - ./keycloak/register.ftl:/opt/jboss/keycloak/themes/base/login/register.ftl
-      - ./attacker_app/passwords.txt:/opt/jboss/keycloak/data/password-blacklists/passwords.txt
+      - ./attacker-app/passwords.txt:/opt/jboss/keycloak/data/password-blacklists/passwords.txt
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: db
@@ -71,7 +71,7 @@ services:
       db_password: password
       oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
       oidc_dynamic_client_registration_enabled: 'true'
-      attacker_app_url: http://${HOST:-localhost}:9999/attacker_app
+      attacker_app_url: http://${HOST:-localhost}:9999/attacker-app
       manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
       #manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
       mail_host: mail
@@ -80,9 +80,9 @@ services:
       #nofile:
         #soft: 65535
         #hard: 65535
-  attacker_app:
-    build: ./attacker_app
-    container_name: attacker_app
+  attacker-app:
+    build: ./attacker-app
+    container_name: attacker-app
     ports:
       - 9999:8080
     environment:

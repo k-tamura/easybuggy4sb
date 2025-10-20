@@ -64,7 +64,7 @@
                 <div id="kc-form">
                     <div id="kc-form-wrapper">
                         <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
-                              action="http://<%=request.getServerName()%>:9999/attacker_app/index.jsp"
+                              action="http://<%=request.getServerName()%>:9999/attacker-app/index.jsp"
                               method="post">
                             <div class="form-group">
                                 <label for="username" class="pf-c-form__label pf-c-form__label-text">Username or
@@ -102,7 +102,7 @@
               <div id="kc-info-wrapper" class="">
                 <div id="kc-registration-container">
                   <div id="kc-registration">
-                   <span>New user? <a tabindex="6" href="/attacker_app/">Register</a></span>
+                   <span>New user? <a tabindex="6" href="/attacker-app/">Register</a></span>
                   </div>
                 </div>
               </div>
