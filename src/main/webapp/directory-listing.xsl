@@ -34,10 +34,10 @@
         </a>
       </td>
       <td style="text-align: right;">
-        <pre><xsl:value-of select="@size"/></pre>
+        <pre><xsl:value-of select="@date"/></pre>
       </td>
       <td style="text-align: right;">
-        <pre><xsl:value-of select="@date"/></pre>
+        <pre><xsl:value-of select="@size"/></pre>
       </td>
     </tr>
   </xsl:template>
