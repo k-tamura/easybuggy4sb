@@ -141,7 +141,7 @@ public class XEEandXXEController extends AbstractController {
             mav.addObject("resultList", customHandler.getResult());
             mav.addObject("note", null);
         }
-		return mav;
+		return doGet(mav, req, locale);
 	}
 
 	public class CustomHandler extends DefaultHandler {
