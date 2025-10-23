@@ -71,7 +71,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
     }
 
     private boolean isImageFile(String fileName) {
-        return Arrays.asList("png", "gif", "jpg", "jpeg", "tif", "tiff", "bmp").contains(
+        return Arrays.asList("png", "gif", "jpg", "jpeg", "bmp").contains(
                 FilenameUtils.getExtension(fileName));
     }
     
