@@ -9,13 +9,7 @@
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />
 		<input type="submit" th:value="#{label.upload}" /><br /><br />
-        <div th:if="${msg != null}">
-            <th:block th:text="${msg}" ></th:block><br /><br />
-        </div>
-        <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-warning-sign"></span> 
-            <th:block th:text="${errmsg}"></th:block>
-        </div>
+		<div th:replace="messages"></div>
         <div class="alert alert-info" role="alert">
             <span class="glyphicon glyphicon-info-sign"></span> 
             <th:block th:utext="${step1}"></th:block>
@@ -37,13 +31,12 @@
 				<th th:text="#{label.mail}"></th>
 			</tr>
 			<tr th:each="result : ${resultList}">
-				<th:block
-					th:if="${result instanceof T(org.t246osslab.easybuggy4sb.core.model.User)}">
-					<td th:text="${result.userId}"></td>
-					<td th:text="${result.name}"></td>
-					<td th:text="${result.password}"></td>
-					<td th:text="${result.phone}"></td>
-					<td th:text="${result.mail}"></td>
+				<th:block th:if="${result instanceof T(org.t246osslab.easybuggy4sb.core.model.User)}">
+					<td th:text="${result.userId}" ></td>
+					<td th:text="${result.name}" ></td>
+					<td th:text="${result.password}" ></td>
+					<td th:text="${result.phone}" ></td>
+					<td th:text="${result.mail}" ></td>
 				</th:block>
 				<th:block th:if="${result instanceof T(java.lang.String[])}">
 					<th:block th:if="${#arrays.length(result) >= 2}">
