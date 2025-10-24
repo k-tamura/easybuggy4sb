@@ -20,11 +20,4 @@ public class UnintendedFileDisclosureController extends AbstractController {
         mav.addObject("note", msg.getMessage("msg.note.unintendedfiledisclosure", placeholders, locale));
         return mav;
     }
-    
-    @RequestMapping(value = "/serverinfo")
-    public ModelAndView serverinfo(ModelAndView mav, Locale locale) {
-        setViewAndCommonObjects(mav, locale, "serverinfo");
-        mav.addObject("properties", System.getProperties());
-        return mav;
-    }
 }

@@ -70,4 +70,11 @@ public class OpenRedirectController extends DefaultLoginController {
         }
         return null;
     }
+
+    @RequestMapping(value = "/serverinfo")
+    public ModelAndView serverinfo(ModelAndView mav, Locale locale) {
+        setViewAndCommonObjects(mav, locale, "serverinfo");
+        mav.addObject("properties", System.getProperties());
+        return mav;
+    }
 }
