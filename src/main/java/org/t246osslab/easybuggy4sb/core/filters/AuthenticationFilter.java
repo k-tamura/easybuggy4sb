@@ -54,7 +54,7 @@ public class AuthenticationFilter implements Filter {
 			if (!"authenticated".equals(authNMsg)) {
                 /* Not authenticated yet */
                 session = request.getSession(true);
-                session.setAttribute("target", target);
+                session.setAttribute("target", target + queryString);
                 if (loginType == null) {
                     response.sendRedirect(response.encodeRedirectURL("/login" + queryString));
                 } else if ("sessionfixation".equals(loginType)) {

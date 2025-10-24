@@ -1,0 +1,17 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<form action="seshj" method="post">
+		<p th:text="#{description.decode.string}" /><br />
+		<textarea rows="10" cols="50" name="string"></textarea><br />
+			<br /> <input type="submit" th:value="#{label.submit}" /><br /><br />
+		<span style="font-family: monospace; white-space: pre;"><p th:utext="${msg}" /></span><br />
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign"></span>
+			<th:block th:utext="${note}"></th:block>
+		</div>
+	</form>
+</body>
+</html>
