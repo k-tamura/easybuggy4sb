@@ -83,6 +83,10 @@ public class DefaultLoginController extends AbstractController {
                 res.sendRedirect("/admins/main");
             } else {
                 session.removeAttribute("target");
+                String requestedSessionId = req.getRequestedSessionId();
+                if (requestedSessionId != null){
+                    target = target + ";jsessionid=" +requestedSessionId;
+                }
                 res.sendRedirect(target);
             }
             return null;
