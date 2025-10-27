@@ -17,6 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
+      HOST: ${HOST:?'.env not found or HOST not set'}
       TZ: ${TZ}
     ports:
       - 3306:3306
