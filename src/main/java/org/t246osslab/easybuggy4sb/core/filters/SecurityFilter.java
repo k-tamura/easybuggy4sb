@@ -57,7 +57,7 @@ public class SecurityFilter implements Filter {
         /* Prevent Content-Type sniffing */
         response.addHeader("X-Content-Type-Options", "nosniff");
 
-        /* Prevent XSS if target is not /xss ... */
+        /* Prevent XSS */
         if (!target.startsWith("/xss") && !target.startsWith("/admins/seshj")) {
             response.addHeader("X-XSS-Protection", "1; mode=block");
         }

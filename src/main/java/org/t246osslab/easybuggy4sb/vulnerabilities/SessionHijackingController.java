@@ -43,6 +43,7 @@ public class SessionHijackingController extends AbstractController {
                 mav.addObject("msg", msg.getMessage("label.decoded.string", null, locale) + " :<br />" + decodedString);
             } catch (IllegalArgumentException e){
                 mav.addObject("errmsg", msg.getMessage("msg.decode.error.occur", null, locale));
+                mav.addObject("detailmsg", e.getMessage());
             }
         }
         return mav;
