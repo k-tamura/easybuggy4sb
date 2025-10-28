@@ -80,15 +80,11 @@ public class DefaultLoginController extends AbstractController {
 
             String target = (String) session.getAttribute("target");
             if (target == null) {
-                res.sendRedirect("/admins/main");
+                target = "/admins/main";
             } else {
                 session.removeAttribute("target");
-                String requestedSessionId = req.getRequestedSessionId();
-                if (requestedSessionId != null){
-                    target = target + ";jsessionid=" +requestedSessionId;
-                }
-                res.sendRedirect(target);
             }
+            res.sendRedirect(res.encodeRedirectURL(target));
             return null;
         } else {
             session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));

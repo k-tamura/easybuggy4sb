@@ -56,7 +56,7 @@ public class AuthenticationFilter implements Filter {
                 session = request.getSession(true);
                 session.setAttribute("target", target + queryString);
                 if (loginType == null) {
-                    response.sendRedirect(response.encodeRedirectURL("/login" + queryString));
+                    response.sendRedirect("/login" + queryString);
                 } else if ("sessionfixation".equals(loginType)) {
                     response.sendRedirect(response.encodeRedirectURL("/" + loginType + "/login" + queryString));
                 } else {
