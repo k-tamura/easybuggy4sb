@@ -18,7 +18,8 @@ public class SessionFixationController extends DefaultLoginController {
     @Override
     @RequestMapping(value = "/sessionfixation/login", method = RequestMethod.GET)
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-        req.setAttribute("note", msg.getMessage("msg.note.session.fixation", null, locale));
+        req.setAttribute("note", msg.getMessage("msg.note.session.fixation",
+                new Object[]{ req.getRequestURL().toString() + ";jsessionid=" }, locale));
         super.doGet(mav, req, res, locale);
         return mav;
     }
