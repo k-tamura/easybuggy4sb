@@ -1,0 +1,43 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+<script>
+    async function performTranslation() {
+        const text = document.getElementById("inputText").value;
+        const targetLanguage = document.getElementById("targetLanguage").value;
+        const requestBody = {
+            "text": text,
+            "targetLanguage": targetLanguage
+        };
+        const response = await fetch("/translate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+        document.getElementById("resultArea").textContent = data.translation;
+    }
+</script>
+<div th:replace="header"></div>
+<form id="translateForm">
+    <th:block th:if="${isSettingsReady}">
+        <p th:text="#{description.translate}" />
+        <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.translator.placeholder}"></textarea><br/>
+        <label th:text="#{label.target.language}"></label>:
+        <select id="targetLanguage" style="margin-bottom: 15px; padding: 5px;">
+            <option value="English" selected="selected"><label th:text="#{label.target.language.en}"></label></option>
+            <option value="French"><label th:text="#{label.target.language.fr}"></label></option>
+            <option value="German"><label th:text="#{label.target.language.de}"></label></option>
+            <option value="Japanese"><label th:text="#{label.target.language.ja}"></label></option>
+            <option value="Chinease"><label th:text="#{label.target.language.zh}"></label></option>
+        </select>
+        <button type="button" onclick="performTranslation()" th:text="#{label.translate}"></button>
+        <label th:text="#{label.translate}"></label>: <div id="resultArea"></div><br/>
+    </th:block>
+    <div th:replace="messages"></div>
+</form>
+</body>
+</html>
+

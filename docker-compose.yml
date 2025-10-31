@@ -76,6 +76,8 @@ services:
       manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
       #manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
       mail_host: mail
+      ollama_url: http://ollama:11434
+      ollama_model: qwen:0.5b
       TZ: ${TZ}
     #ulimits:
       #nofile:
@@ -96,3 +98,22 @@ services:
     command: python -u -m smtpd -d -n -c DebuggingServer 0.0.0.0:1025
     environment:
       TZ: ${TZ}
+  ollama:
+    image: ollama/ollama:0.12.8
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_MODELS=/models
+    volumes:
+      - ./models:/models
+    entrypoint: ["/bin/bash", "-c"]
+    command: |
+      "
+      ollama serve &
+      sleep 5
+      ollama pull qwen:0.5b || true
+      wait
+      "
+    profiles: ["llm"]
