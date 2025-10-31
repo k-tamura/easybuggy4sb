@@ -22,7 +22,6 @@
 </script>
 <div th:replace="header"></div>
 <form id="translateForm">
-    <th:block th:if="${isSettingsReady}">
         <p th:text="#{description.translate}" />
         <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.translator.placeholder}"></textarea><br/>
         <label th:text="#{label.target.language}"></label>:
@@ -33,9 +32,8 @@
             <option value="Japanese"><label th:text="#{label.target.language.ja}"></label></option>
             <option value="Chinease"><label th:text="#{label.target.language.zh}"></label></option>
         </select>
-        <button type="button" onclick="performTranslation()" th:text="#{label.translate}"></button>
-        <label th:text="#{label.translate}"></label>: <div id="resultArea"></div><br/>
-    </th:block>
+        <button type="button" onclick="performTranslation()" th:text="#{label.translate}" th:disabled="${!isLLMReady}"></button><br/>
+        <label th:text="#{label.translate}"></label>: <span id="resultArea"></span><br/>
     <div th:replace="messages"></div>
 </form>
 </body>
