@@ -5,12 +5,23 @@
 	<div th:replace="header"></div>
 	<form th:if="${resultList == null}" action="xee" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.add.users.by.xml}" />
-		<pre id="code" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
+		<pre id="code1" class="prettyprint lang-xml" th:text="${sample_users_xml}"></pre>
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
 		<input type="submit" th:value="#{label.upload}" /><br /><br />
-        <div th:replace="messages"></div>
-		<pre id="code" class="prettyprint lang-xml" th:text="${xee_xml}"></pre>
+		<div th:if="${msg != null}">
+			<th:block th:text="${msg}"></th:block><br /><br />
+		</div>
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign"></span>
+			<th:block th:text="${errmsg}"></th:block><br />
+			<span style="font-family: monospace; white-space: pre;"><th:block th:text="${detailmsg}"></th:block></span>
+		</div>
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign"></span>
+			<th:block th:utext="#{msg.note.xee}"></th:block><br /><br />
+			<pre id="code2" class="prettyprint lang-xml" th:text="${xee_xml}"></pre>
+		</div>
 	</form>
 	<th:block th:if="${resultList != null}">
 		<table class="table table-striped table-bordered table-hover" style="font-size: small;">
