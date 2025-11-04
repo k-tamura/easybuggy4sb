@@ -8,7 +8,27 @@
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />  
 		<input type="submit" th:value="#{label.upload}" /><br /><br />
-		<div th:replace="messages"></div>
+		<div th:if="${msg != null}">
+			<th:block th:text="${msg}"></th:block><br /><br />
+		</div>
+		<div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+			<span class="glyphicon glyphicon-warning-sign"></span>
+			<th:block th:text="${errmsg}"></th:block><br />
+			<span style="font-family: monospace; white-space: pre;"><th:block th:text="${detailmsg}"></th:block></span>
+		</div>
+		<div class="alert alert-info" role="alert">
+			<span class="glyphicon glyphicon-info-sign"></span>
+			<th:block th:utext="${note}"></th:block><br /><br />
+			<ol><li><th:block th:utext="${step1}"></th:block><br />
+			<pre id="code1" class="prettyprint lang-xml" th:text="${command_jsp}"></pre></li>
+				<li><th:block th:utext="${step2}"></th:block><br /></li>
+				<li><th:block th:utext="${step3}"></th:block><br /></li>
+				<li><th:block th:utext="${step4}"></th:block><br /></li>
+				<li><th:block th:utext="${step5}"></th:block><br />
+					<pre id="code2" class="prettyprint lang-xml" th:text="${select_users_jsp}"></pre></li>
+				<li><th:block th:utext="${step6}"></th:block><br /></li></ol>
+		</div>
+
 	</form>
 	<th:block th:if="${upladFilePath != null}">
 		<img th:src="${upladFilePath}" /><br /><br />

@@ -3,12 +3,20 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,11 +33,20 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     private static final String SAVE_DIR = "uploadFiles";
 
     @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
-    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
-        String exitJspURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/exit.jsp");
-        String[] placeholders = new String[]{ exitJspURL};
-        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", placeholders, locale));
+        String uploadFilesURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/");
+        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", null, locale));
+        mav.addObject("step1", msg.getMessage("msg.note.unrestrictedextupload.step1", new String[]{"command.jsp"}, locale));
+        mav.addObject("step2", msg.getMessage("msg.note.unrestrictedextupload.step2", new String[]{uploadFilesURL + "command.jsp?cmd=tree"}, locale));
+        mav.addObject("step3", msg.getMessage("msg.note.unrestrictedextupload.step3", new String[]{uploadFilesURL + "command.jsp?cmd=cat%20src/main/resources/application.properties"}, locale));
+        mav.addObject("step4", msg.getMessage("msg.note.unrestrictedextupload.step4", new String[]{uploadFilesURL + "command.jsp?cmd=env"}, locale));
+        mav.addObject("step5", msg.getMessage("msg.note.unrestrictedextupload.step5", new String[]{"select_users.jsp"}, locale));
+        mav.addObject("step6", msg.getMessage("msg.note.unrestrictedextupload.step6", new String[]{uploadFilesURL + "select_users.jsp"}, locale));
+        Resource resource = new ClassPathResource("/jsp/command.jsp");
+        mav.addObject("command_jsp", IOUtils.toString(resource.getInputStream()));
+        resource = new ClassPathResource("/jsp/select_users.jsp");
+        mav.addObject("select_users_jsp", IOUtils.toString(resource.getInputStream()));
         if (req.getAttribute("errorMessage") != null) {
             mav.addObject("errmsg", req.getAttribute("errorMessage"));
         }
