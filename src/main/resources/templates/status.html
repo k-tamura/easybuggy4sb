@@ -1,0 +1,52 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.os.name}" />
+			<th th:text="#{label.os.version}" />
+			<th th:text="#{label.os.arch}" />
+		</tr>
+		<tr>
+			<td th:text="${osMXBean.name}" />
+			<td th:text="${osMXBean.version}" />
+			<td th:text="${osMXBean.arch}" />
+		</tr>
+	</table><hr />
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.os.available.processors}" />
+			<th th:text="#{label.os.system.cpu.load}" />
+			<th th:text="#{label.os.system.load.average}" />
+			<th th:text="#{label.os.process.cpu.load}" />
+			<th th:text="#{label.os.process.cpu.time}" />
+		</tr>
+		<tr>
+			<td th:text="${osMXBean.availableProcessors}" />
+			<td th:text="${#numbers.formatDecimal(osMXBean.systemCpuLoad * 100, 0, 2)}" />
+			<td th:text="${#numbers.formatDecimal(osMXBean.systemLoadAverage * 100, 0, 2)}" />
+			<td th:text="${#numbers.formatDecimal(osMXBean.processCpuLoad * 100, 0, 2)}" />
+			<td th:text="${osMXBean.processCpuTime / 1000000000}" />
+		</tr>
+	</table><hr />
+	<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.os.committed.virtual.memory.size}" />
+			<th th:text="#{label.os.total.physical.memory.size}" />
+			<th th:text="#{label.os.free.physical.memory.size}" />
+			<th th:text="#{label.os.total.swap.space.size}" />
+			<th th:text="#{label.os.free.swap.space.size}" />
+		</tr>
+		<tr>
+			<td th:text="${osMXBean.committedVirtualMemorySize / 1000000}" />
+			<td th:text="${osMXBean.totalPhysicalMemorySize / 1000000}" />
+			<td th:text="${osMXBean.freePhysicalMemorySize / 1000000}" />
+			<td th:text="${osMXBean.totalSwapSpaceSize / 1000000}" />
+			<td th:text="${osMXBean.freeSwapSpaceSize / 1000000}" />
+		</tr>
+	</table>
+	<div th:replace="messages"></div>
+</body>
+</html>

@@ -65,6 +65,7 @@
 		<li><p><a href="admins/main?logintype=bruteforce" th:text="#{function.name.brute.force}"></a>: <span th:text="#{function.description.brute.force}"></span></p></li>
 		<li><p><a href="admins/seshj" th:text="#{function.name.session.hijacking}"></a>: <span th:text="#{function.description.session.hijacking}"></span></p></li>
 		<li><p><a th:href="@{'admins/main?logintype=sessionfixation'}" th:text="#{function.name.session.fixation}"></a>: <span th:text="#{function.description.session.fixation}"></span></p></li>
+		<li><p><a href="admins/status?logintype=status" th:text="#{function.name.http.login}"></a>: <span th:text="#{function.description.http.login}"></span></p></li>
 		<li><p><a href="admins/main?logintype=verbosemsg" th:text="#{function.name.verbose.error.message}"></a>: <span th:text="#{function.description.verbose.error.message}"></span></p></li>
 		<li><p><a href="/lfi/index.jsp?template=style_bootstrap.html" th:text="#{function.name.local.file.inclusion}"></a>: <span th:text="#{function.description.local.file.inclusion}"></span></p></li>
 		<li><p><a href="/ssrf/index.jsp?template=basic" th:text="#{function.name.ssrf}"></a>: <span th:text="#{function.description.ssrf}"></span></p></li>
@@ -80,7 +81,6 @@
 	<ul>
 		<li><p><a href="vulnerabileoidcrp?type=10" th:text="#{function.name.vulnerabileoidcrp10}"></a>: <span th:text="#{function.description.vulnerabileoidcrp10}"></span></p></li>
 		<li><p><a href="vulnerabileoidcrp?type=11" th:text="#{function.name.vulnerabileoidcrp11}"></a>: <span th:text="#{function.description.vulnerabileoidcrp11}"></span></p></li>
-		<li><p><a href="vulnerabileoidcrp?type=12" th:text="#{function.name.vulnerabileoidcrp12}"></a>: <span th:text="#{function.description.vulnerabileoidcrp12}"></span></p></li>
 		<li><p><a href="vulnerabileoidcrp?type=13" th:text="#{function.name.vulnerabileoidcrp13}"></a>: <span th:text="#{function.description.vulnerabileoidcrp13}"></span></p></li>
 		<li><p><a href="vulnerabileoidcrp?type=6" th:text="#{function.name.vulnerabileoidcrp6}"></a>: <span th:text="#{function.description.vulnerabileoidcrp6}"></span></p></li>
 		<li><p><a href="vulnerabileoidcrp?type=15" th:text="#{function.name.vulnerabileoidcrp15}"></a>: <span th:text="#{function.description.vulnerabileoidcrp15}"></span></p></li>
