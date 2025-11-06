@@ -17,7 +17,7 @@ ADMIN_PASSWORD="password"
 HEALTH_CHECK_URL="${KEYCLOAK_URL}/realms/${REALM_NAME}/.well-known/openid-configuration"
 
 # Retry count and interval
-MAX_RETRIES=50
+MAX_RETRIES=100
 INTERVAL=5 # seconds
 
 # Keycloak takes at least 15 seconds to start up
