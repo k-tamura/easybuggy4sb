@@ -36,8 +36,8 @@ services:
       DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
-      KEYCLOAK_FRONTEND_URL: http://${HOST:-localhost}:8080/auth
-      #KEYCLOAK_FRONTEND_URL: https://${HOST:-localhost}:8443/auth
+      #KEYCLOAK_FRONTEND_URL: http://${HOST:-localhost}:8080/auth
+      KEYCLOAK_FRONTEND_URL: https://${HOST:-localhost}:8443/auth
       DEBUG_PORT: '*:8787'
       DEBUG: 'true'
       TZ: ${TZ}
@@ -73,8 +73,8 @@ services:
       oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
       oidc_dynamic_client_registration_enabled: 'true'
       attacker_app_url: http://${HOST:-localhost}:9999/attacker-app
-      manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
-      #manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
+      #manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
+      manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
       mail_host: mail
       ollama_url: http://ollama:11434
       ollama_model: qwen:0.5b
