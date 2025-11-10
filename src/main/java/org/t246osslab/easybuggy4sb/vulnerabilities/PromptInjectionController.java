@@ -12,9 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class PromptInjectionController extends AbstractController {
@@ -48,9 +46,10 @@ public class PromptInjectionController extends AbstractController {
 
     @PostMapping("/translate")
     @ResponseBody
-    public Map<String, String> translate(@RequestBody Map<String, String> body) {
+    public Map<String, String> translate(@RequestBody Map<String, String> body, Locale locale) {
         String inputText = body.get("text");
         String targetLanguage = body.get("targetLanguage");
+        Map<String, String> result = new HashMap<>();
         RestTemplate restTemplate = new RestTemplate();
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
@@ -60,8 +59,7 @@ public class PromptInjectionController extends AbstractController {
         reqBody.put("stream", false);
         ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
         String output = (String) response.getBody().get("response");
-        Map<String, String> result = new HashMap<>();
-        result.put("translation", output != null ? output.trim() : "(no response)");
+        result.put("translation", output != null ? output.trim() : msg.getMessage("msg.cannot.translate", null, locale));
         return result;
     }
 }
