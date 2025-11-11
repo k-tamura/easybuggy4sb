@@ -18,12 +18,12 @@ import java.io.InputStreamReader;
 import java.util.Locale;
 
 @Controller
-public class OGNLExpressionInjectionController extends AbstractController {
+public class ELInjectionController extends AbstractController {
 
-    @RequestMapping(value = "/ognleijc")
+    @RequestMapping(value = "/elijc")
     public ModelAndView process(@RequestParam(value = "expression", required = false) String expression,
                                 ModelAndView mav, Locale locale) throws InterruptedException, IOException {
-        setViewAndCommonObjects(mav, locale, "commandinjection");
+        setViewAndCommonObjects(mav, locale, "elinjection");
         Object value = null;
         String errMessage = "";
         OgnlContext ctx = new OgnlContext();

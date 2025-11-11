@@ -3,11 +3,29 @@
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
-	<form action="ognleijc" method="post">
-		<p th:utext="#{msg.enter.math.expression}" /><br />
-		<input type="text" name="expression" size="80" maxlength="300"
-			th:value="${expression}" /> = <span th:text="${value}"></span><br /><br /> 
-		<input type="submit" th:value="#{label.calculate}" /><br /><br />
+	<form action="commandijc" method="post">
+		<p th:utext="#{msg.enter.repository.url}" /><br />
+		<input type="text" name="url" size="80" maxlength="300"
+			th:value="${url}" /><br /><br />
+		<input type="submit" th:value="#{label.analyze}" /><br /><br />
+		<div th:if="${cloc}">
+			<table class="table table-striped table-bordered table-hover" style="font-size: small;">
+				<tr>
+					<th th:text="#{label.oss.language}" />
+					<th th:text="#{label.oss.files}" />
+					<th th:text="#{label.oss.code}" />
+					<th th:text="#{label.oss.comments}" />
+					<th th:text="#{label.oss.blanks}" />
+				</tr>
+				<tr th:each="entry : ${cloc}">
+					<th th:if="${entry.key != 'header'}" th:text="${entry.key == 'SUM'} ? #{label.sum} : ${entry.key}"></th>
+					<td th:if="${entry.key != 'header'}" th:text="${entry.value.nFiles}"></td>
+					<td th:if="${entry.key != 'header'}" th:text="${entry.value.code}"></td>
+					<td th:if="${entry.key != 'header'}" th:text="${entry.value.comment}"></td>
+					<td th:if="${entry.key != 'header'}" th:text="${entry.value.blank}"></td>
+				</tr>
+			</table>
+		</div>
         <div th:replace="messages"></div>
 	</form>
 </body>
