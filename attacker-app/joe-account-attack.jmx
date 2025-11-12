@@ -76,7 +76,7 @@
                 <elementProp name="redirect_uri" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">true</boolProp>
                   <stringProp name="Argument.name">redirect_uri</stringProp>
-                  <stringProp name="Argument.value">http://${host}:${port}/auth/realms/master/account/login-redirect</stringProp>
+                  <stringProp name="Argument.value">https://${host}:${port}/auth/realms/master/account/login-redirect</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
@@ -180,7 +180,7 @@
             <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor - code" enabled="true">
               <stringProp name="RegexExtractor.useHeaders">true</stringProp>
               <stringProp name="RegexExtractor.refname">code</stringProp>
-              <stringProp name="RegexExtractor.regex">Location: http://${host}:${port}/auth/realms/master/account/login-redirect?.+?&amp;code=([0-9a-f\-.]+)</stringProp>
+              <stringProp name="RegexExtractor.regex">Location: https://${host}:${port}/auth/realms/master/account/login-redirect?.+?&amp;code=([0-9a-f\-.]+)</stringProp>
               <stringProp name="RegexExtractor.template">$1$</stringProp>
               <stringProp name="RegexExtractor.default"></stringProp>
               <boolProp name="RegexExtractor.default_empty_value">false</boolProp>
@@ -422,8 +422,8 @@
         <hashTree/>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <stringProp name="HTTPSampler.domain">keycloak</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
-          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.port">8443</stringProp>
+          <stringProp name="HTTPSampler.protocol">https</stringProp>
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>

@@ -63,7 +63,7 @@ def main():
         context = browser.new_context()
         page = context.new_page()
         # Access to Keycloak account console
-        page.goto("http://keycloak:8080/auth/realms/master/account")
+        page.goto("https://keycloak:8443/auth/realms/master/account")
 
         print(f"Starting brute-force attack for user '{username}'...")
 
