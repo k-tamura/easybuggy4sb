@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+/**
+ * Filter to enforce HTTPS communication
+ */
 public class HttpsEnforcementFilter implements Filter {
 
     @Value("${metrics.allowed.hosts}")

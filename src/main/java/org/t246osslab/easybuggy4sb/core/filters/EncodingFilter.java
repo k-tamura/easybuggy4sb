@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 /**
  * Servlet Filter for encoding
  */
-@Component
 public class EncodingFilter extends OrderedCharacterEncodingFilter {
 
     /**

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 /**
  * Servlet Filter for authentication
  */
-@Component
 public class AuthenticationFilter implements Filter {
 
     /**

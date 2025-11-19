@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 /**
  * Servlet Filter for security
  */
-@Component
 public class SecurityFilter implements Filter {
 
     @Autowired
