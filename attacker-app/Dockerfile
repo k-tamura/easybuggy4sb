@@ -9,4 +9,6 @@ COPY server.xml tomcat/conf
 COPY attacker-app/ tomcat/webapps/attacker-app/
 COPY credentials/. .
 COPY jmx/. .
+COPY download-css.sh ./
+RUN chmod +x ./download-css.sh
 ENTRYPOINT ["./tomcat/bin/catalina.sh", "run"]
