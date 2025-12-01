@@ -6,14 +6,25 @@ import java.util.Date;
 public class Forum implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private String id = null;
     private Date time = null;
     private String username = null;
     private String picture = null;
     private String message = null;
+    private String fileName = null;
 
     @Override
     public String toString() {
-        return "time=" + time + ", username=" + username + ", picture=" + picture + ", message=" + message;
+        return "id" + id + ", time=" + time + ", username=" + username + ", picture=" + picture
+                + ", message=" + message+ ", fileName=" + fileName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Date getTime() {
@@ -45,5 +56,13 @@ public class Forum implements Serializable {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

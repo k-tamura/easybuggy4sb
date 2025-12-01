@@ -16,12 +16,20 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.Forum;
@@ -29,6 +37,9 @@ import org.t246osslab.easybuggy4sb.core.model.Forum;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -167,7 +178,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		String nonce = UUID.randomUUID().toString();
 		try {
 			AuthorizationCodeRequestUrl url = new AuthorizationCodeRequestUrl(authzEndpoint, clientId);
-			url.setResponseTypes(Arrays.asList("code"));
+			url.setResponseTypes(Collections.singletonList("code"));
 			url.setScopes(Arrays.asList("openid", "profile"));
 			url.setState(state);
 			url.set("nonce", nonce);
@@ -241,11 +252,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 				log.warn("Invalid signature"); // Error handling should be Implemented
 			}
 			// Verify iss
-			if (!idToken.verifyIssuer(Arrays.asList(issuer))) {
+			if (!idToken.verifyIssuer(Collections.singletonList(issuer))) {
 				log.warn("Invalid issuer"); // Error handling should be Implemented
 			}
 			// Verify aud
-			if (!idToken.verifyAudience(Arrays.asList(clientId))) {
+			if (!idToken.verifyAudience(Collections.singletonList(clientId))) {
 				log.warn("Invalid audience"); // Error handling should be Implemented
 			}
 			// Verify at_hath
@@ -284,7 +295,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		String state = UUID.randomUUID().toString();
 		try {
 			GenericUrl url = new GenericUrl(endSessionEndpoint);
-			url.set("id_token_hint", (String) ses.getAttribute("idToken"));
+			url.set("id_token_hint", ses.getAttribute("idToken"));
 			url.set("post_logout_redirect_uri", req.getRequestURL().toString().replace("/oidclogout", "/callback"));
 			url.set("state", state);
 			res.sendRedirect(url.build());
@@ -295,8 +306,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 		ses.invalidate();
 	}
 
-	@RequestMapping(value = "/addMessage")
-	public ModelAndView forum(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
+	@RequestMapping(value = "/addMessage", headers=("content-type=multipart/*"), method = RequestMethod.POST)
+	public ModelAndView forum(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 		if (ses == null) {
 			return index(mav, req, null, locale);
 		}
@@ -319,11 +330,27 @@ public class VulnerableOIDCRPController extends AbstractController {
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
-			insertMessage(username, picture, message, mav, locale, isAdmin);
+			insertMessage(username, picture, message, mav, locale, isAdmin, file);
 		}
 		searchMessages(mav, locale, isAdmin);
 		return mav;
 	}
+
+	@GetMapping("/download")
+	public ResponseEntity<Resource> downloadFile(ModelAndView mav, Locale locale, @RequestParam("id") int id) {
+		File file = searchFile(mav, locale, id);
+		Resource resource = new FileSystemResource(file);
+
+		if (!file.exists()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+		return ResponseEntity.ok()
+				.header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
+				.header("Content-Type", "application/pdf")
+				.body(resource);
+	}
+
 
 	private Map<?, ?> getUserInfo(HttpSession ses) {
 
@@ -398,8 +425,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 				log.info("Register this app as OIDC client.");
 				Map<String, Object> params = new HashMap<>();
 				params.put("client_name", "EasyBuggy Boot");
-				params.put("redirect_uris", Arrays.asList("*"));
-				params.put("post_logout_redirect_uris", Arrays.asList("*"));
+				params.put("redirect_uris", Collections.singletonList("*"));
+				params.put("post_logout_redirect_uris", Collections.singletonList("*"));
 				HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
 				HttpRequest registerRequest = requestFactory.buildPostRequest(new GenericUrl(registration_endpoint), content);
 				registerRequest.setHeaders(headers);
@@ -477,14 +504,16 @@ public class VulnerableOIDCRPController extends AbstractController {
 	private List<Forum> searchMessages(ModelAndView mav, Locale locale, boolean isAdmin) {
 		List<Forum> messages = null;
 		try {
-			String sql = "select * from forum " + (isAdmin ? "" : "where isadmin = 'false' ") + "order by time desc";
+			String sql = "select * from forum " + (isAdmin ? "" : "where isadmin = 'false' ") + "order by id desc";
 			messages = jdbcTemplate.query(sql, new RowMapper<Forum>() {
 				public Forum mapRow(ResultSet rs, int rowNum) throws SQLException {
 					Forum forum = new Forum();
+					forum.setId(rs.getString("id"));
 					forum.setTime(rs.getTime("time"));
 					forum.setUsername(rs.getString("username"));
 					forum.setPicture(rs.getString("picture"));
 					forum.setMessage(rs.getString("message"));
+					forum.setFileName(rs.getString("file_name"));
 					return forum;
 				}
 			});
@@ -501,10 +530,48 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return messages;
 	}
 
-	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale, boolean isAdmin) {
+	private File searchFile(ModelAndView mav, Locale locale, int id) {
+		File file = null;
 		try {
-			int insertCount = jdbcTemplate.update("insert into forum values (CURRENT_TIMESTAMP, ?, ?, ?, ?)",
-					username, picture, message, String.valueOf(isAdmin));
+			String sql = "select file_name, file_data from forum where id = ?";
+			file = jdbcTemplate.query(sql, new Object[]{id}, rs -> {
+				if (rs.next()) {
+					String fileName = rs.getString("file_name");
+					byte[] bytes = rs.getBytes("file_data");
+					if (bytes != null) {
+						String tmpDir = System.getProperty("java.io.tmpdir");
+						File tempFile = new File(tmpDir, fileName);
+                        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+							fos.write(bytes);
+						} catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return tempFile;
+					}
+				}
+				return null;
+			});
+		} catch (DataAccessException e) {
+			mav.addObject("errmsg",
+					msg.getMessage("msg.db.access.error.occur", new String[] { e.getMessage() }, null, locale));
+			log.error("DataAccessException occurs: ", e);
+		} catch (Exception e) {
+			mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
+			mav.addObject("detailmsg", e.getMessage());
+			log.error("Exception occurs: ", e);
+		}
+		return file;
+	}
+
+	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale,
+							   boolean isAdmin, MultipartFile file) {
+		try {
+			int insertCount = jdbcTemplate.update("insert into forum (time, username, picture, " +
+							"message, isadmin, file_name, file_data) values (CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)",
+					username, picture, message, String.valueOf(isAdmin), file != null ? file.getOriginalFilename() : null,
+					file != null ? file.getBytes() : null);
 			if (insertCount != 1) {
 				mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
 			}

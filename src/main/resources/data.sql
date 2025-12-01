@@ -13,6 +13,6 @@ insert into users (id, name, password, secret, ispublic, mail) values ('user07',
 insert into users (id, name, password, secret, ispublic, mail) values ('user08','Jacqueline','password','1938472650','true','jacqueline@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user09','Michelle','pas2w0rd','3849201763','true','michelle@gmail.com');
 
-delete from forum;
+truncate table forum;
+insert into forum (time, username, picture, message, isadmin, file_name, file_data) values (CURRENT_TIMESTAMP,'admin','images/avatar_anon.png','この掲示板では、管理者（adminとmanager）の書き込みは管理者にしか表示されません。パスワードは添付ファイルに記載しています。<br/><br/>On this board, posts by administrators (admin and manager) are only visible to administrators. The passwords are in the attached file.', 'true', 'credentials.txt', 0x757365726E616D652C70617373776F72640D0A61646D696E2C70617373776F72640D0A6D616E616765722C6D616E61676572);
 insert into forum (time, username, picture, message, isadmin) values (CURRENT_TIMESTAMP,'test','images/avatar_man.png','Feel free to write any questions you may have.', 'false');
-insert into forum (time, username, picture, message, isadmin) values (CURRENT_TIMESTAMP,'admin','images/avatar_anon.png','この掲示板では、管理者（adminとmanager）の書き込みは管理者にしか表示されません。<br/><br/>On this board, posts by administrators (admin and manager) are only visible to administrators.', 'true');
