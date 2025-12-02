@@ -44,7 +44,7 @@ public class ThreadStarvationController extends AbstractController {
 			}
 
 			List<String> listA = new ArrayList<>();
-			listA.add(new Date().toString() + "," + req.getRemoteAddr() + "," + req.getRequestedSessionId());
+			listA.add(new Date() + "," + req.getRemoteAddr() + "," + req.getRequestedSessionId());
 
 			Files.write(path, listA, StandardOpenOption.APPEND);
 			List<String> lines = Files.readAllLines(path);

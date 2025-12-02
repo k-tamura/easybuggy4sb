@@ -31,7 +31,7 @@ public class FileDescriptorLeakController extends AbstractController {
                     "history.csv");
             FileOutputStream fos = new FileOutputStream(file, true);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
-            osw.write(new Date().toString() + ",");
+            osw.write(new Date() + ",");
             osw.write(req.getRemoteAddr() + ",");
             osw.write(req.getRequestedSessionId());
             osw.write(System.getProperty("line.separator"));

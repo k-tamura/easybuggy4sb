@@ -21,7 +21,7 @@ public class BufferOverflowExceptionController {
 	@RequestMapping(value = "/boe")
 	public void process() {
 		File f = new File("test.txt");
-		try (RandomAccessFile raf = new RandomAccessFile(f, "rw");) {
+		try (RandomAccessFile raf = new RandomAccessFile(f, "rw")) {
 			FileChannel ch = raf.getChannel();
 			MappedByteBuffer buf = ch.map(MapMode.READ_WRITE, 0, f.length());
 			final byte[] src = new byte[10];

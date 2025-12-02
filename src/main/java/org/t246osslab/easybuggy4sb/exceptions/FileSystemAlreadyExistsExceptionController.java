@@ -3,6 +3,7 @@ package org.t246osslab.easybuggy4sb.exceptions;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -27,7 +28,7 @@ public class FileSystemAlreadyExistsExceptionController {
         env.put("create", "true");
         env.put("encoding", "UTF-8");
         try (FileSystem zipfs = FileSystems.newFileSystem(zipfile, env)) {
-            Files.write(zipfs.getPath("fsaee.txt"), "test".getBytes("UTF-8"), StandardOpenOption.CREATE);
+            Files.write(zipfs.getPath("fsaee.txt"), "test".getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE);
             FileSystems.newFileSystem(zipfile, env);
             FileSystems.newFileSystem(zipfile, env);
         } catch (IOException e1) {
