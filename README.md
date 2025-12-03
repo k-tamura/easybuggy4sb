@@ -43,9 +43,9 @@ Access to
    
 See [the wiki page](https://github.com/k-tamura/easybuggy4sb/wiki).
 
-:clock4: Demo
+:clock4: Environment
 -
 
-This demo shows: Start up -> Infinite Loop -> LDAP Injection -> UnsatisfiedLinkError -> BufferOverflowException -> Deadlock -> Memory Leak -> JVM Crash (Shut down)
+When you start with Docker Compose, the following containers will be started:
 
-![demo](https://github.com/k-tamura/test/blob/master/demo_ebsb.gif)
+<img width="1140" height="948" alt="Env_en" src="https://github.com/user-attachments/assets/a1aec1c4-fd4d-448b-aee0-bf5d057556fc" />
