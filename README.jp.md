@@ -42,9 +42,9 @@ EasyBuggy Boot単独で起動する場合（`docker compose up`より攻撃で�
    
 [wikiページ](https://github.com/k-tamura/easybuggy4sb/wiki)を参照下さい。
 
-:clock4: デモ
+:clock4: Dockerコンテナーの構成
 -
 
-EasyBuggyを起動して、無限ループ、LDAPインジェクション、UnsatisfiedLinkError、BufferOverflowException、デッドロック、メモリリーク、JVMクラッシュの順で実行しています。
+Docker Composeで起動すると、以下のコンテナーが起動します。
 
-![demo](https://github.com/k-tamura/test/blob/master/demo_ebsb_ja.gif)
+<img width="1139" height="945" alt="スクリーンショット 2025-12-03 164604" src="https://github.com/user-attachments/assets/a7e8968e-7019-47bf-a43e-6f4335e90fa4" />
