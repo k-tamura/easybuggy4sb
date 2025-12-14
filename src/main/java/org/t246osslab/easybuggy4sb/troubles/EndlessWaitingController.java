@@ -92,8 +92,6 @@ public class EndlessWaitingController extends AbstractController {
                 }
                 buffwriter.write(String.valueOf(i % 10));
             }
-            buffwriter.close();
-            fileWriter.close();
             if (!osName.toLowerCase().startsWith("windows")) {
                 Runtime runtime = Runtime.getRuntime();
                 runtime.exec("chmod 777 " + batFile.getAbsolutePath());

@@ -6,8 +6,8 @@ import org.springframework.ldap.NamingException;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
@@ -28,7 +28,7 @@ public class ClickJackingController extends AbstractController {
 	@Autowired
 	private LdapTemplate ldapTemplate;
 
-	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.GET)
+	@GetMapping(value = "/admins/clickjacking")
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, HttpSession session, Locale locale) throws IOException {
 		String userid = (String) session.getAttribute("userid");
 		if (userid == null) {
@@ -41,7 +41,7 @@ public class ClickJackingController extends AbstractController {
 		return mav;
 	}
 
-	@RequestMapping(value = "/admins/clickjacking", method = RequestMethod.POST)
+	@PostMapping(value = "/admins/clickjacking")
 	protected ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
 			throws IOException {
         setViewAndCommonObjects(mav, locale, "clickjacking");

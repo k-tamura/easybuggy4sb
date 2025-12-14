@@ -20,8 +20,8 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.core.model.User;
 
@@ -40,7 +40,7 @@ public class DefaultLoginController extends AbstractController {
     /* User's login history using in-memory account locking */
     private static ConcurrentHashMap<String, User> userLoginHistory = new ConcurrentHashMap<>();
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping(value = "/login")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         setViewAndCommonObjects(mav, locale, "login");
 
@@ -61,7 +61,7 @@ public class DefaultLoginController extends AbstractController {
         return mav;
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
             throws IOException {
 

@@ -12,8 +12,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.LdapQueryBuilder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
 import org.t246osslab.easybuggy4sb.core.model.User;
@@ -22,7 +22,7 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 public class LDAPInjectionController extends DefaultLoginController {
 	
     @Override
-    @RequestMapping(value = "/ldapijc/login", method = RequestMethod.GET)
+    @GetMapping(value = "/ldapijc/login")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         req.setAttribute("note", msg.getMessage("msg.note.ldap.injection", null, locale));
         super.doGet(mav, req, res, locale);
@@ -30,7 +30,7 @@ public class LDAPInjectionController extends DefaultLoginController {
     }
 
     @Override
-    @RequestMapping(value = "/ldapijc/login", method = RequestMethod.POST)
+    @PostMapping(value = "/ldapijc/login")
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
         return super.doPost(mav, req, res, locale);
     }

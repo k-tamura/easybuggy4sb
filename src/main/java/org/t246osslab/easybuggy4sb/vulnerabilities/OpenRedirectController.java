@@ -8,8 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
 
@@ -17,7 +18,7 @@ import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
 public class OpenRedirectController extends DefaultLoginController {
 
     @Override
-    @RequestMapping(value = "/openredirect/login", method = RequestMethod.GET)
+    @GetMapping(value = "/openredirect/login")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
         req.setAttribute("note", msg.getMessage("msg.note.open.redirect", null, locale));
         super.doGet(mav, req, res, locale);
@@ -25,7 +26,7 @@ public class OpenRedirectController extends DefaultLoginController {
     }
 
     @Override
-    @RequestMapping(value = "/openredirect/login", method = RequestMethod.POST)
+    @PostMapping(value = "/openredirect/login")
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
 
         String userid = req.getParameter("userid");

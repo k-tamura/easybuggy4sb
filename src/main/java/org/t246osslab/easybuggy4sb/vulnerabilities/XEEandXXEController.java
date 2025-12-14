@@ -1,16 +1,5 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -21,8 +10,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,8 +19,16 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.model.User;
 import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.XMLConstants;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Locale;
 
 @Controller
 public class XEEandXXEController extends AbstractController {
@@ -45,7 +42,7 @@ public class XEEandXXEController extends AbstractController {
 	@Value("${attacker.app.url}")
 	protected String attackerAppUrl;
 
-	@RequestMapping(value = { "/xee", "/xxe" }, method = RequestMethod.GET)
+	@GetMapping(value = { "/xee", "/xxe" })
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
 
 		Resource resource = new ClassPathResource("/xml/sample_users.xml");
@@ -69,7 +66,7 @@ public class XEEandXXEController extends AbstractController {
 		return mav;
 	}
 
-	@RequestMapping(value = { "/xee", "/xxe" }, headers=("content-type=multipart/*"), method = RequestMethod.POST)
+	@PostMapping(value = { "/xee", "/xxe" }, headers=("content-type=multipart/*"))
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
 			Locale locale) throws IOException {
 
@@ -111,14 +108,8 @@ public class XEEandXXEController extends AbstractController {
 			parser = spf.newSAXParser();
 			parser.parse(new File(savePath + File.separator + fileName).getAbsolutePath(), customHandler);
 			isRegistered = true;
-		} catch (ParserConfigurationException e) {
-			log.error("ParserConfigurationException occurs: ", e);
-			mav.addObject("detailmsg", e.getMessage());
-		} catch (SAXException e) {
-			log.error("SAXException occurs: ", e);
-			mav.addObject("detailmsg", e.getMessage());
 		} catch (Exception e) {
-			log.error("Exception occurs: ", e);
+			log.error(e.getClass().getSimpleName() + " occurs: ", e);
 			mav.addObject("detailmsg", e.getMessage());
 		}
 

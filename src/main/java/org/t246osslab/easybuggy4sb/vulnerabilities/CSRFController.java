@@ -14,8 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
@@ -24,14 +24,14 @@ public class CSRFController extends AbstractController {
 
 	@Autowired
 	private LdapTemplate ldapTemplate;
-	
-    @RequestMapping(value = "/admins/csrf", method = RequestMethod.GET)
+
+    @GetMapping(value = "/admins/csrf")
     public ModelAndView doGet(ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "csrf");
         return mav;
     }
 
-    @RequestMapping(value = "/admins/csrf", method = RequestMethod.POST)
+    @PostMapping(value = "/admins/csrf")
     protected ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
             throws IOException {
         setViewAndCommonObjects(mav, locale, "csrf");

@@ -14,8 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,7 +28,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     // Name of the directory where uploaded files is saved
     private static final String SAVE_DIR = "uploadFiles";
 
-    @RequestMapping(value = "/ureupload", method = RequestMethod.GET)
+    @GetMapping(value = "/ureupload")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
         String uploadFilesURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/");
@@ -49,7 +49,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         return mav;
     }
 
-    @RequestMapping(value = "/ureupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
+    @PostMapping(value = "/ureupload", headers=("content-type=multipart/*"))
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         
         if (req.getAttribute("errorMessage") != null) {

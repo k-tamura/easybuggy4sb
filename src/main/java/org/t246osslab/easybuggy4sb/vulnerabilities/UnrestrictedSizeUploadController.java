@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
@@ -26,13 +24,13 @@ public class UnrestrictedSizeUploadController extends AbstractController {
     // Name of the directory where uploaded files is saved
     private static final String SAVE_DIR = "uploadFiles";
 
-    @RequestMapping(value = "/ursupload", method = RequestMethod.GET)
+    @GetMapping(value = "/ursupload")
     public ModelAndView doGet(ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "unrestrictedsizeupload");
         return mav;
     }
 
-    @RequestMapping(value = "/ursupload", headers=("content-type=multipart/*"), method = RequestMethod.POST)
+    @PostMapping(value = "/ursupload", headers=("content-type=multipart/*"))
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req,
                                Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedsizeupload");

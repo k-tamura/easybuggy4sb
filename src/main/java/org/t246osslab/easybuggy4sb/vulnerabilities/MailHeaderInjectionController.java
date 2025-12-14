@@ -21,8 +21,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
@@ -41,13 +41,13 @@ public class MailHeaderInjectionController extends AbstractController {
 	@Autowired
 	private JavaMailSender javaMailSender;
 
-	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.GET)
+	@GetMapping(value = "/mailheaderijct")
 	public ModelAndView doGet(ModelAndView mav, Locale locale) {
 	    setViewAndCommonObjects(mav, locale, "mailheaderinjection");
 		return mav;
 	}
 
-	@RequestMapping(value = "/mailheaderijct", method = RequestMethod.POST)
+	@PostMapping(value = "/mailheaderijct")
 	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, Locale locale)
 			throws IOException, ServletException {
         setViewAndCommonObjects(mav, locale, "mailheaderinjection");

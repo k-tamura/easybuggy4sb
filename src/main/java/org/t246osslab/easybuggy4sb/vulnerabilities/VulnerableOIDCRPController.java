@@ -25,10 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
@@ -67,7 +64,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	protected String endSessionEndpoint;
 
-	protected String registration_endpoint;
+	protected String registrationEndpoint;
 
 	protected String jwksUri;
 
@@ -102,7 +99,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				tokenEndpoint = (String) opConfig.get("token_endpoint");
 				userinfoEndpoint = (String) opConfig.get("userinfo_endpoint");
 				endSessionEndpoint = (String) opConfig.get("end_session_endpoint");
-				registration_endpoint = (String) opConfig.get("registration_endpoint");
+				registrationEndpoint = (String) opConfig.get("registration_endpoint");
 				issuer = (String) opConfig.get("issuer");
 				jwksUri = (String) opConfig.get("jwks_uri");
 				if (clientRegistrationEnabled) {
@@ -277,8 +274,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 			ses.setAttribute("refreshToken", idTokenRes.getRefreshToken());
 			userInfo = getUserInfo(ses);
 			mav.addObject("userInfo", userInfo);
-			String username = (String) userInfo.get("name");
-			if (username == null) username = (String) userInfo.get("preferred_username");
+			String username = null;
+			if (userInfo != null) {
+				username = (String) userInfo.get("name");
+				if (username == null) username = (String) userInfo.get("preferred_username");
+			}
 			ses.setAttribute("username", username);
 			return mav;
 		} catch (TokenResponseException e) {
@@ -306,7 +306,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		ses.invalidate();
 	}
 
-	@RequestMapping(value = "/addMessage", headers=("content-type=multipart/*"), method = RequestMethod.POST)
+	@PostMapping(value = "/addMessage", headers=("content-type=multipart/*"))
 	public ModelAndView forum(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 		if (ses == null) {
 			return index(mav, req, null, locale);
@@ -339,16 +339,13 @@ public class VulnerableOIDCRPController extends AbstractController {
 	@GetMapping("/download")
 	public ResponseEntity<Resource> downloadFile(ModelAndView mav, Locale locale, @RequestParam("id") int id) {
 		File file = searchFile(mav, locale, id);
-		Resource resource = new FileSystemResource(file);
-
-		if (!file.exists()) {
+		if (file == null || !file.exists()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-
 		return ResponseEntity.ok()
 				.header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
 				.header("Content-Type", "application/pdf")
-				.body(resource);
+				.body(new FileSystemResource(file));
 	}
 
 
@@ -406,7 +403,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				clientId = (String) clientCredential.get("client_id");
 				clientSecret = (String) clientCredential.get("client_secret");
 
-				String readEndpoint = registration_endpoint.replace("/realms/", "/admin/realms/");
+				String readEndpoint = registrationEndpoint.replace("/realms/", "/admin/realms/");
 				readEndpoint = readEndpoint.replace("/clients-registrations/openid-connect", "/clients/" + clientId);
 				HttpRequest searchRequest = requestFactory.buildGetRequest(new GenericUrl(readEndpoint));
 				searchRequest.setHeaders(headers);
@@ -428,7 +425,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				params.put("redirect_uris", Collections.singletonList("*"));
 				params.put("post_logout_redirect_uris", Collections.singletonList("*"));
 				HttpContent content = new JsonHttpContent(new JacksonFactory(), params);
-				HttpRequest registerRequest = requestFactory.buildPostRequest(new GenericUrl(registration_endpoint), content);
+				HttpRequest registerRequest = requestFactory.buildPostRequest(new GenericUrl(registrationEndpoint), content);
 				registerRequest.setHeaders(headers);
 				HttpResponse response = registerRequest.execute();
 				clientInfo = new Gson().fromJson(response.parseAsString(), Map.class);
@@ -601,10 +598,10 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return clientCredential;
 	}
 
-	private void insertClientCredential(String client_id, String client_secret) {
+	private void insertClientCredential(String clientId, String clientSecret) {
 		try {
 			jdbcTemplate.update("delete from client_credential");
-			jdbcTemplate.update("insert into client_credential values (?, ?)", client_id, client_secret);
+			jdbcTemplate.update("insert into client_credential values (?, ?)", clientId, clientSecret);
 		} catch (DataAccessException e) {
 			log.error("DataAccessException occurs: ", e);
 		} catch (Exception e) {

@@ -2,8 +2,9 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import com.sun.management.OperatingSystemMXBean;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.DefaultLoginController;
 
@@ -17,7 +18,7 @@ import java.util.Locale;
 public class HTTPLoginController extends DefaultLoginController {
 
 	@Override
-	@RequestMapping(value = "/status/login", method = RequestMethod.GET)
+	@GetMapping(value = "/status/login")
 	public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
 		req.setAttribute("note", msg.getMessage("msg.note.http.login", null, locale));
 		super.doGet(mav, req, res, locale);
@@ -25,7 +26,7 @@ public class HTTPLoginController extends DefaultLoginController {
 	}
 
 	@Override
-	@RequestMapping(value = "/status/login", method = RequestMethod.POST)
+	@PostMapping(value = "/status/login")
 	public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
 		return super.doPost(mav, req, res, locale);
 	}
