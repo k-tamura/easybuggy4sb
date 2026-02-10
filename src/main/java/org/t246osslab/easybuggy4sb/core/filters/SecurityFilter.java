@@ -56,10 +56,8 @@ public class SecurityFilter implements Filter {
         response.addHeader("X-Content-Type-Options", "nosniff");
 
         /* Prevent XSS */
-        if (!target.startsWith("/xss") && !target.startsWith("/admins/seshj")) {
-            response.addHeader("X-XSS-Protection", "1; mode=block");
-        }
-        
+        response.addHeader("X-XSS-Protection", "1; mode=block");
+
         /* Prevent to upload large files if target start w/ /ureupload and /xee and /xxe */
         if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
                 && request.getMethod().equalsIgnoreCase("POST")) {
