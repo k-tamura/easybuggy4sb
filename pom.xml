@@ -15,7 +15,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.6.RELEASE</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<properties>
@@ -138,7 +138,7 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.0</version>
+			<version>3.18.0</version>
 		</dependency>
 
 		<dependency>
@@ -150,7 +150,7 @@
 	  	<dependency>
 	  		<groupId>com.google.api-client</groupId>
 	  		<artifactId>google-api-client-gson</artifactId>
-	  		<version>1.30.3</version>
+	  		<version>1.32.1</version>
 	  	</dependency>
 	
 		<dependency>
@@ -166,7 +166,7 @@
 		<dependency>
 			<groupId>org.owasp.esapi</groupId>
 			<artifactId>esapi</artifactId>
-			<version>2.1.0.1</version>
+			<version>2.7.0.0</version>
 		</dependency>
 
 		<dependency>
