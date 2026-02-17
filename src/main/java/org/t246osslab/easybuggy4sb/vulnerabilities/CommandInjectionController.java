@@ -15,39 +15,43 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.Map;
 
 @Controller
 public class CommandInjectionController extends AbstractController {
 
+    public static final String OSS_SRC = "oss-src";
     private final ObjectMapper mapper = new ObjectMapper();
 
     @RequestMapping(value = "/commandijc")
     public ModelAndView process(@RequestParam(value = "url", required = false) String url,
                                 ModelAndView mav, Locale locale) throws InterruptedException, IOException {
         setViewAndCommonObjects(mav, locale, "commandinjection");
-        OgnlContext ctx = new OgnlContext();
-        ctx.setMemberAccess(new DefaultMemberAccess(false));
-        String repoDirName = getRepoDirName(url);
+
         if (!StringUtils.isBlank(url)) {
             try {
+                OgnlContext ctx = new OgnlContext();
+                ctx.setMemberAccess(new DefaultMemberAccess(false));
+                Path dir = Paths.get(OSS_SRC);
+                Files.createDirectories(dir);
+                String repoDirName = getRepoDirName(url);
+                new File(OSS_SRC, repoDirName).delete();
                 String osName = System.getProperty("os.name").toLowerCase();
                 if (osName.startsWith("windows")) {
-                    if (!new File("oss-src/" + repoDirName).exists()) {
-                        executeCommand("cmd", "/c", "git clone " + url + " oss-src/" + repoDirName);
-                    }
+                    executeCommand(OSS_SRC, "cmd", "/c", "git clone " + url);
                     if (!new File("cloc-2.06.exe").exists()) {
-                        executeCommand("cmd", "/c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.exe");
+                        executeCommand(null, "cmd", "/c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.exe");
                     }
                     Map<String, Object> clocResult = executeCloc("cmd", "/c", "cloc-2.06.exe --json oss-src/" + repoDirName);
                     mav.addObject("cloc", clocResult);
                 } else {
-                    if (!new File("oss-src/" + repoDirName).exists()) {
-                        executeCommand("bash", "-c", "git clone " + url + " oss-src/" + repoDirName);
-                    }
+                    executeCommand(OSS_SRC, "bash", "-c", "git clone " + url);
                     if (!new File("cloc-2.06.pl").exists()) {
-                        executeCommand("bash", "-c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.pl");
+                        executeCommand(null, "bash", "-c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.pl");
                     }
                     Map<String, Object> clocResult = executeCloc("bash", "-c", "perl cloc-2.06.pl --json oss-src/" + repoDirName);
                     mav.addObject("cloc", clocResult);
@@ -64,9 +68,10 @@ public class CommandInjectionController extends AbstractController {
         return mav;
     }
 
-    private void executeCommand(String... command) throws Exception {
+    private void executeCommand(String directory, String... command) throws Exception {
         ProcessBuilder pb = new ProcessBuilder(command);
         pb.redirectErrorStream(true);
+        if (directory != null) pb.directory(new File(directory));
         Process process = pb.start();
         process.waitFor();
     }
@@ -93,9 +98,11 @@ public class CommandInjectionController extends AbstractController {
     }
 
     public String getRepoDirName(String url) {
-        if (url == null || url.isEmpty()) return "";
-        String[] parts = url.split("/");
-        String last = parts[parts.length - 1];
-        return last.endsWith(".git") ? last.substring(0, last.length() - 4) : last;
+        if (url == null || url.isEmpty()) return null;
+        int pos = url.lastIndexOf(".git");
+        if (pos == -1) return null;
+        String[] parts = url.substring(0, pos).split("/");
+        if (parts.length < 3) return null;
+        return parts[parts.length - 1];
     }
 }
