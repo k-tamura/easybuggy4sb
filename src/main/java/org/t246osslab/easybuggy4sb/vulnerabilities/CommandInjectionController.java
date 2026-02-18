@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ognl.DefaultMemberAccess;
 import ognl.OgnlContext;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,7 @@ public class CommandInjectionController extends AbstractController {
                 Path dir = Paths.get(OSS_SRC);
                 Files.createDirectories(dir);
                 String repoDirName = getRepoDirName(url);
-                new File(OSS_SRC, repoDirName).delete();
+                FileUtils.deleteDirectory(new File(OSS_SRC + "/" + repoDirName));
                 String osName = System.getProperty("os.name").toLowerCase();
                 if (osName.startsWith("windows")) {
                     executeCommand(OSS_SRC, "cmd", "/c", "git clone " + url);
