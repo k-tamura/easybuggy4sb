@@ -75,7 +75,7 @@
       OK!
     </div>
     <iframe id="hijacked_frame"
-      src="http://<%=request.getServerName()%>/admins/clickjacking"
+      src="https://<%=request.getServerName()%>/admins/clickjacking"
       scrolling="no">
     </iframe>
     <script>

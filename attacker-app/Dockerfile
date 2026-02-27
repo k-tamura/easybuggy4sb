@@ -11,4 +11,21 @@ COPY credentials/. .
 COPY jmx/. .
 COPY download-css.sh ./
 RUN chmod +x ./download-css.sh
+
+# 1. 自己署名証明書の生成
+RUN keytool -genkey -alias tomcat -keyalg RSA -keystore ./tomcat/conf/tomcat.keystore \
+    -dname "CN=attacker.com, OU=Dev, O=Test, C=JP" \
+    -keypass password -storepass password -noprompt
+
+# 2. server.xml をHTTPS有効版に置換 (あるいは sed で書き換え)
+# ここでは例として、あらかじめ用意した設定ファイルをコピーするか、sedで編集します
+RUN sed -i '/<Service name="Catalina">/a \
+    <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol" \
+               maxThreads="150" SSLEnabled="true"> \
+        <SSLHostConfig> \
+            <Certificate certificateKeystoreFile="conf/tomcat.keystore" \
+                         certificateKeystorePassword="password" type="RSA" /> \
+        </SSLHostConfig> \
+    </Connector>' ./tomcat/conf/server.xml
+
 ENTRYPOINT ["./tomcat/bin/catalina.sh", "run"]

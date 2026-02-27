@@ -88,6 +88,7 @@ services:
     container_name: attacker-app
     ports:
       - 9999:8080
+      - 9998:8443
     environment:
       TZ: ${TZ}
   mail:
