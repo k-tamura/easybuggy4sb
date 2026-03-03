@@ -34,33 +34,33 @@ public class TomcatConfig {
     }
 
     @Bean
-    public FilterRegistrationBean encodingFilterRegistration() {
+    public FilterRegistrationBean encodingFilterRegistration(EncodingFilter encodingFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new EncodingFilter());
+        registration.setFilter(encodingFilter);
         registration.setOrder(1);
         return registration;
     }
 
     @Bean
-    public FilterRegistrationBean authenticationFilterRegistration() {
+    public FilterRegistrationBean authenticationFilterRegistration(AuthenticationFilter authenticationFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new AuthenticationFilter());
+        registration.setFilter(authenticationFilter);
         registration.setOrder(2);
         return registration;
     }
 
     @Bean
-    public FilterRegistrationBean httpsEnforcementFilterRegistration() {
+    public FilterRegistrationBean httpsEnforcementFilterRegistration(HttpsEnforcementFilter httpsEnforcementFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new HttpsEnforcementFilter());
+        registration.setFilter(httpsEnforcementFilter);
         registration.setOrder(3);
         return registration;
     }
 
     @Bean
-    public FilterRegistrationBean securityFilterRegistration() {
+    public FilterRegistrationBean securityFilterRegistration(SecurityFilter securityFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new SecurityFilter());
+        registration.setFilter(securityFilter);
         registration.setOrder(4);
         return registration;
     }

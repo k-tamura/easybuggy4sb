@@ -1,5 +1,7 @@
 package org.t246osslab.easybuggy4sb.core.filters;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet Filter for authentication
  */
+@Component
 public class AuthenticationFilter implements Filter {
 
     /**

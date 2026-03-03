@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.filter.OrderedCharacterEncodingFilter;
+import org.springframework.stereotype.Component;
 
 /**
  * Servlet Filter for encoding
  */
+@Component
 public class EncodingFilter extends OrderedCharacterEncodingFilter {
 
     /**

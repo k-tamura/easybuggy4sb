@@ -1,6 +1,7 @@
 package org.t246osslab.easybuggy4sb.core.filters;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import java.io.IOException;
 /**
  * Filter to enforce HTTPS communication
  */
+@Component
 public class HttpsEnforcementFilter implements Filter {
 
     @Value("${metrics.allowed.hosts}")
