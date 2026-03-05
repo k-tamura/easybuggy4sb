@@ -19,9 +19,10 @@
 
 FROM maven:3.8-jdk-8
 RUN apt-get update && apt-get install curl vim -y
+WORKDIR /opt/easybuggy4sb/
+COPY pom.xml /opt/easybuggy4sb/pom.xml
+RUN mvn dependency:go-offline -B
 COPY src /opt/easybuggy4sb/src
 COPY catalina.policy /opt/easybuggy4sb/catalina.policy
 COPY init.sql /opt/easybuggy4sb/init.sql
-COPY pom.xml /opt/easybuggy4sb/pom.xml
-WORKDIR /opt/easybuggy4sb/
 CMD ["mvn", "clean", "spring-boot:run"]
