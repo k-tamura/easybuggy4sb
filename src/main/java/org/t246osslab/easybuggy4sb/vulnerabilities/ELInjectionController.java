@@ -63,8 +63,8 @@ public class ELInjectionController extends AbstractController {
                 mav.addObject("detailmsg", errMessage);
             }
         }
-        if (value != null && NumberUtils.isNumber(value.toString())) {
-            mav.addObject("value", value);
+        if (value != null) {
+            mav.addObject("value", value.toString());
         }
         return mav;
     }
