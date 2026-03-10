@@ -157,6 +157,7 @@ public class XEEandXXEController extends AbstractController {
 					user.setPhone(attributes.getValue("phone"));
 					user.setMail(attributes.getValue("mail"));
 					resultList.add(user);
+					isRegistered = true;
 				} else {
 					String uid = attributes.getValue("uid");
 					if (uid == null) {
@@ -170,7 +171,6 @@ public class XEEandXXEController extends AbstractController {
 						resultList.add(new String[]{attributes.getValue("uid"), executeResult});
 					}
 				}
-				isRegistered = true;
 			}
 		}
 
