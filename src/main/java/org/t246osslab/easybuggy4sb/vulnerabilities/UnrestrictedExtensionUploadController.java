@@ -85,10 +85,11 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         if (isConverted) {
             mav.addObject("msg", msg.getMessage("msg.convert.grayscale.complete", null, locale));
             mav.addObject("upladFilePath", SAVE_DIR + "/" + fileName);
+            return mav;
         } else {
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));
+            return doGet(mav, req, locale);
         }
-        return mav;
     }
 
     // Convert color image into gray scale image.

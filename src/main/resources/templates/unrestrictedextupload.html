@@ -6,7 +6,7 @@
 	<form th:if="${upladFilePath == null}" action="ureupload" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.convert.grayscale}" />
 		<input type="file" name="file" size="60" /><br />
-		<p th:text="#{msg.select.upload.file}" />  
+		<p th:text="#{msg.select.upload.file}" />
 		<input type="submit" th:value="#{label.upload}" /><br /><br />
 		<div th:if="${msg != null}">
 			<th:block th:text="${msg}"></th:block><br /><br />
@@ -20,12 +20,12 @@
 			<span class="glyphicon glyphicon-info-sign"></span>
 			<th:block th:utext="${note}"></th:block><br /><br />
 			<ol><li><th:block th:utext="${step1}"></th:block><br />
-			<pre id="code1" class="prettyprint lang-xml" th:text="${command_jsp}"></pre></li>
+					<pre id="code1" class="prettyprint lang-xml" th:text="${command_jsp}"></pre></li>
 				<li><th:block th:utext="${step2}"></th:block><br /></li>
 				<li><th:block th:utext="${step3}"></th:block><br /></li>
 				<li><th:block th:utext="${step4}"></th:block><br /></li>
 				<li><th:block th:utext="${step5}"></th:block><br />
-					<pre id="code2" class="prettyprint lang-xml" th:text="${select_users_jsp}"></pre></li>
+					<pre id="code2" class="prettyprint lang-xml" th:text="${select_users_jsp}" style="max-height: 200px; overflow-y: auto;"></pre></li>
 				<li><th:block th:utext="${step6}"></th:block><br /></li></ol>
 		</div>
 
