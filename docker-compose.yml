@@ -72,7 +72,7 @@ services:
       db_password: password
       oidc_config_endpoint: http://keycloak:8080/auth/realms/master/.well-known/openid-configuration
       oidc_dynamic_client_registration_enabled: 'true'
-      attacker_app_url: http://${HOST:-localhost}:9999/attacker-app
+      attacker_app_url: http://${HOST:-localhost}:9080/attacker-app
       #manage_account_page_url: http://${HOST:-localhost}:8080/auth/realms/master/account/
       manage_account_page_url: https://${HOST:-localhost}:8443/auth/realms/master/account/
       mail_host: mail
@@ -87,8 +87,8 @@ services:
     build: ./attacker-app
     container_name: attacker-app
     ports:
-      - 9999:8080
-      - 9998:8443
+      - 9080:8080
+      - 9443:8443
     environment:
       TZ: ${TZ}
   mail:

