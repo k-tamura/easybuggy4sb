@@ -27,7 +27,7 @@ When running EasyBuggy Boot alone (fewer vulnerabilities than `docker compose up
 
 ( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
 
-:warning: **Java 7 or 8 is needed. Doesn't work with Java 9 or later.**
+:warning: **Java 8 is needed. Doesn't work with Java 9 or later.**
 
 Access to
 
