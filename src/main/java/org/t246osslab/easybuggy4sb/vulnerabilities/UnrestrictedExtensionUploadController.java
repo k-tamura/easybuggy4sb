@@ -31,18 +31,18 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
     @GetMapping(value = "/ureupload")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
-        String uploadFilesURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/");
+        String uploadFilesURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", File.separator + SAVE_DIR + File.separator);
         mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", null, locale));
         mav.addObject("step1", msg.getMessage("msg.note.unrestrictedextupload.step1", new String[]{"command.jsp"}, locale));
         mav.addObject("step2", msg.getMessage("msg.note.unrestrictedextupload.step2", new String[]{uploadFilesURL + "command.jsp?cmd=tree"}, locale));
         mav.addObject("step3", msg.getMessage("msg.note.unrestrictedextupload.step3", new String[]{uploadFilesURL + "command.jsp?cmd=cat%20src/main/resources/application.properties"}, locale));
         mav.addObject("step4", msg.getMessage("msg.note.unrestrictedextupload.step4", new String[]{uploadFilesURL + "command.jsp?cmd=env"}, locale));
-        mav.addObject("step5", msg.getMessage("msg.note.unrestrictedextupload.step5", new String[]{"select_users.jsp"}, locale));
-        mav.addObject("step6", msg.getMessage("msg.note.unrestrictedextupload.step6", new String[]{uploadFilesURL + "select_users.jsp"}, locale));
+        mav.addObject("step5", msg.getMessage("msg.note.unrestrictedextupload.step5", new String[]{"get_all_records.jsp"}, locale));
+        mav.addObject("step6", msg.getMessage("msg.note.unrestrictedextupload.step6", new String[]{uploadFilesURL + "get_all_records.jsp"}, locale));
         Resource resource = new ClassPathResource("/jsp/command.jsp");
         mav.addObject("command_jsp", IOUtils.toString(resource.getInputStream()));
-        resource = new ClassPathResource("/jsp/select_users.jsp");
-        mav.addObject("select_users_jsp", IOUtils.toString(resource.getInputStream()));
+        resource = new ClassPathResource("/jsp/get_all_records.jsp");
+        mav.addObject("get_all_records_jsp", IOUtils.toString(resource.getInputStream()));
         if (req.getAttribute("errorMessage") != null) {
             mav.addObject("errmsg", req.getAttribute("errorMessage"));
         }
@@ -58,9 +58,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
 
         setViewAndCommonObjects(mav, locale, "unrestrictedextupload");
 
-        String exitJspURL = req.getRequestURL().toString().replaceAll("/ureupload*.+", "/uploadFiles/exit.jsp");
-        String[] placeholders = new String[]{ exitJspURL};
-        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", placeholders, locale));
+        mav.addObject("note", msg.getMessage("msg.note.unrestrictedextupload", null, locale));
 
         // Get absolute path of the web application
         String appPath = req.getServletContext().getRealPath("");
@@ -76,9 +74,9 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         if (StringUtils.isBlank(fileName)) {
             return doGet(mav, req, locale);
         }
-        boolean isConverted = MultiPartFileUtils.writeFile(savePath, file, fileName);
+        boolean isConverted = false;
 
-        if (!isConverted) {
+        if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
             isConverted = convert2GrayScale(new File(savePath + File.separator + fileName).getAbsolutePath());
         }
         

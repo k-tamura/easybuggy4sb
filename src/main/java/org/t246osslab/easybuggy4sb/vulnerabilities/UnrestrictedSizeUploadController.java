@@ -52,9 +52,9 @@ public class UnrestrictedSizeUploadController extends AbstractController {
             mav.addObject("errmsg", msg.getMessage("msg.not.image.file", null, locale));
             return doGet(mav, locale);
         }
-        boolean isConverted = MultiPartFileUtils.writeFile(savePath, file, fileName);
+        boolean isConverted = false;
 
-        if (!isConverted) {
+        if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
             isConverted = reverseColor(new File(savePath + File.separator + fileName).getAbsolutePath());
         }
         

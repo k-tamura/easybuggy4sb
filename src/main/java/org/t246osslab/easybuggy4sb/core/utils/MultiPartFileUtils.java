@@ -29,21 +29,22 @@ public final class MultiPartFileUtils {
      * @param savePath Path to save an uploaded file.
      * @param filePart A part or form item that was received within a <code>multipart/form-data</code> POST request.
      * @param fileName The uploaded file name.
+     * @return true if the file was written successfully, false otherwise.
      */
     public static boolean writeFile(String savePath, MultipartFile filePart, String fileName) throws IOException {
-        boolean isConverted = false;
+        boolean success = false;
         try (OutputStream out = new FileOutputStream(savePath + File.separator + fileName);
-                InputStream in = filePart.getInputStream()) {
+             InputStream in = filePart.getInputStream()) {
             int read;
             final byte[] bytes = new byte[1024];
             while ((read = in.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
+            success = true;
         } catch (FileNotFoundException e) {
             // Ignore because file already exists
             log.debug("Exception occurs: ", e);
-            isConverted = true;
         }
-        return isConverted;
+        return success;
     }
 }

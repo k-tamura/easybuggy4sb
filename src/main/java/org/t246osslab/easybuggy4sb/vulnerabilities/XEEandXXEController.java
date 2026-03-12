@@ -91,37 +91,38 @@ public class XEEandXXEController extends AbstractController {
 			mav.addObject("errmsg", msg.getMessage("msg.not.xml.file", null, locale));
 			return doGet(mav, req, locale);
 		}
-		boolean isRegistered = MultiPartFileUtils.writeFile(savePath, file, fileName);
-
+		boolean isParsed = false;
 		CustomHandler customHandler = new CustomHandler();
-		customHandler.setLocale(locale);
-		SAXParser parser;
-		try {
-			SAXParserFactory spf = SAXParserFactory.newInstance();
-			if ("/xee".equals(req.getServletPath())) {
-				customHandler.setInsert();
-				spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
-				spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-			} else {
-				spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+		if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
+			customHandler.setLocale(locale);
+			SAXParser parser;
+			try {
+				SAXParserFactory spf = SAXParserFactory.newInstance();
+				if ("/xee".equals(req.getServletPath())) {
+					customHandler.setInsert();
+					spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
+					spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+				} else {
+					spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+				}
+				parser = spf.newSAXParser();
+				parser.parse(new File(savePath + File.separator + fileName).getAbsolutePath(), customHandler);
+				isParsed = true;
+			} catch (Exception e) {
+				log.error(e.getClass().getSimpleName() + " occurs: ", e);
+				mav.addObject("detailmsg", e.getMessage());
 			}
-			parser = spf.newSAXParser();
-			parser.parse(new File(savePath + File.separator + fileName).getAbsolutePath(), customHandler);
-			isRegistered = true;
-		} catch (Exception e) {
-			log.error(e.getClass().getSimpleName() + " occurs: ", e);
-			mav.addObject("detailmsg", e.getMessage());
 		}
 
 		if ("/xee".equals(req.getServletPath())) {
-			if (isRegistered && customHandler.isRegistered()) {
+			if (isParsed && customHandler.isRegistered()) {
 				mav.addObject("msg", msg.getMessage("msg.batch.registration.complete", null, locale));
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.registration.fail", null, locale));
 			}
             setViewAndCommonObjects(mav, locale, "xee");
 		} else {
-			if (isRegistered && customHandler.isRegistered()) {
+			if (isParsed && customHandler.isRegistered()) {
 				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
