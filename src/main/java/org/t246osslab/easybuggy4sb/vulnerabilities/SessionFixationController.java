@@ -18,8 +18,7 @@ public class SessionFixationController extends DefaultLoginController {
     @Override
     @GetMapping(value = "/sessionfixation/login")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
-        mav.addObject("note", msg.getMessage("msg.note.session.fixation",
-                new Object[]{ req.getRequestURL().toString() + ";jsessionid=" }, locale));
+        mav.addObject("note", msg.getMessage("msg.note.session.fixation", null, locale));
         super.doGet(mav, req, res, locale);
         return mav;
     }

@@ -53,7 +53,7 @@ public class PromptInjectionController extends AbstractController {
         RestTemplate restTemplate = new RestTemplate();
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
-        String prompt = "Translate this text into " + targetLanguage + ": " + inputText;
+        String prompt = "Translate the following text into " + targetLanguage + ": " + inputText;
         log.info("Prompt to LLM: {}", prompt);
         reqBody.put("prompt", prompt);
         reqBody.put("stream", false);
