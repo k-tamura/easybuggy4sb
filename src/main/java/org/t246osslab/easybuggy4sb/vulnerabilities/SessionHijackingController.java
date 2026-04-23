@@ -40,7 +40,7 @@ public class SessionHijackingController extends AbstractController {
             try {
                 byte[] decodedBytes = Base64.getUrlDecoder().decode(string);
                 String decodedString = new String(decodedBytes);
-                mav.addObject("msg", msg.getMessage("label.decoded.string", null, locale) + " :<br />" + decodedString);
+                mav.addObject("msg", "<br />" + msg.getMessage("label.decoded.string", null, locale) + ": " + decodedString);
             } catch (IllegalArgumentException e){
                 mav.addObject("errmsg", msg.getMessage("msg.decode.error.occur", null, locale));
                 mav.addObject("detailmsg", e.getMessage());
