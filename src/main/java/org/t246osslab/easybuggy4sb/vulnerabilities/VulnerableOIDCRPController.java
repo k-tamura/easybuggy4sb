@@ -119,13 +119,13 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 		String type = req.getParameter("type");
 		String[] placeholders = null;
-		if ("1".equals(type)) {
+		if ("7".equals(type)) {
 			placeholders = new String[]{ attackerAppUrl };
-		} else if ("2".equals(type)) {
+		} else if ("8".equals(type)) {
 			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
-		} else if ("3".equals(type)) {
+		} else if ("9".equals(type)) {
 			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/start?redirect_path=/vulnerabileoidcrp") };
-		} else if ("7".equals(type)) {
+		} else if ("11".equals(type)) {
 			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/callback/*"),
 					req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/vulnerabileoidcrp"),
 					attackerAppUrl + "/picture",
