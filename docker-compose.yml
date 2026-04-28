@@ -27,7 +27,7 @@ services:
     volumes:
       - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
       - ./keycloak/register.ftl:/opt/jboss/keycloak/themes/base/login/register.ftl
-      - ./attacker-app/passwords.txt:/opt/jboss/keycloak/data/password-blacklists/passwords.txt
+      - ./attacker-app/credentials/passwords.txt:/opt/jboss/keycloak/standalone/data/password-blacklists/passwords.txt
     environment:
       DB_VENDOR: MYSQL
       DB_ADDR: db
