@@ -11,8 +11,8 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 -
 When running EasyBuggy Boot with Keycloak, MySQL, and an attacker's application
 
-    $ echo HOST=192.168.1.17 > .env # if you run EasyBuggy Boot not on localhost (e.g. 192.168.1.17)
-    $ echo TZ=America/New_York >> .env # Added to eliminate container time skew
+    $ echo HOST=192.168.1.17 > .env # Set the IP address of the server on which to run EasyBuggy Boot
+    $ echo TZ=America/New_York >> .env # Add your time zone to eliminate container time skew
     $ docker compose up
 
 Access to
