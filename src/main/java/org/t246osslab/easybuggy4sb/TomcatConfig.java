@@ -34,9 +34,9 @@ public class TomcatConfig {
     }
 
     @Bean
-    public FilterRegistrationBean encodingFilterRegistration(EncodingFilter encodingFilter) {
+    public FilterRegistrationBean encodingFilterRegistration() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(encodingFilter);
+        registration.setFilter(new EncodingFilter());
         registration.setOrder(1);
         return registration;
     }
