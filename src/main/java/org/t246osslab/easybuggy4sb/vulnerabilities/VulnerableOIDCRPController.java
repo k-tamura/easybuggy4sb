@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -337,7 +336,15 @@ public class VulnerableOIDCRPController extends AbstractController {
 	}
 
 	@GetMapping("/download")
-	public ResponseEntity<Resource> downloadFile(ModelAndView mav, Locale locale, @RequestParam("id") int id) {
+	public ResponseEntity<Resource> downloadFile(ModelAndView mav, HttpServletRequest req, HttpSession ses,
+												 Locale locale, @RequestParam("id") int id) {
+		if (ses == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		Map<?, ?> userInfo = getUserInfo(ses);
+		if (userInfo == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 		File file = searchFile(mav, locale, id);
 		if (file == null || !file.exists()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -540,8 +547,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 						File tempFile = new File(tmpDir, fileName);
                         try (FileOutputStream fos = new FileOutputStream(tempFile)) {
 							fos.write(bytes);
-						} catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
