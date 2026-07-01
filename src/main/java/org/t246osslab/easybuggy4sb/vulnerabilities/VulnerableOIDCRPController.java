@@ -219,7 +219,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		// Verify state
 		String state = (String) ses.getAttribute("state");
 		if (state == null || state.isEmpty() || !state.equals(req.getParameter("state"))) {
-			log.warn("Invalid state"); // Error handling should be Implemented
+			log.warn("Invalid state"); // Error handling should be implemented
 		}
 
 		try {
@@ -241,31 +241,31 @@ public class VulnerableOIDCRPController extends AbstractController {
 			// Verify nonce
 			String nonce = (String) ses.getAttribute("nonce");
 			if (nonce == null || nonce.isEmpty() || !nonce.equals(idToken.getPayload().getNonce())) {
-				log.warn("Invalid nonce"); // Error handling should be Implemented
+				log.warn("Invalid nonce"); // Error handling should be implemented
 			}
 			// Verify signature
 			if (!idToken.verifySignature(getJwkPublicKey(idToken.getHeader().getKeyId()))) {
-				log.warn("Invalid signature"); // Error handling should be Implemented
+				log.warn("Invalid signature"); // Error handling should be implemented
 			}
 			// Verify iss
 			if (!idToken.verifyIssuer(Collections.singletonList(issuer))) {
-				log.warn("Invalid issuer"); // Error handling should be Implemented
+				log.warn("Invalid issuer"); // Error handling should be implemented
 			}
 			// Verify aud
 			if (!idToken.verifyAudience(Collections.singletonList(clientId))) {
-				log.warn("Invalid audience"); // Error handling should be Implemented
+				log.warn("Invalid audience"); // Error handling should be implemented
 			}
 			// Verify at_hath
 			if (!getAtHash(accessToken).equals(idToken.getPayload().getAccessTokenHash())) {
-				log.warn("Invalid at_hash"); // Error handling should be Implemented
+				log.warn("Invalid at_hash"); // Error handling should be implemented
 			}
 			// Verify exp
 			if (!idToken.verifyExpirationTime(System.currentTimeMillis(), 0)) {
-				log.warn("Invalid exp"); // Error handling should be Implemented
+				log.warn("Invalid exp"); // Error handling should be implemented
 			}
 			// Verify iat
 			if (!idToken.verifyIssuedAtTime(System.currentTimeMillis(), 600)) {
-				log.warn("Invalid iat"); // Error handling should be Implemented
+				log.warn("Invalid iat"); // Error handling should be implemented
 			}
 
 			ses.setAttribute("accessToken", accessToken);

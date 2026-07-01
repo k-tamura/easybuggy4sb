@@ -60,7 +60,7 @@ public class SecurityFilter implements Filter {
         /* Prevent XSS */
         response.addHeader("X-XSS-Protection", "1; mode=block");
 
-        /* Prevent to upload large files if target start w/ /ureupload and /xee and /xxe */
+        /* Prevent uploading large files if target starts with /ureupload, /xee, or /xxe */
         if ((target.startsWith("/ureupload") || target.startsWith("/xee") || target.startsWith("/xxe"))
                 && request.getMethod().equalsIgnoreCase("POST")) {
             ServletFileUpload upload = new ServletFileUpload();

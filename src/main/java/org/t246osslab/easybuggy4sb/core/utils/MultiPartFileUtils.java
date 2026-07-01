@@ -42,7 +42,7 @@ public final class MultiPartFileUtils {
             }
             success = true;
         } catch (FileNotFoundException e) {
-            // Ignore because file already exists
+            // Ignore and log the exception
             log.debug("Exception occurs: ", e);
         }
         return success;

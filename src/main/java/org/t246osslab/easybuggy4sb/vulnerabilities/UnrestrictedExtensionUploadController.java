@@ -25,7 +25,7 @@ import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 @Controller
 public class UnrestrictedExtensionUploadController extends AbstractController {
 
-    // Name of the directory where uploaded files is saved
+    // Name of the directory where uploaded files are saved
     private static final String SAVE_DIR = "uploadFiles";
 
     @GetMapping(value = "/ureupload")
@@ -63,7 +63,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         // Get absolute path of the web application
         String appPath = req.getServletContext().getRealPath("");
 
-        // Create a directory to save the uploaded file if it does not exists
+        // Create a directory to save the uploaded file if it does not exist
         String savePath = (appPath == null ? System.getProperty("user.dir") : appPath) + File.separator + SAVE_DIR;
         File fileSaveDir = new File(savePath);
         if (!fileSaveDir.exists()) {
@@ -82,7 +82,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         
         if (isConverted) {
             mav.addObject("msg", msg.getMessage("msg.convert.grayscale.complete", null, locale));
-            mav.addObject("upladFilePath", SAVE_DIR + "/" + fileName);
+            mav.addObject("uploadFilePath", SAVE_DIR + "/" + fileName);
             return mav;
         } else {
             mav.addObject("errmsg", msg.getMessage("msg.convert.grayscale.fail", null, locale));

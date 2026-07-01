@@ -25,13 +25,14 @@ public class HttpsEnforcementFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
 
-        // Allow HTTP only for these paths
+        // Allow HTTP access for specific paths
         if (uri.startsWith("/stat")) {
             chain.doFilter(request, response);
             return;
         } else if (uri.startsWith("/metrics") || uri.startsWith("/health")) {
             if (METRICS_ALLOWED_HOSTS.indexOf(req.getRemoteHost()) < 0) {
                 res.sendRedirect("https://" + req.getServerName());
+                return;
             }
             chain.doFilter(request, response);
             return;

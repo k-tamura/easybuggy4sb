@@ -35,8 +35,7 @@ public class DeadlockController2 extends AbstractController {
     @RequestMapping(value = "/deadlock2")
     public ModelAndView process(HttpServletRequest req, HttpSession ses, ModelAndView mav, Locale locale) {
         setViewAndCommonObjects(mav, locale, "deadlock2");
-        // Overwrite title (because title is the same as xee page)
-        mav.addObject("title", msg.getMessage("title.xee.page", null, locale));
+        mav.addObject("title", msg.getMessage("title.deadlock2.page", null, locale));
         List<User> users = null;
         String order = getOrder(req);
         if ("POST".equals(req.getMethod())) {

@@ -33,7 +33,7 @@ import java.util.Locale;
 @Controller
 public class XEEandXXEController extends AbstractController {
 
-	// Name of the directory where uploaded files is saved
+	// Name of the directory where uploaded files are saved
 	private static final String SAVE_DIR = "uploadFiles";
 
 	@Autowired

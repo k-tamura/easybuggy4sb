@@ -195,6 +195,7 @@
 						-XX:+HeapDumpOnOutOfMemoryError
 						-XX:HeapDumpPath=logs/
 						-XX:ErrorFile=logs/hs_err_pid%p.log
+						<!-- -XX:StartFlightRecording=settings=profile,dumponexit=true,maxage=7d,maxsize=5G,filename=easybuggy.jfr -->
 						<!-- Auto kill JVM when OOME occurs: For post-8u92 JDKs -->
 						<!-- -XX:+CrashOnOutOfMemoryError -->
 						<!-- Auto kill JVM when OOME occurs: For Linux -->

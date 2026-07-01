@@ -19,7 +19,7 @@ public class InfiniteLoopController {
             int contentLength = req.getContentLength();
             log.debug("contextPath: {}, contentLength: {}", contextPath, contentLength);
         }
-        // Note: This is more dangerous! (parallel inifinite loop)
+        // Note: This is more dangerous! (parallel infinite loop)
 		// IntStream.generate(() -> 0).peek(i -> {
 	    //     String contextPath = req.getContextPath();
         //     int contentLength = req.getContentLength();

@@ -3,6 +3,7 @@ package org.t246osslab.easybuggy4sb.controller;
 import java.util.Locale;
 
 import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 public abstract class AbstractController {
 
     protected Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private static final Encoder ENCODER = ESAPI.encoder();
 
     @Autowired
     protected MessageSource msg;
@@ -40,23 +43,23 @@ public abstract class AbstractController {
 
     /**
      * Encode data for use in HTML using HTML entity encoding
-     * Note that this method just call <code>ESAPI.encoder().encodeForHTML(String)</code>.
+     * Note that this method just calls <code>ESAPI.encoder().encodeForHTML(String)</code>.
      *
      * @param input the text to encode for HTML
      * @return input encoded for HTML
      */
     protected String encodeForHTML(String input) {
-        return ESAPI.encoder().encodeForHTML(input);
+        return ENCODER.encodeForHTML(input);
     }
 
     /**
      * Encode data for use in LDAP queries.
-     * Note that this method just call <code>ESAPI.encoder().encodeForLDAP((String)</code>.
+     * Note that this method just calls <code>ESAPI.encoder().encodeForLDAP(String)</code>.
      *
      * @param input the text to encode for LDAP
      * @return input encoded for use in LDAP
      */
     protected String encodeForLDAP(String input) {
-        return ESAPI.encoder().encodeForLDAP(input);
+        return ENCODER.encodeForLDAP(input);
     }
 }

@@ -16,8 +16,8 @@ public class ExceptionInInitializerErrorController {
 	public void process() {
         try {
             Class<?> cl = Class.forName("org.t246osslab.easybuggy4sb.errors.InitializerErrorThrower");
-            Constructor<?> cunstructor = cl.getConstructor();
-            cunstructor.newInstance(new Object[] { null });
+            Constructor<?> constructor = cl.getConstructor();
+            constructor.newInstance(new Object[] { null });
         } catch (Exception e) {
             log.error("Exception occurs: ", e);
         }

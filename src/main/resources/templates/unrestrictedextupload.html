@@ -3,7 +3,7 @@
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
 	<div th:replace="header"></div>
-	<form th:if="${upladFilePath == null}" action="ureupload" method="post" enctype="multipart/form-data">
+	<form th:if="${uploadFilePath == null}" action="ureupload" method="post" enctype="multipart/form-data">
 		<p th:text="#{msg.convert.grayscale}" />
 		<input type="file" name="file" size="60" /><br />
 		<p th:text="#{msg.select.upload.file}" />
@@ -30,8 +30,8 @@
 		</div>
 
 	</form>
-	<th:block th:if="${upladFilePath != null}">
-		<img th:src="${upladFilePath}" /><br /><br />
+	<th:block th:if="${uploadFilePath != null}">
+		<img th:src="${uploadFilePath}" /><br /><br />
 		<div th:replace="messages"></div>
 		<input type="button" onClick='history.back();'  th:value="#{label.history.back}" />
 	</th:block>

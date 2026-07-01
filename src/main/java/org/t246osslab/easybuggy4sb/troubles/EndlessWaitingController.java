@@ -37,7 +37,7 @@ public class EndlessWaitingController extends AbstractController {
                 mav.addObject("errmsg", msg.getMessage("msg.cant.create.batch", null, locale));
             } else {
                 try {
-                    /* execte the batch */
+                    /* execute the batch */
                     ProcessBuilder pb = new ProcessBuilder(batFile.getAbsolutePath());
                     Process process = pb.start();
                     process.waitFor();

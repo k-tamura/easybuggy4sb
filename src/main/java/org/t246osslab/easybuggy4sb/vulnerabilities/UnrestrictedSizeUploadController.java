@@ -21,7 +21,7 @@ import org.t246osslab.easybuggy4sb.core.utils.MultiPartFileUtils;
 @Controller
 public class UnrestrictedSizeUploadController extends AbstractController {
 
-    // Name of the directory where uploaded files is saved
+    // Name of the directory where uploaded files are saved
     private static final String SAVE_DIR = "uploadFiles";
 
     @GetMapping(value = "/ursupload")
@@ -60,7 +60,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
         
         if (isConverted) {
             mav.addObject("msg", msg.getMessage("msg.reverse.color.complete", null, locale));
-            mav.addObject("upladFilePath", SAVE_DIR + "/" + fileName);
+            mav.addObject("uploadFilePath", SAVE_DIR + "/" + fileName);
         } else {
             mav.addObject("errmsg", msg.getMessage("msg.reverse.color.fail", null, locale));
             mav.addObject("note", msg.getMessage("msg.note.unrestrictedsizeupload", null, locale));
