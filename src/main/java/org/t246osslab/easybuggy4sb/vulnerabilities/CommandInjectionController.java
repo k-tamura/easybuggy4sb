@@ -2,8 +2,6 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ognl.DefaultMemberAccess;
-import ognl.OgnlContext;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -35,8 +33,6 @@ public class CommandInjectionController extends AbstractController {
 
         if (!StringUtils.isBlank(url)) {
             try {
-                OgnlContext ctx = new OgnlContext();
-                ctx.setMemberAccess(new DefaultMemberAccess(false));
                 Path dir = Paths.get(OSS_SRC);
                 Files.createDirectories(dir);
                 String repoDirName = getRepoDirName(url);

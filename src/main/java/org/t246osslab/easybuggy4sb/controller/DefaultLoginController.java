@@ -49,8 +49,8 @@ public class DefaultLoginController extends AbstractController {
         while (paramNames.hasMoreElements()) {
             String paramName = (String) paramNames.nextElement();
             hiddenMap.put(paramName, req.getParameterValues(paramName));
-            mav.addObject("hiddenMap", hiddenMap);
         }
+        mav.addObject("hiddenMap", hiddenMap);
 
         HttpSession session = req.getSession(true);
         String authNMsg = (String) session.getAttribute("authNMsg");
