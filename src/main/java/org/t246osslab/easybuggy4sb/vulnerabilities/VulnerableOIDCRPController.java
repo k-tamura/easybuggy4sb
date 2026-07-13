@@ -23,7 +23,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,8 +42,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.RSAPublicKeySpec;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
@@ -509,8 +507,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		List<Forum> messages = null;
 		try {
 			String sql = "select * from forum " + (isAdmin ? "" : "where isadmin = 'false' ") + "order by id desc";
-			messages = jdbcTemplate.query(sql, new RowMapper<Forum>() {
-				public Forum mapRow(ResultSet rs, int rowNum) throws SQLException {
+			messages = jdbcTemplate.query(sql, (rs, rowNum) -> {
 					Forum forum = new Forum();
 					forum.setId(rs.getString("id"));
 					forum.setTime(rs.getTime("time"));
@@ -519,8 +516,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 					forum.setMessage(rs.getString("message"));
 					forum.setFileName(rs.getString("file_name"));
 					return forum;
-				}
-			});
+				});
 			mav.addObject("messages", messages);
 		} catch (DataAccessException e) {
 			mav.addObject("errmsg",
