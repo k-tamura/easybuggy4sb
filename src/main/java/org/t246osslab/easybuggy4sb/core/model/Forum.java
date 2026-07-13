@@ -15,7 +15,7 @@ public class Forum implements Serializable {
 
     @Override
     public String toString() {
-        return "id" + id + ", time=" + time + ", username=" + username + ", picture=" + picture
+        return "id=" + id + ", time=" + time + ", username=" + username + ", picture=" + picture
                 + ", message=" + message+ ", fileName=" + fileName;
     }
 

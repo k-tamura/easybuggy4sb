@@ -9,15 +9,12 @@ public class OutOfMemoryErrorController3 {
 	@RequestMapping(value = "/oome3")
 	public void process() {
 		while (true) {
-			new Thread() {
-				@Override
-				public void run() {
+			new Thread(() -> {
 					try {
 						Thread.sleep(10000);
 					} catch (InterruptedException e) {
 					}
-				}
-			}.start();
+				}).start();
 		}
 	}
 }
