@@ -25,7 +25,7 @@
 		<jvm.args>-XX:MaxMetaspaceSize=128m -Xloggc:logs/gc_%p_%t.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails
                         -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=10M
 			-XX:NativeMemoryTracking=summary</jvm.args>
-		<derby.version>10.13.1.1</derby.version>
+		<derby.version>10.17.1.0</derby.version>
 	</properties>
 
 	<profiles>
