@@ -1,16 +1,5 @@
 package org.t246osslab.easybuggy4sb.controller;
 
-import java.io.IOException;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.core.model.User;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
 public class DefaultLoginController extends AbstractController {
@@ -95,8 +91,20 @@ public class DefaultLoginController extends AbstractController {
     }
 
     protected HttpSession recreateSession(HttpServletRequest req, HttpSession session) {
-        session.invalidate();
-        return req.getSession(true);
+        Map<String, Object> attributes = new HashMap<>();
+        if (session != null) {
+            Enumeration<String> attributeNames = session.getAttributeNames();
+            while (attributeNames.hasMoreElements()) {
+                String name = attributeNames.nextElement();
+                attributes.put(name, session.getAttribute(name));
+            }
+            session.invalidate();
+        }
+        HttpSession newSession = req.getSession(true);
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            newSession.setAttribute(entry.getKey(), entry.getValue());
+        }
+        return newSession;
     }
 
     protected void incrementLoginFailedCount(String userid) {
