@@ -74,7 +74,7 @@ public class DefaultLoginController extends AbstractController {
         } else if (authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
             resetAccountLock(userid);
-
+            session = recreateSession(req, session);
             session.setAttribute("authNMsg", "authenticated");
             session.setAttribute("userid", userid);
 
@@ -92,6 +92,11 @@ public class DefaultLoginController extends AbstractController {
 		/* account lock count +1 */
 	    incrementLoginFailedCount(userid);
 		return doGet(mav, req, res, locale);
+    }
+
+    protected HttpSession recreateSession(HttpServletRequest req, HttpSession session) {
+        session.invalidate();
+        return req.getSession(true);
     }
 
     protected void incrementLoginFailedCount(String userid) {

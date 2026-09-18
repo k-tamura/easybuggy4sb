@@ -5,6 +5,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,5 +28,10 @@ public class SessionFixationController extends DefaultLoginController {
     @PostMapping(value = "/sessionfixation/login")
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
         return super.doPost(mav, req, res, locale);
+    }
+
+    @Override
+    protected HttpSession recreateSession(HttpServletRequest req, HttpSession session) {
+        return session;
     }
 }
