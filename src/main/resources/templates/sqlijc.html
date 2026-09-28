@@ -5,7 +5,7 @@
 	<div th:replace="header"></div>
 	<form action="sqlijc" method="post">
 		<p th:text="#{msg.enter.mail.and.passwd}" /><br />
-		<label th:text="#{label.mail}"></label> : <input type="text" name="mail" size="20" maxlength="20" />
+		<label th:text="#{label.mail}"></label> : <input type="text" name="mail" size="50" maxlength="50" />
 		<label th:text="#{label.password}"></label> : <input type="password" name="password" size="20" maxlength="20" autocomplete="off" />
 		<br /><br /><input type="submit" th:value="#{label.submit}" /><br /><br />
 		<table th:if="${userList != null}" class="table table-striped table-bordered table-hover" style="font-size: small;">
