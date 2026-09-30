@@ -16,13 +16,12 @@ COPY jmx/. .
 COPY download-css.sh ./
 RUN chmod +x ./download-css.sh
 
-# 1. 自己署名証明書の生成
+# Generate a self-signed certificate
 RUN keytool -genkey -alias tomcat -keyalg RSA -keystore ./tomcat/conf/tomcat.keystore \
     -dname "CN=attacker.com, OU=Dev, O=Test, C=JP" \
     -keypass ${KEYSTORE_PASSWORD} -storepass ${KEYSTORE_PASSWORD} -noprompt
 
-# 2. server.xml をHTTPS有効版に置換 (あるいは sed で書き換え)
-# ここでは例として、あらかじめ用意した設定ファイルをコピーするか、sedで編集します
+# Replace server.xml with the HTTPS-enabled version
 RUN sed -i \
     "s|\${KEYSTORE_PASSWORD}|${KEYSTORE_PASSWORD}|g" \
     ./tomcat/conf/server.xml
