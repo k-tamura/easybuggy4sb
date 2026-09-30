@@ -38,17 +38,20 @@ public class AuthenticationFilter implements Filter {
             
             String loginType = request.getParameter("logintype");
             String queryString = request.getQueryString();
-            if (queryString == null) {
-                queryString = "";
-            } else {
-                /* Remove "logintype" parameter from query string. (* "logintype" specifies a login servlet) */
-                queryString = queryString.replace("logintype=" + loginType + "&", "");
-                queryString = queryString.replace("&logintype=" + loginType, "");
-                queryString = queryString.replace("logintype=" + loginType, "");
-                if (!queryString.isEmpty()) {
-                    queryString = "?" + queryString;
+
+            /* Remove "logintype" parameter from query string. */
+            StringBuilder cleanQuery = new StringBuilder();
+            if (queryString != null && !queryString.isEmpty()) {
+                for (String param : queryString.split("&")) {
+                    String paramName = param.indexOf('=') >= 0 ? param.substring(0, param.indexOf('=')) : param;
+                    if (!"logintype".equals(paramName)) {
+                        if (cleanQuery.length() > 0) cleanQuery.append('&');
+                        cleanQuery.append(param);
+                    }
                 }
             }
+            queryString = cleanQuery.length() > 0 ? "?" + cleanQuery.toString() : "";
+
             HttpSession session = request.getSession(false);
             String authNMsg = (session == null) ? null : (String) session.getAttribute("authNMsg");
 			if (!"authenticated".equals(authNMsg)) {
