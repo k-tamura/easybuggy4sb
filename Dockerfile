@@ -17,8 +17,8 @@
 #ENV PATH $MAVEN_HOME/bin:$PATH
 #CMD ["mvn", "clean", "spring-boot:run", "-Dmaven.wagon.http.ssl.insecure=true", "-Dmaven.wagon.http.ssl.allowall=true"]
 
-FROM maven:3.8-jdk-8
-RUN apt-get update && apt-get install curl vim tree -y
+FROM maven:3.8-eclipse-temurin-8
+RUN apt-get update && apt-get install curl vim -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /opt/easybuggy4sb/
 COPY pom.xml /opt/easybuggy4sb/pom.xml
 RUN mvn dependency:go-offline -B
