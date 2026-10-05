@@ -16,7 +16,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: admin
       MYSQL_PASSWORD: password
-      HOST: ${HOST:?'.env file not found or HOST not set. Please set the IP address of the server on which to run EasyBuggy Boot. For example, $ echo HOST=192.168.1.17 > .env '}
+      HOST: ${HOST:?'.env file not found or HOST not set. Please set the IP address of the server on which to run EasyBuggy Boot. For example, echo HOST=192.168.1.17 > .env '}
       TZ: ${TZ}
     ports:
       - 3306:3306
