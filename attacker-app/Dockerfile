@@ -9,7 +9,7 @@ RUN wget https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/
     && rm -fr apache-tomcat-${TOMCAT_VERSION}/webapps/* \
     && mv apache-tomcat-${TOMCAT_VERSION} tomcat \
     && rm -f apache-tomcat-${TOMCAT_VERSION}.tar.gz
-COPY server.xml tomcat/conf
+COPY server.xml tomcat/conf/
 COPY attacker-app/ tomcat/webapps/attacker-app/
 COPY credentials/. .
 COPY jmx/. .

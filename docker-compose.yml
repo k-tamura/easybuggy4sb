@@ -22,7 +22,7 @@ services:
       - 3306:3306
   keycloak:
     build: ./keycloak
-    #image: tamura246/easybuggy4sb-keycloak:2.0
+    image: tamura246/easybuggy4sb-keycloak:2.0
     container_name: keycloak
     volumes:
       - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
@@ -56,7 +56,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    #image: tamura246/easybuggy4sb-easybuggy:2.0
+    image: tamura246/easybuggy4sb-easybuggy:2.0
     container_name: easybuggy
     ports:
       - 80:80
@@ -86,7 +86,7 @@ services:
         #hard: 65535
   attacker-app:
     build: ./attacker-app
-    #image: tamura246/easybuggy4sb-attacker-app:2.0
+    image: tamura246/easybuggy4sb-attacker-app:2.0
     container_name: attacker-app
     ports:
       - 9080:8080
@@ -103,22 +103,13 @@ services:
     environment:
       TZ: ${TZ}
   ollama:
-    image: ollama/ollama:0.12.8
-    #image: tamura246/ollama:0.12.8
+    image: tamura246/ollama-qwen-0.5b:2.0
+    build:
+      context: ./ollama
+      args:
+        MODEL_NAME: "qwen:0.5b"  # Edit this line if you want to change another llm (e.g., "llama3:8b").
     container_name: ollama
     restart: unless-stopped
     ports:
       - "11434:11434"
-    environment:
-      - OLLAMA_MODELS=/models
-    volumes:
-      - ./models:/models
-    entrypoint: ["/bin/bash", "-c"]
-    command: |
-      "
-      ollama serve &
-      sleep 5
-      ollama pull qwen:0.5b || true
-      wait
-      "
     profiles: ["llm"]

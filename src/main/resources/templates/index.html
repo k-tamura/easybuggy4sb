@@ -72,7 +72,7 @@
 		<li><p><a href="/unintendedfiledisclosure" th:text="#{function.name.unintended.file.disclosure}"></a>: <span th:text="#{function.description.unintended.file.disclosure}"></span></p></li>
 		<li><p><a href="/admins/csrf" th:text="#{function.name.csrf}"></a>: <span th:text="#{function.description.csrf}"></span></p></li>
 		<li><p><a href="/admins/clickjacking" th:text="#{function.name.clickjacking}"></a>: <span th:text="#{function.description.clickjacking}"></span></p></li>
-		<li><p><a href="/admins/cssinject" th:text="#{function.name.cssinjection}"></a>: <span th:text="#{function.description.cssinjection}"></span></p></li>
+		<!-- <li><p><a href="/admins/cssinject" th:text="#{function.name.cssinjection}"></a>: <span th:text="#{function.description.cssinjection}"></span></p></li> -->
 		<li><p><a href="xee" th:text="#{function.name.xee}"></a>: <span th:text="#{function.description.xee}"></span></p></li>
 		<li><p><a href="xxe" th:text="#{function.name.xxe}"></a>: <span th:text="#{function.description.xxe}"></span></p></li>
 		<li><p><a href="promptinjection" th:text="#{function.name.prompt.injection}"></a>: <span th:text="#{function.description.prompt.injection}"></span></p></li>
@@ -125,10 +125,10 @@
 		<li><p><a href="jnicall" target="_blank">UnsatisfiedLinkError</a>: <span th:text="#{function.description.throwable(${'UnsatisfiedLinkError'})}"></span></p></li>
 		<li><p><a href="ze" target="_blank">ZipError</a>: <span th:text="#{function.description.throwable(${'ZipError'})}"></span></p></li>
 	</ul>
-
+	<!--
 	<h2>
-		<span class="glyphicon glyphicon-knight"></span> 
-        <span th:text="#{section.exceptions}"></span>
+		<span class="glyphicon glyphicon-knight"></span>
+		<span th:text="#{section.exceptions}"></span>
 	</h2>
 	<p th:text="#{description.section.exceptions}"></p>
 	<ul>
@@ -162,7 +162,8 @@
 		<li><p><a href="uce" target="_blank">UnsupportedCharsetException </a>: <span th:text="#{function.description.throwable(${'UnsupportedCharsetException'})}"></span></p></li>
 		<li><p><a href="uoe" target="_blank">UnsupportedOperationException </a>: <span th:text="#{function.description.throwable(${'UnsupportedOperationException'})}"></span></p></li>
 	</ul>
-    </th:block>
+	-->
+	</th:block>
 
 	<hr />
 	<footer>
