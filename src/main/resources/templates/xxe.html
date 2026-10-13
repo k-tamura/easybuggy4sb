@@ -53,7 +53,7 @@
 				</th:block>
 			</tr>
 		</table>
-		<input type="button" onClick='history.back();' th:value="#{label.history.back}" /><br /><br />
+		<input type="button" th:onclick="|location.href='@{/xxe}'|" th:value="#{label.history.back}" /><br /><br />
         <div th:replace="messages"></div>
 	</th:block>
 </body>

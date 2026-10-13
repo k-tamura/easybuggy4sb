@@ -120,20 +120,20 @@ public class XEEandXXEController extends AbstractController {
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.registration.fail", null, locale));
 			}
-            setViewAndCommonObjects(mav, locale, "xee");
+			mav.addObject("title", msg.getMessage("title.xee.page", null, locale));
 		} else {
 			if (isParsed && customHandler.isRegistered()) {
 				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
 			} else {
 				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
 			}
-            setViewAndCommonObjects(mav, locale, "xxe");
+			mav.addObject("title", msg.getMessage("title.xxe.page", null, locale));
 		}
         if (customHandler.getResult() != null && !customHandler.getResult().isEmpty()) {
             mav.addObject("resultList", customHandler.getResult());
             mav.addObject("note", null);
         }
-		return doGet(mav, req, locale);
+		return mav;
 	}
 
 	public class CustomHandler extends DefaultHandler {
