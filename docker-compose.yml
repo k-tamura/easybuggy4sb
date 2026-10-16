@@ -4,8 +4,8 @@ volumes:
 
 services:
   db:
-    image: mysql:8
-    #image: tamura246/mysql:8
+    #image: mysql:8
+    image: tamura246/mysql:8
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     container_name: db
     volumes:
@@ -93,9 +93,20 @@ services:
       - 9443:8443
     environment:
       TZ: ${TZ}
+  attacker-app2:
+    build:
+      context: ./attacker-app
+      dockerfile: Dockerfile.playwright
+    container_name: attacker-app2
+    ipc: host
+    init: true
+    command: sleep infinity
+    environment:
+      TZ: ${TZ}
+    profiles: ["attacker-app2"]
   mail:
-    image: python:3.6-alpine
-    #image: tamura246/python:3.6-alpine
+    #image: python:3.6-alpine
+    image: tamura246/python:3.6-alpine
     container_name: mail
     ports:
       - 1025:1025
@@ -103,7 +114,7 @@ services:
     environment:
       TZ: ${TZ}
   ollama:
-    image: tamura246/ollama-qwen-0.5b:2.0
+    image: tamura246/easybuggy4sb-ollama-qwen-0.5b:2.0
     build:
       context: ./ollama
       args:
