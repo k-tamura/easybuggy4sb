@@ -39,6 +39,27 @@ def solve_recaptcha_v2(website_url: str, website_key: str, timeout: int = 120) -
             return r["solution"]["gRecaptchaResponse"]
     raise TimeoutError("Retrieving the result from CapSolver timed out")
 
+def solve_and_set_recaptcha(page):
+    """Extract sitekey, solve reCAPTCHA v2, and inject the token into the form."""
+    # 1. reCAPTCHA sitekey を取得
+    site_key = page.get_attribute(".g-recaptcha", "data-sitekey")
+    if not site_key:
+        raise RuntimeError("reCAPTCHA site key not found (please check your realm settings)")
+
+    # 2. CapSolver で reCAPTCHA を解く
+    token = solve_recaptcha_v2(page.url, site_key)
+
+    # 3. token を DOM に埋め込む
+    page.evaluate(
+        """(token) => {
+            document.querySelectorAll('textarea[name="g-recaptcha-response"]').forEach(el => {
+                el.style.display = 'block';
+                el.value = token;
+            });
+        }""",
+        token,
+    )
+
 def main():
 
     with sync_playwright() as p:
@@ -66,22 +87,8 @@ def main():
                 page.fill("#password", "Pas2w0rd")
                 page.fill("#password-confirm", "Pas2w0rd")
 
-                # reCAPTCHA v2: Retrieve the site key from the screen, then obtain a token using CapSolver
-                # site_key = page.get_attribute(".g-recaptcha", "data-sitekey")
-                # if not site_key:
-                #     raise RuntimeError("reCAPTCHA site key not found (please check your realm settings)")
-                # token = solve_recaptcha_v2(page.url, site_key)
-
-                # Set the token in the form (Keycloak reads the value upon form submission, without requiring a callback)
-                # page.evaluate(
-                #     """(token) => {
-                #         document.querySelectorAll('textarea[name="g-recaptcha-response"]').forEach(el => {
-                #             el.style.display = 'block';
-                #             el.value = token;
-                #         });
-                #     }""",
-                #     token,
-                # )
+                # reCAPTCHA v2: Solve and inject token
+                # solve_and_set_recaptcha(page)
 
                 # Click the registration button
                 page.click("form#kc-register-form [type=submit]")
