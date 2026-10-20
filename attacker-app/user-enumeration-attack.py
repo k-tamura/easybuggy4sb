@@ -9,11 +9,11 @@ import requests
 from playwright.sync_api import sync_playwright
 
 BASE_URL = "https://keycloak:8443/auth"
-CAPSOLVER_API_KEY = os.environ.get("CAPSOLVER_API_KEY", "")
+CAPSOLVER_API_KEY = os.environ.get("CAPSOLVER_API_KEY", "CAP-047752D6421D-INVALID-KEY-FC156E1CAXXXA0794FAA4D3BCF39C5DC8C5CB6B6")
 CAPSOLVER_API = "https://api.capsolver.com"
 
 def solve_recaptcha_v2(website_url: str, website_key: str, timeout: int = 120) -> str:
-    """CapSolverでreCAPTCHA v2を解き、g-recaptcha-responseのトークンを返す"""
+    """Solve reCAPTCHA v2 using CapSolver and return the g-recaptcha-response token."""
     res = requests.post(f"{CAPSOLVER_API}/createTask", json={
         "clientKey": CAPSOLVER_API_KEY,
         "task": {
@@ -23,7 +23,7 @@ def solve_recaptcha_v2(website_url: str, website_key: str, timeout: int = 120) -
         },
     }, timeout=30).json()
     if res.get("errorId"):
-        raise RuntimeError(f"createTask失敗: {res}")
+        raise RuntimeError(f"createTask failed: {res}")
     task_id = res["taskId"]
 
     deadline = time.time() + timeout
@@ -34,10 +34,10 @@ def solve_recaptcha_v2(website_url: str, website_key: str, timeout: int = 120) -
             "taskId": task_id,
         }, timeout=30).json()
         if r.get("errorId"):
-            raise RuntimeError(f"getTaskResult失敗: {r}")
+            raise RuntimeError(f"getTaskResult failed: {r}")
         if r.get("status") == "ready":
             return r["solution"]["gRecaptchaResponse"]
-    raise TimeoutError("CapSolverの結果取得がタイムアウトしました")
+    raise TimeoutError("Retrieving the result from CapSolver timed out")
 
 def main():
 
@@ -47,18 +47,18 @@ def main():
         with open("usernames.txt", "r", encoding="utf-8") as f:
             for line in f:
                 username = line.strip()
-                # 自己署名証明書のため証明書エラーを無視
+                # Ignore certificate errors due to a self-signed certificate
                 context = browser.new_context(ignore_https_errors=True)
                 page = context.new_page()
 
-                # ログイン画面へアクセス(アカウントコンソール経由でログイン画面に遷移)
+                # Access the login screen (navigate to the login screen via the account console)
                 page.goto(f"{BASE_URL}/realms/master/account", wait_until="domcontentloaded")
 
-                # Registerリンクをクリック
+                # Click the Register link
                 page.click("#kc-registration a")
                 page.wait_for_selector("form#kc-register-form")
 
-                # プロファイル入力
+                # Enter profile information
                 page.fill("input[name=firstName]", username)
                 page.fill("input[name=lastName]", username)
                 page.fill("input[name=email]", username + "@gmail.com")
@@ -66,13 +66,13 @@ def main():
                 page.fill("#password", "Pas2w0rd")
                 page.fill("#password-confirm", "Pas2w0rd")
 
-                # reCAPTCHA v2: サイトキーを画面から取得し、CapSolverでトークンを取得
+                # reCAPTCHA v2: Retrieve the site key from the screen, then obtain a token using CapSolver
                 # site_key = page.get_attribute(".g-recaptcha", "data-sitekey")
                 # if not site_key:
-                #     raise RuntimeError("reCAPTCHAのsitekeyが見つかりません(レルムの設定を確認してください)")
+                #     raise RuntimeError("reCAPTCHA site key not found (please check your realm settings)")
                 # token = solve_recaptcha_v2(page.url, site_key)
 
-                # トークンをフォームに設定(Keycloakはcallbackなしでフォーム送信時に値を読む)
+                # Set the token in the form (Keycloak reads the value upon form submission, without requiring a callback)
                 # page.evaluate(
                 #     """(token) => {
                 #         document.querySelectorAll('textarea[name="g-recaptcha-response"]').forEach(el => {
@@ -83,7 +83,7 @@ def main():
                 #     token,
                 # )
 
-                # 登録ボタンをクリック
+                # Click the registration button
                 page.click("form#kc-register-form [type=submit]")
                 page.wait_for_load_state("domcontentloaded")
 
