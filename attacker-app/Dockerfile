@@ -26,7 +26,6 @@ ENV PATH="${JMETER_HOME}/bin:${PATH}"
 WORKDIR /opt/attacker-app
 
 # --- Install Python dependencies ---
-RUN chmod +x ./*.py
 RUN pip install --no-cache-dir requests "playwright==1.49.0"
 
 # --- Set up Tomcat ---
@@ -42,7 +41,7 @@ COPY credentials/. .
 COPY jmx/. .
 COPY py/. .
 COPY download-css.sh ./
-RUN chmod +x ./download-css.sh
+RUN chmod +x ./*.sh ./*.py
 
 # Generate a self-signed certificate (using keytool from the installed Java)
 RUN keytool -genkey -alias tomcat -keyalg RSA -keystore ./tomcat/conf/tomcat.keystore \
