@@ -41,15 +41,15 @@ def solve_recaptcha_v2(website_url: str, website_key: str, timeout: int = 120) -
 
 def solve_and_set_recaptcha(page):
     """Extract sitekey, solve reCAPTCHA v2, and inject the token into the form."""
-    # 1. reCAPTCHA sitekey を取得
+    # Retrieve reCAPTCHA sitekey
     site_key = page.get_attribute(".g-recaptcha", "data-sitekey")
     if not site_key:
         raise RuntimeError("reCAPTCHA site key not found (please check your realm settings)")
 
-    # 2. CapSolver で reCAPTCHA を解く
+    # Solve reCAPTCHA with CapSolver
     token = solve_recaptcha_v2(page.url, site_key)
 
-    # 3. token を DOM に埋め込む
+    # Embed token into the DOM
     page.evaluate(
         """(token) => {
             document.querySelectorAll('textarea[name="g-recaptcha-response"]').forEach(el => {
