@@ -89,7 +89,7 @@ def main():
                 page.fill("#password-confirm", "Pas2w0rd")
 
                 # reCAPTCHA v2: Solve and inject token
-                # solve_and_set_recaptcha(page)
+                solve_and_set_recaptcha(page)
 
                 # Click the registration button
                 page.click("form#kc-register-form [type=submit]")
@@ -105,7 +105,7 @@ def main():
                 if locator.count() > 0:
                     msg = locator.inner_text()
                     if "Username already exists" in msg:
-                        print(f"Username {username} already exists.")
+                        print(f"Username '{username}' already exists.")
 
                 if (success_count + failed_count) % 10 == 0:
                     print(f"{success_count + failed_count} user registrations processed. Success: {success_count}. Failed: {failed_count}.")
