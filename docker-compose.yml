@@ -93,17 +93,6 @@ services:
       - 9443:8443
     environment:
       TZ: ${TZ}
-  attacker-app2:
-    build:
-      context: ./attacker-app
-      dockerfile: Dockerfile.playwright
-    container_name: attacker-app2
-    ipc: host
-    init: true
-    command: sleep infinity
-    environment:
-      TZ: ${TZ}
-    profiles: ["attacker-app2"]
   mail:
     #image: python:3.6-alpine
     image: tamura246/python:3.6-alpine

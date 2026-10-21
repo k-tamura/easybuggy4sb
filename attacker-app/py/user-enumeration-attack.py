@@ -64,7 +64,8 @@ def main():
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        processed_count = 0
+        success_count = 0
+        failed_count = 0
         with open("usernames.txt", "r", encoding="utf-8") as f:
             for line in f:
                 username = line.strip()
@@ -94,16 +95,20 @@ def main():
                 page.click("form#kc-register-form [type=submit]")
                 page.wait_for_load_state("domcontentloaded")
 
+                if page.url.endswith("/auth/realms/master/account/"):
+                    success_count += 1
+                else:
+                    failed_count += 1
+
                 locator = page.locator("#input-error-username")
 
                 if locator.count() > 0:
                     msg = locator.inner_text()
                     if "Username already exists" in msg:
                         print(f"Username {username} already exists.")
-                processed_count += 1
 
-                if processed_count % 10 == 0:
-                    print(f"{processed_count} user registrations processed.")
+                if (success_count + failed_count) % 10 == 0:
+                    print(f"{success_count + failed_count} user registrations processed. Success: {success_count}. Failed: {failed_count}.")
 
         print(f"Processing completed. Total: {processed_count} user registered.")
         browser.close()

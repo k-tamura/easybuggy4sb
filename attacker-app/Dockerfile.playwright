@@ -1,9 +1,0 @@
-FROM mcr.microsoft.com/playwright/python:v1.49.0-jammy
-
-WORKDIR /opt/attacker-app
-COPY dictionary-attack.py ./
-COPY user-enumeration-attack.py ./
-COPY credentials/passwords.txt ./
-COPY credentials/usernames.txt ./
-RUN chmod +x ./*.py
-RUN pip install --no-cache-dir requests "playwright==1.49.0"
