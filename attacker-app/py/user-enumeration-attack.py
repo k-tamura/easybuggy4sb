@@ -4,7 +4,6 @@ import os
 import random
 import string
 import time
-
 import requests
 from playwright.sync_api import sync_playwright
 
@@ -73,7 +72,7 @@ def main():
                 context = browser.new_context(ignore_https_errors=True)
                 page = context.new_page()
 
-                # Access the login screen (navigate to the login screen via the account console)
+                # Access the login screen via the account console
                 page.goto(f"{BASE_URL}/realms/master/account", wait_until="domcontentloaded")
 
                 # Click the Register link
@@ -108,7 +107,8 @@ def main():
                         print(f"Username '{username}' already exists.")
 
                 if (success_count + failed_count) % 10 == 0:
-                    print(f"{success_count + failed_count} user registrations processed. Success: {success_count}. Failed: {failed_count}.")
+                    print(f"{success_count + failed_count} user registrations processed. "
+                          f"Success: {success_count}. Failed: {failed_count}.")
 
         print(f"Processing completed. Total: {processed_count} user registered.")
         browser.close()
