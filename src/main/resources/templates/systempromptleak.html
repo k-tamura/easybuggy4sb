@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+      th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+<script>
+    async function performQuestion() {
+        const text = document.getElementById("inputText").value;
+        const requestBody = {
+            "text": text
+        };
+        const response = await fetch("/respond", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(requestBody)
+        });
+        const data = await response.json();
+        document.getElementById("resultArea").textContent = data.answer;
+    }
+</script>
+<div th:replace="header"></div>
+<form id="respondForm">
+    <p th:text="#{description.respond}"/>
+    <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.question.placeholder}"></textarea><br/>
+    <button type="button" onclick="performQuestion()" th:text="#{label.submit}" th:disabled="${!isLLMReady}"></button><br/><br/>
+    <label th:text="#{label.answer}"></label>: <span id="resultArea"></span><br/><br/>
+    <div th:replace="messages"></div>
+</form>
+</body>
+</html>
+
