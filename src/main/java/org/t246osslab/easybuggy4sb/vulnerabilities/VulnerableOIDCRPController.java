@@ -111,7 +111,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 	}
 
-	@RequestMapping(value = "/vulnerabileoidcrp")
+	@RequestMapping(value = "/vulnerableoidcrp")
 	public ModelAndView index(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
 		String type = req.getParameter("type");
@@ -121,17 +121,17 @@ public class VulnerableOIDCRPController extends AbstractController {
 		} else if ("8".equals(type)) {
 			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
 		} else if ("9".equals(type)) {
-			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/start?redirect_path=/vulnerabileoidcrp") };
+			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/start?redirect_path=/vulnerableoidcrp") };
 		} else if ("11".equals(type)) {
-			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/callback/*"),
-					req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/vulnerabileoidcrp"),
+			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/callback/*"),
+					req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/vulnerableoidcrp"),
 					attackerAppUrl + "/picture",
-					req.getRequestURL().toString().replaceFirst("/vulnerabileoidcrp*", "/callback/%252E%252E/vulnerabileoidcrp")};
+					req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/callback/%252E%252E/vulnerableoidcrp")};
 		}
-		mav.setViewName("vulnerabileoidcrpforum");
-		mav.addObject("title", msg.getMessage("title.vulnerabileoidcrp.forum.page", null, locale));
+		mav.setViewName("vulnerableoidcrpforum");
+		mav.addObject("title", msg.getMessage("title.vulnerableoidcrp.forum.page", null, locale));
 		if (type != null) {
-			mav.addObject("note", msg.getMessage("msg.note.vulnerabileoidcrp" + type, placeholders, locale));
+			mav.addObject("note", msg.getMessage("msg.note.vulnerableoidcrp" + type, placeholders, locale));
 		}
 
 		if (ses != null) {
@@ -197,8 +197,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 			return index(mav, req, null, locale);
 		}
 
-		mav.setViewName("vulnerabileoidcrphome");
-		mav.addObject("title", msg.getMessage("title.vulnerabileoidcrp.home.page", null, locale));
+		mav.setViewName("vulnerableoidcrphome");
+		mav.addObject("title", msg.getMessage("title.vulnerableoidcrp.home.page", null, locale));
 		mav.addObject("manageAccountPageUrl", manageAccountPageUrl);
 
 		Map<?, ?> userInfo = getUserInfo(ses);
@@ -314,8 +314,8 @@ public class VulnerableOIDCRPController extends AbstractController {
 		} else {
 			mav.addObject("userInfo", userInfo);
 		}
-		mav.setViewName("vulnerabileoidcrpforum");
-		mav.addObject("title", msg.getMessage("title.vulnerabileoidcrp.forum.page", null, locale));
+		mav.setViewName("vulnerableoidcrpforum");
+		mav.addObject("title", msg.getMessage("title.vulnerableoidcrp.forum.page", null, locale));
 		String message = req.getParameter("message");
 		boolean isAdmin = isAdmin((String) ses.getAttribute("accessToken"));
 		if (message != null && !message.isEmpty()) {
