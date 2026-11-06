@@ -25,8 +25,6 @@ services:
     image: tamura246/easybuggy4sb-keycloak:2.0
     container_name: keycloak
     volumes:
-      - ./keycloak/account.ftl:/opt/jboss/keycloak/themes/base/account/account.ftl
-      - ./keycloak/register.ftl:/opt/jboss/keycloak/themes/base/login/register.ftl
       - ./attacker-app/credentials/passwords.txt:/opt/jboss/keycloak/standalone/data/password-blacklists/passwords.txt
     environment:
       DB_VENDOR: MYSQL
@@ -78,7 +76,7 @@ services:
       manage_account_page_url: https://${HOST}:8443/auth/realms/master/account/
       mail_host: mail
       ollama_url: http://ollama:11434
-      ollama_model: qwen:0.5b
+      ollama_model: llama3.2:1b
       TZ: ${TZ}
     #ulimits:
       #nofile:
@@ -107,7 +105,7 @@ services:
     build:
       context: ./ollama
       args:
-        MODEL_NAME: "qwen:0.5b"  # Edit this line if you want to change another llm (e.g., "llama3:8b").
+        MODEL_NAME: "llama3.2:1b"  # Edit this line if you want to change another llm (e.g., "llama3:8b").
     container_name: ollama
     restart: unless-stopped
     ports:
