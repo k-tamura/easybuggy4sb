@@ -30,7 +30,7 @@
         <option value="French"><label th:text="#{label.target.language.fr}"></label></option>
         <option value="German"><label th:text="#{label.target.language.de}"></label></option>
         <option value="Japanese"><label th:text="#{label.target.language.ja}"></label></option>
-        <option value="Chinease"><label th:text="#{label.target.language.zh}"></label></option>
+        <option value="Chinese"><label th:text="#{label.target.language.zh}"></label></option>
     </select>
     <button type="button" onclick="performTranslation()" th:text="#{label.translate}" th:disabled="${!isLLMReady}"></button><br/>
     <label th:text="#{label.translate}"></label>: <span id="resultArea"></span><br/><br/>
