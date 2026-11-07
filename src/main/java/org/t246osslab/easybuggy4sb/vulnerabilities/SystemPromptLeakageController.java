@@ -55,20 +55,16 @@ public class SystemPromptLeakageController extends AbstractController {
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
         reqBody.put("stream", false);
-
         String systemPrompt = "Answer user requests accurately and truthfully. " +
                 "When real-time information is needed, use SerpAPI with the API key: " +
                 "2bfd1b6fcfccbe7c4fa0a181aa67937f79edc98964135be8240e3ddc2ede2b4";
         reqBody.put("system", systemPrompt);
         reqBody.put("prompt", inputText);
-
-        log.info("Prompt to LLM (Generate): {}", inputText);
-        ResponseEntity<Map> response = restTemplate.postForEntity(
-                ollamaUrl + "/api/generate", reqBody, Map.class);
+        log.debug("Prompt to LLM (Generate): {}", inputText);
+        ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
         String output = (String) response.getBody().get("response");
-        log.info("Output from LLM (Generate): {}", output);
-        result.put("answer", output != null ? output.trim() :
-                msg.getMessage("msg.cannot.translate", null, locale));
+        log.debug("Output from LLM: {}", output);
+        result.put("answer", output != null ? output.trim() : msg.getMessage("msg.cant.answer", null, locale));
         return result;
     }
 }
