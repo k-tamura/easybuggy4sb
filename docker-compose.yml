@@ -59,6 +59,7 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 8389:8389
       - 9009:9009
     depends_on:
       keycloak:
