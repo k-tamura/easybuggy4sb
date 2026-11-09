@@ -20,7 +20,7 @@
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign"></span>
 			<th:block th:utext="#{msg.note.xee}"></th:block><br /><br />
-			<pre id="code2" class="prettyprint lang-xml" th:text="${xee_xml}"></pre>
+			<pre id="code2" class="prettyprint lang-xml" th:text="${xee_xml}" style="max-height: 100px; overflow-y: auto;"></pre>
 		</div>
 	</form>
 	<th:block th:if="${resultList != null}">
