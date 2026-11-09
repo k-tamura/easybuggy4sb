@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE user[
+<!DOCTYPE users[
 <!ENTITY x0 "ha!">
 <!ENTITY x1 "&x0;&x0;">
 <!ENTITY x2 "&x1;&x1;">

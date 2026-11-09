@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import random
-import string
 import time
 import requests
 from playwright.sync_api import sync_playwright
