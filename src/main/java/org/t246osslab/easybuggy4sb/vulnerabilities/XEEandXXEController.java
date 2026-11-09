@@ -129,11 +129,13 @@ public class XEEandXXEController extends AbstractController {
 			}
 			mav.addObject("title", msg.getMessage("title.xxe.page", null, locale));
 		}
-        if (customHandler.getResult() != null && !customHandler.getResult().isEmpty()) {
-            mav.addObject("resultList", customHandler.getResult());
-            mav.addObject("note", null);
+		ArrayList<Object> result = customHandler.getResult();
+		if (result != null && !result.isEmpty()) {
+			mav.addObject("resultList", result);
+			return mav;
+		} else {
+            return doGet(mav, req, locale);
         }
-		return mav;
 	}
 
 	public class CustomHandler extends DefaultHandler {
