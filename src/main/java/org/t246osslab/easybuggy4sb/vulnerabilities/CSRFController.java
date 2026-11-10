@@ -26,8 +26,9 @@ public class CSRFController extends AbstractController {
 	private LdapTemplate ldapTemplate;
 
     @GetMapping(value = "/admins/csrf")
-    public ModelAndView doGet(ModelAndView mav, Locale locale) {
+    public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, Locale locale) {
         setViewAndCommonObjects(mav, locale, "csrf");
+        mav.addObject("note", msg.getMessage("msg.note.csrf", new Object[]{req.getServerName()}, locale));
         return mav;
     }
 
@@ -52,7 +53,7 @@ public class CSRFController extends AbstractController {
             } catch (Exception e) {
                 log.error("Exception occurs: ", e);
                 mav.addObject("errmsg", msg.getMessage("msg.passwd.change.failed", null, locale));
-                return doGet(mav, locale);
+                return doGet(mav, req, locale);
             }
         } else {
             if (StringUtils.isBlank(password) || password.length() < 8) {
@@ -61,7 +62,7 @@ public class CSRFController extends AbstractController {
                 mav.addObject("errmsg", msg.getMessage("msg.unknown.exception.occur", null, locale));
                 mav.addObject("detailmsg", "userid: " + userid);
             }
-            return doGet(mav, locale);
+            return doGet(mav, req, locale);
         }
         mav.addObject("complete", "true");
         return mav;
