@@ -84,7 +84,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 	@Value("${oidc.configuration.endpoint}")
 	public void setOPConfig(String configEndpoint) {
-		if (configEndpoint != null && !configEndpoint.isEmpty()) {
+		if (StringUtils.isNotEmpty(configEndpoint)) {
 			log.debug("OP Config Endpoint: " + configEndpoint);
 			try {
 				HttpRequestFactory requestFactory = (new NetHttpTransport()).createRequestFactory();
@@ -102,7 +102,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 				if (clientRegistrationEnabled) {
 					tryRegisterClient();
 				}
-				if (!(StringUtils.isEmpty(clientId) || StringUtils.isEmpty(clientSecret))) {
+				if (StringUtils.isNotEmpty(clientId) && StringUtils.isNotEmpty(clientSecret)) {
 					isSettingsReady = true;
 				}
 			} catch (IOException e) {
@@ -115,18 +115,19 @@ public class VulnerableOIDCRPController extends AbstractController {
 	public ModelAndView index(ModelAndView mav, HttpServletRequest req, HttpSession ses, Locale locale) {
 
 		String type = req.getParameter("type");
+		String requestUrl = req.getRequestURL().toString();
 		String[] placeholders = null;
 		if ("7".equals(type)) {
 			placeholders = new String[]{ attackerAppUrl };
 		} else if ("8".equals(type)) {
-			placeholders = new String[]{ attackerAppUrl + "/picture", req.getRequestURL().toString() };
+			placeholders = new String[]{ attackerAppUrl + "/picture", requestUrl };
 		} else if ("9".equals(type)) {
-			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/start?redirect_path=/vulnerableoidcrp") };
+			placeholders = new String[]{ requestUrl.replaceFirst("/vulnerableoidcrp*", "/start?redirect_path=/vulnerableoidcrp") };
 		} else if ("11".equals(type)) {
-			placeholders = new String[]{ req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/callback/*"),
-					req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/vulnerableoidcrp"),
+			placeholders = new String[]{ requestUrl.replaceFirst("/vulnerableoidcrp*", "/callback/*"),
+					requestUrl.replaceFirst("/vulnerableoidcrp*", "/vulnerableoidcrp"),
 					attackerAppUrl + "/picture",
-					req.getRequestURL().toString().replaceFirst("/vulnerableoidcrp*", "/callback/%252E%252E/vulnerableoidcrp")};
+					requestUrl.replaceFirst("/vulnerableoidcrp*", "/callback/%252E%252E/vulnerableoidcrp")};
 		}
 		mav.setViewName("vulnerableoidcrpforum");
 		mav.addObject("title", msg.getMessage("title.vulnerableoidcrp.forum.page", null, locale));
@@ -176,8 +177,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			url.setScopes(Arrays.asList("openid", "profile"));
 			url.setState(state);
 			url.set("nonce", nonce);
-			String redirectPath = req.getParameter("redirect_path");
-			if (redirectPath == null || redirectPath.isEmpty()) redirectPath = "/callback";
+			String redirectPath = StringUtils.defaultIfEmpty(req.getParameter("redirect_path"), "/callback");
 			String redirectUri = req.getRequestURL().toString().replace("/start", redirectPath);
 			ses.setAttribute("redirectUri", redirectUri);
 			url.setRedirectUri(new GenericUrl(redirectUri).build());
@@ -209,14 +209,14 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 		// Verify authz code
 		String code = req.getParameter("code");
-		if (code == null || code.isEmpty()) {
+		if (StringUtils.isEmpty(code)) {
 			log.warn("code is required");
 			return index(mav, req, null, locale);
 		}
 
 		// Verify state
 		String state = (String) ses.getAttribute("state");
-		if (state == null || state.isEmpty() || !state.equals(req.getParameter("state"))) {
+		if (StringUtils.isEmpty(state) || !state.equals(req.getParameter("state"))) {
 			log.warn("Invalid state"); // Error handling should be implemented
 		}
 
@@ -238,7 +238,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 
 			// Verify nonce
 			String nonce = (String) ses.getAttribute("nonce");
-			if (nonce == null || nonce.isEmpty() || !nonce.equals(idToken.getPayload().getNonce())) {
+			if (StringUtils.isEmpty(nonce) || !nonce.equals(idToken.getPayload().getNonce())) {
 				log.warn("Invalid nonce"); // Error handling should be implemented
 			}
 			// Verify signature
@@ -318,12 +318,11 @@ public class VulnerableOIDCRPController extends AbstractController {
 		mav.addObject("title", msg.getMessage("title.vulnerableoidcrp.forum.page", null, locale));
 		String message = req.getParameter("message");
 		boolean isAdmin = isAdmin((String) ses.getAttribute("accessToken"));
-		if (message != null && !message.isEmpty()) {
+		if (StringUtils.isNotEmpty(message)) {
 			String username = (String) userInfo.get("name");
-			if (username == null || message.isEmpty()) username = (String) userInfo.get("preferred_username");
-			String picture = (String) userInfo.get("picture");
+			if (username == null) username = (String) userInfo.get("preferred_username");
+			String picture = StringUtils.defaultIfEmpty((String) userInfo.get("picture"), "images/avatar_anon.png");
 			//if (username.equals("admin")) picture = "images/avatar_woman.png";
-			if (picture == null || picture.isEmpty()) picture = "images/avatar_anon.png";
 			message =  StringEscapeUtils.escapeHtml(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
@@ -503,11 +502,10 @@ public class VulnerableOIDCRPController extends AbstractController {
 		return null;
 	}
 
-	private List<Forum> searchMessages(ModelAndView mav, Locale locale, boolean isAdmin) {
-		List<Forum> messages = null;
+	private void searchMessages(ModelAndView mav, Locale locale, boolean isAdmin) {
 		try {
 			String sql = "select * from forum " + (isAdmin ? "" : "where isadmin = 'false' ") + "order by id desc";
-			messages = jdbcTemplate.query(sql, (rs, rowNum) -> {
+			List<Forum> messages = jdbcTemplate.query(sql, (rs, rowNum) -> {
 					Forum forum = new Forum();
 					forum.setId(rs.getString("id"));
 					forum.setTime(rs.getTime("time"));
@@ -527,7 +525,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			mav.addObject("detailmsg", e.getMessage());
 			log.error("Exception occurs: ", e);
 		}
-		return messages;
 	}
 
 	private File searchFile(ModelAndView mav, Locale locale, int id) {
