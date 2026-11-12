@@ -30,7 +30,7 @@ public class SQLInjectionController extends AbstractController {
 	    setViewAndCommonObjects(mav, locale, "sqlijc");
 		mail = StringUtils.trim(mail);
 		password = StringUtils.trim(password);
-		if (!StringUtils.isBlank(mail) && !StringUtils.isBlank(password) && password.length() >= 8) {
+		if (StringUtils.isNotBlank(mail) && StringUtils.isNotBlank(password) && password.length() >= 8) {
 			try {
 				List<User> users = selectUsers(mail, password);
 				if (users == null || users.isEmpty()) {

@@ -43,7 +43,7 @@ public class CSRFController extends AbstractController {
         }
         String userid = (String) session.getAttribute("userid");
         String password = StringUtils.trim(req.getParameter("password"));
-        if (!StringUtils.isBlank(userid) && !StringUtils.isBlank(password) && password.length() >= 8) {
+        if (StringUtils.isNotBlank(userid) && StringUtils.isNotBlank(password) && password.length() >= 8) {
             try {
 				ModificationItem item = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 						new BasicAttribute("userPassword", password));

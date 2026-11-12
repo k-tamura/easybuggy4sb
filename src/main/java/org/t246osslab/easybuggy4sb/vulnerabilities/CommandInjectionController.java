@@ -31,7 +31,7 @@ public class CommandInjectionController extends AbstractController {
                                 ModelAndView mav, Locale locale) throws InterruptedException, IOException {
         setViewAndCommonObjects(mav, locale, "commandinjection");
 
-        if (!StringUtils.isBlank(url)) {
+        if (StringUtils.isNotBlank(url)) {
             try {
                 Path dir = Paths.get(OSS_SRC);
                 Files.createDirectories(dir);
@@ -95,7 +95,7 @@ public class CommandInjectionController extends AbstractController {
     }
 
     public String getRepoDirName(String url) {
-        if (url == null || url.isEmpty()) return null;
+        if (StringUtils.isEmpty(url)) return null;
         int pos = url.lastIndexOf(".git");
         if (pos == -1) return null;
         String[] parts = url.substring(0, pos).split("/");

@@ -20,7 +20,7 @@ public class SlowRegularExpressionController extends AbstractController {
 			Locale locale) {
 		String message;
         setViewAndCommonObjects(mav, locale, "slowregex");
-		if (!StringUtils.isBlank(word)) {
+		if (StringUtils.isNotBlank(word)) {
 			if (isMatched(word)) {
 				message = msg.getMessage("msg.match.regular.expression", null, locale);
 			} else {

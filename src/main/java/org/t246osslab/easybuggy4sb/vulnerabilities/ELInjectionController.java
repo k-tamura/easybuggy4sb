@@ -28,7 +28,7 @@ public class ELInjectionController extends AbstractController {
         String errMessage = "";
         OgnlContext ctx = new OgnlContext();
         ctx.setMemberAccess(new DefaultMemberAccess(false));
-        if (!StringUtils.isBlank(expression)) {
+        if (StringUtils.isNotBlank(expression)) {
             try {
                 Object expr = Ognl.parseExpression(expression.replaceAll("Math\\.", "@Math@"));
                 value = Ognl.getValue(expr, ctx);

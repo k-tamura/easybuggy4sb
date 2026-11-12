@@ -17,7 +17,7 @@ public class MojibakeController extends AbstractController {
     public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
     		Locale locale) {
         setViewAndCommonObjects(mav, locale, "mojibake");
-        if (!StringUtils.isBlank(string)) {
+        if (StringUtils.isNotBlank(string)) {
             // Capitalize the given string
             String capitalizedName = WordUtils.capitalize(string);
             mav.addObject("msg", msg.getMessage("label.capitalized.string", null, locale) + " : "

@@ -1,5 +1,6 @@
 package org.t246osslab.easybuggy4sb.core.filters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class AuthenticationFilter implements Filter {
 
             /* Remove "logintype" parameter from query string. */
             StringBuilder cleanQuery = new StringBuilder();
-            if (queryString != null && !queryString.isEmpty()) {
+            if (StringUtils.isNotEmpty(queryString)) {
                 for (String param : queryString.split("&")) {
                     String paramName = param.indexOf('=') >= 0 ? param.substring(0, param.indexOf('=')) : param;
                     if (!"logintype".equals(paramName)) {

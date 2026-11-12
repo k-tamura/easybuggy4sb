@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +31,7 @@ public class IndexController extends AbstractController {
         mav.addObject("memoryleak2desc", msg.getMessage("function.description.memory.leak2", new Object[] { lblPerm }, locale));
 
         String mode = System.getProperty("easybuggy.mode");
-        mav.addObject("isOnlyVulnerabilities", mode != null && mode.equalsIgnoreCase("only-vulnerabilities"));
+        mav.addObject("isOnlyVulnerabilities", StringUtils.equalsIgnoreCase(mode, "only-vulnerabilities"));
         return mav;
     }
 }

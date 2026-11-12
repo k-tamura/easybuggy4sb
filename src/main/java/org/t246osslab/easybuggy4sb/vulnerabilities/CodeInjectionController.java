@@ -20,7 +20,7 @@ public class CodeInjectionController extends AbstractController {
 	public ModelAndView process(@RequestParam(value = "jsonString", required = false) String jsonString,
 			ModelAndView mav, Locale locale) {
 		setViewAndCommonObjects(mav, locale, "codeinjection");
-        if (!StringUtils.isBlank(jsonString)) {
+        if (StringUtils.isNotBlank(jsonString)) {
             parseJson(jsonString, mav, locale);
 			mav.addObject("jsonString", jsonString);
         } else {

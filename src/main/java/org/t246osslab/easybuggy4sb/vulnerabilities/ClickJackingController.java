@@ -57,7 +57,7 @@ public class ClickJackingController extends AbstractController {
 			return null;
 		}
 		String mail = StringUtils.trim(req.getParameter("mail"));
-		if (!StringUtils.isBlank(mail) && isValidEmailAddress(mail)) {
+		if (StringUtils.isNotBlank(mail) && isValidEmailAddress(mail)) {
 			try {
 				ModificationItem item = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 						new BasicAttribute("mail", mail));
