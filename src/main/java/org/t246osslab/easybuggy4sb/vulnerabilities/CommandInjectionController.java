@@ -61,7 +61,7 @@ public class CommandInjectionController extends AbstractController {
             }
         }
         if (url != null) {
-            mav.addObject("expression", url);
+            mav.addObject("url", url);
         }
         return mav;
     }
