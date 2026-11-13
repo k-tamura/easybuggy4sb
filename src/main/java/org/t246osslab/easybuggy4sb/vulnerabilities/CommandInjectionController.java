@@ -3,6 +3,7 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class CommandInjectionController extends AbstractController {
 
     public static final String OSS_SRC = "oss-src";
+    private static final String CLOC_DOWNLOAD_URL = "https://github.com/AlDanial/cloc/releases/download/v2.06/";
     private final ObjectMapper mapper = new ObjectMapper();
 
     @RequestMapping(value = "/commandijc")
@@ -37,22 +39,18 @@ public class CommandInjectionController extends AbstractController {
                 Files.createDirectories(dir);
                 String repoDirName = getRepoDirName(url);
                 FileUtils.deleteDirectory(new File(OSS_SRC + "/" + repoDirName));
-                String osName = System.getProperty("os.name").toLowerCase();
-                if (osName.startsWith("windows")) {
-                    executeCommand(OSS_SRC, "cmd", "/c", "git clone " + url);
-                    if (!new File("cloc-2.06.exe").exists()) {
-                        executeCommand(null, "cmd", "/c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.exe");
-                    }
-                    Map<String, Object> clocResult = executeCloc("cmd", "/c", "cloc-2.06.exe --json oss-src/" + repoDirName);
-                    mav.addObject("cloc", clocResult);
-                } else {
-                    executeCommand(OSS_SRC, "bash", "-c", "git clone " + url);
-                    if (!new File("cloc-2.06.pl").exists()) {
-                        executeCommand(null, "bash", "-c", "curl -O -L https://github.com/AlDanial/cloc/releases/download/v2.06/cloc-2.06.pl");
-                    }
-                    Map<String, Object> clocResult = executeCloc("bash", "-c", "perl cloc-2.06.pl --json oss-src/" + repoDirName);
-                    mav.addObject("cloc", clocResult);
+                boolean isWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
+                String shell = isWindows ? "cmd" : "bash";
+                String shellOption = isWindows ? "/c" : "-c";
+                String clocFile = isWindows ? "cloc-2.06.exe" : "cloc-2.06.pl";
+                String clocCommand = (isWindows ? "" : "perl ") + clocFile + " --json oss-src/" + repoDirName;
+
+                executeCommand(OSS_SRC, shell, shellOption, "git clone " + url);
+                if (!new File(clocFile).exists()) {
+                    executeCommand(null, shell, shellOption, "curl -O -L " + CLOC_DOWNLOAD_URL + clocFile);
                 }
+                Map<String, Object> clocResult = executeCloc(shell, shellOption, clocCommand);
+                mav.addObject("cloc", clocResult);
             } catch (Exception e) {
                 log.error("Exception occurs: ", e);
                 mav.addObject("errmsg", msg.getMessage("msg.cant.analyze.code", null, null, locale));
@@ -78,20 +76,10 @@ public class CommandInjectionController extends AbstractController {
         pb.redirectErrorStream(true);
         Process process = pb.start();
         try (InputStream is = process.getInputStream()) {
-            String json = convertStreamToString(is);
+            String json = IOUtils.toString(is, StandardCharsets.UTF_8.name());
             process.waitFor();
             return mapper.readValue(json, new TypeReference<Map<String, Object>>() {});
         }
-    }
-
-    private String convertStreamToString(InputStream is) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        byte[] buf = new byte[2048];
-        int len;
-        while ((len = is.read(buf)) != -1) {
-            sb.append(new String(buf, 0, len, StandardCharsets.UTF_8));
-        }
-        return sb.toString();
     }
 
     public String getRepoDirName(String url) {
