@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
@@ -61,9 +62,18 @@ public class SystemPromptLeakageController extends AbstractController {
         reqBody.put("system", systemPrompt);
         reqBody.put("prompt", inputText);
         log.debug("Prompt to LLM (Generate): {}", inputText);
-        ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
-        String output = (String) response.getBody().get("response");
-        log.debug("Output from LLM: {}", output);
+        String output = null;
+        try {
+            ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
+            Map<?, ?> resBody = response.getBody();
+            if (resBody != null && resBody.get("response") instanceof String) {
+                output = (String) resBody.get("response");
+                log.debug("Output from LLM: {}", output);
+            }
+        } catch (RestClientException e) {
+            log.warn("LLM request failed: {}", e.getMessage());
+            log.debug("Exception occurs: ", e);
+        }
         result.put("answer", output != null ? output.trim() : msg.getMessage("msg.cant.answer", null, locale));
         return result;
     }
