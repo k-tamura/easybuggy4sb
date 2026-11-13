@@ -91,6 +91,7 @@ public class XEEandXXEController extends AbstractController {
 			mav.addObject("errmsg", msg.getMessage("msg.not.xml.file", null, locale));
 			return doGet(mav, req, locale);
 		}
+		boolean isXee = "/xee".equals(req.getServletPath());
 		boolean isParsed = false;
 		CustomHandler customHandler = new CustomHandler();
 		if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
@@ -98,7 +99,7 @@ public class XEEandXXEController extends AbstractController {
 			SAXParser parser;
 			try {
 				SAXParserFactory spf = SAXParserFactory.newInstance();
-				if ("/xee".equals(req.getServletPath())) {
+				if (isXee) {
 					customHandler.setInsert();
 					spf.setFeature("http://xml.org/sax/features/external-general-entities", false);
 					spf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -114,21 +115,14 @@ public class XEEandXXEController extends AbstractController {
 			}
 		}
 
-		if ("/xee".equals(req.getServletPath())) {
-			if (isParsed && customHandler.isRegistered()) {
-				mav.addObject("msg", msg.getMessage("msg.batch.registration.complete", null, locale));
-			} else {
-				mav.addObject("errmsg", msg.getMessage("msg.batch.registration.fail", null, locale));
-			}
-			mav.addObject("title", msg.getMessage("title.xee.page", null, locale));
+		if (isParsed && customHandler.isRegistered()) {
+			mav.addObject("msg", msg.getMessage(
+					isXee ? "msg.batch.registration.complete" : "msg.batch.update.complete", null, locale));
 		} else {
-			if (isParsed && customHandler.isRegistered()) {
-				mav.addObject("msg", msg.getMessage("msg.batch.update.complete", null, locale));
-			} else {
-				mav.addObject("errmsg", msg.getMessage("msg.batch.update.fail", null, locale));
-			}
-			mav.addObject("title", msg.getMessage("title.xxe.page", null, locale));
+			mav.addObject("errmsg", msg.getMessage(
+					isXee ? "msg.batch.registration.fail" : "msg.batch.update.fail", null, locale));
 		}
+		mav.addObject("title", msg.getMessage(isXee ? "title.xee.page" : "title.xxe.page", null, locale));
 		ArrayList<Object> result = customHandler.getResult();
 		if (result != null && !result.isEmpty()) {
 			mav.addObject("resultList", result);
@@ -152,8 +146,8 @@ public class XEEandXXEController extends AbstractController {
 
 			} else if (isUsersExist && "user".equals(qName)) {
 				String executeResult = upsertUser(attributes, locale);
-				User user = new User();
 				if (executeResult == null) {
+					User user = new User();
 					user.setUserId(attributes.getValue("uid"));
 					user.setName(attributes.getValue("name"));
 					user.setPassword(attributes.getValue("password"));
@@ -205,14 +199,11 @@ public class XEEandXXEController extends AbstractController {
 				int count = jdbcTemplate.queryForObject(
 						"select count(*) from users where id = ?", Integer.class, uid);
 
-				if (count == 1) {
-					if (isInsert) {
-						return msg.getMessage("msg.user.already.exist", null, locale);
-					}
-				} else {
-					if (!isInsert) {
-						return msg.getMessage("msg.user.not.exist", null, locale);
-					}
+				if (isInsert && count == 1) {
+					return msg.getMessage("msg.user.already.exist", null, locale);
+				}
+				if (!isInsert && count == 0) {
+					return msg.getMessage("msg.user.not.exist", null, locale);
 				}
 				if (isInsert) {
 					int insertCount = jdbcTemplate.update("insert into users values (?, ?, ?, ?, ?, ?, ?)",
