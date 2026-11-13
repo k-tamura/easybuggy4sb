@@ -85,7 +85,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
             int width = image.getWidth();
             int height = image.getHeight();
 
-            // ピクセルごとに処理
+            // Process each pixel
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     int rgba = image.getRGB(x, y);
@@ -94,12 +94,12 @@ public class UnrestrictedSizeUploadController extends AbstractController {
                     int green = (rgba >> 8)  & 0xff;
                     int blue  = rgba & 0xff;
 
-                    // 色を反転
+                    // Invert the color
                     red   = 255 - red;
                     green = 255 - green;
                     blue  = 255 - blue;
 
-                    // 新しい色を再構成
+                    // Reconstruct the new color
                     int inverted = (alpha << 24) | (red << 16) | (green << 8) | blue;
                     image.setRGB(x, y, inverted);
                 }

@@ -253,7 +253,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			if (!idToken.verifyAudience(Collections.singletonList(clientId))) {
 				log.warn("Invalid audience"); // Error handling should be implemented
 			}
-			// Verify at_hath
+			// Verify at_hash
 			if (!getAtHash(accessToken).equals(idToken.getPayload().getAccessTokenHash())) {
 				log.warn("Invalid at_hash"); // Error handling should be implemented
 			}
