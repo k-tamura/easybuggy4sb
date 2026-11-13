@@ -26,7 +26,7 @@
 		<tr>
 			<td th:text="${osMXBean.availableProcessors}" />
 			<td th:text="${#numbers.formatDecimal(osMXBean.systemCpuLoad * 100, 0, 2)}" />
-			<td th:text="${#numbers.formatDecimal(osMXBean.systemLoadAverage * 100, 0, 2)}" />
+			<td th:text="${osMXBean.systemLoadAverage < 0 ? 'N/A' : #numbers.formatDecimal(osMXBean.systemLoadAverage, 0, 2)}" />
 			<td th:text="${#numbers.formatDecimal(osMXBean.processCpuLoad * 100, 0, 2)}" />
 			<td th:text="${osMXBean.processCpuTime / 1000000000}" />
 		</tr>

@@ -5,7 +5,7 @@
 	<div th:replace="header"></div>
 	<div th:if="${dumpAllThreads!= null}">
 		<p th:text="#{description.thread.dump}" />
-		<table th:each="dumpThread: ${dumpAllThreads}" class="tabletable-bordered table-hover" style="font-size: small;">
+		<table th:each="dumpThread: ${dumpAllThreads}" class="table table-bordered table-hover" style="font-size: small;">
 			<tr th:each="stacktrace: ${dumpThread.toString().split('\r\n|\r|\n')}">
 				<td th:text="${stacktrace.replaceAll('\t', '&nbsp;&nbsp;&nbsp;&nbsp;')}"></td>
 			</tr>

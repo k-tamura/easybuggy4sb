@@ -26,11 +26,11 @@
     <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.translator.placeholder}"></textarea><br/>
     <label th:text="#{label.target.language}"></label>:
     <select id="targetLanguage" style="margin-bottom: 15px; padding: 5px;">
-        <option value="English" selected="selected"><label th:text="#{label.target.language.en}"></label></option>
-        <option value="French"><label th:text="#{label.target.language.fr}"></label></option>
-        <option value="German"><label th:text="#{label.target.language.de}"></label></option>
-        <option value="Japanese"><label th:text="#{label.target.language.ja}"></label></option>
-        <option value="Chinese"><label th:text="#{label.target.language.zh}"></label></option>
+        <option value="English" selected="selected" th:text="#{label.target.language.en}"></option>
+        <option value="French" th:text="#{label.target.language.fr}"></option>
+        <option value="German" th:text="#{label.target.language.de}"></option>
+        <option value="Japanese" th:text="#{label.target.language.ja}"></option>
+        <option value="Chinese" th:text="#{label.target.language.zh}"></option>
     </select>
     <button type="button" onclick="performTranslation()" th:text="#{label.translate}" th:disabled="${!isLLMReady}"></button><br/>
     <label th:text="#{label.translate}"></label>: <span id="resultArea"></span><br/><br/>

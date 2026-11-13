@@ -11,7 +11,7 @@
 			<p th:utext="${msg}" /><br />
 		<div class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign"></span>
-            <th:block th:utext="' ' + #{msg.note.xss}"></th:block>
+            <th:block th:utext="#{msg.note.xss}"></th:block>
 		</div>
 	</form>
 </body>

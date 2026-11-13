@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <div th:replace="head"></div>
 <body style="margin-left: 20px; margin-right: 20px;">
-	<div th:include="header"></div>
+	<div th:replace="header"></div>
 	<p th:utext="#{msg.admin.page.top}" />
 	<ul>
 		<li><a th:href="@{'/serverinfo'}"><th:block th:utext="#{title.serverinfo.page}" /></a></li>
