@@ -102,7 +102,7 @@ services:
     environment:
       TZ: ${TZ}
   ollama:
-    image: tamura246/easybuggy4sb-ollama-qwen-0.5b:2.0
+    image: tamura246/easybuggy4sb-ollama-llama3.2:2.0
     build:
       context: ./ollama
       args:
