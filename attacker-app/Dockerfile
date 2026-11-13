@@ -26,11 +26,11 @@ ENV PATH="${JMETER_HOME}/bin:${PATH}"
 WORKDIR /opt/attacker-app
 
 # --- Install Python dependencies ---
-RUN pip install --no-cache-dir requests "playwright==1.49.0"
+RUN pip install --no-cache-dir "requests==2.32.3" "playwright==1.49.0"
 
 # --- Set up Tomcat ---
 RUN curl -fsSL https://archive.apache.org/dist/tomcat/tomcat-9/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz -o apache-tomcat-${TOMCAT_VERSION}.tar.gz \
-    && tar -zxvf apache-tomcat-${TOMCAT_VERSION}.tar.gz \
+    && tar -zxf apache-tomcat-${TOMCAT_VERSION}.tar.gz \
     && rm -fr apache-tomcat-${TOMCAT_VERSION}/webapps/* \
     && mv apache-tomcat-${TOMCAT_VERSION} tomcat \
     && rm -f apache-tomcat-${TOMCAT_VERSION}.tar.gz

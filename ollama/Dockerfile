@@ -6,5 +6,5 @@ ARG MODEL_NAME=llama3.2:1b
 
 # Download the specified model and store it in the image
 RUN ollama serve & \
-    sleep 5 && \
+    until ollama ls >/dev/null 2>&1; do sleep 1; done && \
     ollama pull ${MODEL_NAME}
