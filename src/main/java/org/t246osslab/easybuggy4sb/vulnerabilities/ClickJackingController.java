@@ -45,7 +45,7 @@ public class ClickJackingController extends AbstractController {
 	protected ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale)
 			throws IOException {
         setViewAndCommonObjects(mav, locale, "clickjacking");
-        
+
 		HttpSession session = req.getSession();
 		if (session == null) {
 			res.sendRedirect("/");

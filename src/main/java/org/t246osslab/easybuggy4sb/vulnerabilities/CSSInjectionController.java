@@ -24,6 +24,7 @@ public class CSSInjectionController extends AbstractController {
 		try {
 			mav.addObject("cssinjection_css", IOUtils.toString(resource.getInputStream()));
 		} catch (IOException e) {
+			log.error("Failed to read cssinjection.css: ", e);
 		}
 		mav.addObject("nonce", UUID.randomUUID().toString());
 		mav.addObject("style", style);

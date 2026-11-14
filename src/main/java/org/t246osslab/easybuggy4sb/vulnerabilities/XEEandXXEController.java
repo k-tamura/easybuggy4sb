@@ -160,12 +160,12 @@ public class XEEandXXEController extends AbstractController {
 					if (uid == null) {
 						StringBuilder attributeString = new StringBuilder();
 						for (int i = 0; i < attributes.getLength(); i++) {
-							attributeString.append(attributes.getQName(i) + "=" + attributes.getValue(i));
+							attributeString.append(attributes.getQName(i)).append("=").append(attributes.getValue(i));
 							if (i < attributes.getLength() - 1) attributeString.append(",");
 						}
 						resultList.add(new String[]{attributeString.toString(), executeResult});
 					} else {
-						resultList.add(new String[]{attributes.getValue("uid"), executeResult});
+						resultList.add(new String[]{uid, executeResult});
 					}
 				}
 			}

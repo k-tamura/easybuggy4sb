@@ -57,7 +57,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
         if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
             isConverted = reverseColor(new File(savePath + File.separator + fileName).getAbsolutePath());
         }
-        
+
         if (isConverted) {
             mav.addObject("msg", msg.getMessage("msg.reverse.color.complete", null, locale));
             mav.addObject("uploadFilePath", SAVE_DIR + "/" + fileName);
@@ -72,7 +72,7 @@ public class UnrestrictedSizeUploadController extends AbstractController {
         return Arrays.asList("png", "gif", "jpg", "jpeg", "bmp").contains(
                 FilenameUtils.getExtension(fileName));
     }
-    
+
     // Reverse the color of the image file
     private boolean reverseColor(String fileName) {
         boolean isConverted = false;

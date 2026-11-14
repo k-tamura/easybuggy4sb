@@ -20,7 +20,7 @@ import org.t246osslab.easybuggy4sb.core.model.User;
 
 @Controller
 public class LDAPInjectionController extends DefaultLoginController {
-	
+
     @Override
     @GetMapping(value = "/ldapijc/login")
     public ModelAndView doGet(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) {
@@ -34,7 +34,7 @@ public class LDAPInjectionController extends DefaultLoginController {
     public ModelAndView doPost(ModelAndView mav, HttpServletRequest req, HttpServletResponse res, Locale locale) throws IOException {
         return super.doPost(mav, req, res, locale);
     }
-    
+
 	@Override
 	protected boolean authUser(String userId, String password) {
 

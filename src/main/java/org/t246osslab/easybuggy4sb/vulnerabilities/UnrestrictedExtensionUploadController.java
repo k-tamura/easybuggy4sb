@@ -51,7 +51,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
 
     @PostMapping(value = "/ureupload", headers=("content-type=multipart/*"))
     public ModelAndView doPost(@RequestParam("file") MultipartFile file, ModelAndView mav, HttpServletRequest req, Locale locale) throws IOException {
-        
+
         if (req.getAttribute("errorMessage") != null) {
             return doGet(mav, req, locale);
         }
@@ -79,7 +79,7 @@ public class UnrestrictedExtensionUploadController extends AbstractController {
         if (MultiPartFileUtils.writeFile(savePath, file, fileName)) {
             isConverted = convert2GrayScale(new File(savePath + File.separator + fileName).getAbsolutePath());
         }
-        
+
         if (isConverted) {
             mav.addObject("msg", msg.getMessage("msg.convert.grayscale.complete", null, locale));
             mav.addObject("uploadFilePath", SAVE_DIR + "/" + fileName);

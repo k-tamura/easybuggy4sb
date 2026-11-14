@@ -37,7 +37,7 @@ public class OpenRedirectController extends DefaultLoginController {
         } else {
             loginQueryString = "?" + loginQueryString;
         }
-        
+
         HttpSession session = req.getSession(true);
         if (isAccountLocked(userid)) {
             /* account lock count +1 */
@@ -50,7 +50,7 @@ public class OpenRedirectController extends DefaultLoginController {
 
             session.setAttribute("authNMsg", "authenticated");
             session.setAttribute("userid", userid);
-            
+
             String gotoUrl = req.getParameter("goto");
             if (gotoUrl != null) {
                 res.sendRedirect(gotoUrl);

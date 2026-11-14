@@ -1,5 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +37,7 @@ public class SessionHijackingController extends AbstractController {
         } else {
             mav.addObject("note", msg.getMessage("msg.note.seshj2", null, locale));
         }
-        if (!org.apache.commons.lang3.StringUtils.isBlank(string)) {
+        if (!StringUtils.isBlank(string)) {
             try {
                 byte[] decodedBytes = Base64.getUrlDecoder().decode(string.trim());
                 String decodedString = new String(decodedBytes);
