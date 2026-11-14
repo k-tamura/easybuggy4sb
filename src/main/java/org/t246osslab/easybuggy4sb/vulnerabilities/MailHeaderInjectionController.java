@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 
 /**
- * A servlet that takes message details from user and send it as a new mail
+ * A controller that takes message details from the user and sends it as a new mail
  * through an SMTP server. The mail may contain an attachment which is the file
  * uploaded from client.
  */
@@ -92,38 +92,30 @@ public class MailHeaderInjectionController extends AbstractController {
 	}
 
 	/**
-	 * Saves files uploaded from the client and return a list of these files
+	 * Saves files uploaded from the client and returns a list of these files
 	 * which will be attached to the mail message.
 	 */
 	private List<File> saveUploadedFiles(HttpServletRequest request) throws IOException, ServletException {
 		List<File> listFiles = new ArrayList<>();
-		byte[] buffer = new byte[4096];
-		int bytesRead;
-		Collection<Part> multiparts = request.getParts();
-		if (!multiparts.isEmpty()) {
-			for (Part part : request.getParts()) {
-				// creates a file to be saved
-				String fileName = extractFileName(part);
-				if (StringUtils.isBlank(fileName)) {
-					// not attachment part, continue
-					continue;
-				}
-
-				File saveFile = new File(fileName);
-				log.debug("Uploaded file is saved on: " + saveFile.getAbsolutePath());
-
-				try (FileOutputStream outputStream = new FileOutputStream(saveFile);
-						InputStream inputStream = part.getInputStream()) {
-
-					// saves uploaded file
-					while ((bytesRead = inputStream.read(buffer)) != -1) {
-						outputStream.write(buffer, 0, bytesRead);
-					}
-				} catch (Exception e) {
-					log.error("Exception occurs: ", e);
-				}
-				listFiles.add(saveFile);
+		for (Part part : request.getParts()) {
+			// creates a file to be saved
+			String fileName = extractFileName(part);
+			if (StringUtils.isBlank(fileName)) {
+				// not attachment part, continue
+				continue;
 			}
+
+			File saveFile = new File(fileName);
+			log.debug("Uploaded file is saved on: " + saveFile.getAbsolutePath());
+
+			// saves uploaded file
+			try (FileOutputStream outputStream = new FileOutputStream(saveFile);
+					InputStream inputStream = part.getInputStream()) {
+				IOUtils.copy(inputStream, outputStream);
+			} catch (Exception e) {
+				log.error("Exception occurs: ", e);
+			}
+			listFiles.add(saveFile);
 		}
 		return listFiles;
 	}
@@ -146,11 +138,10 @@ public class MailHeaderInjectionController extends AbstractController {
 	 * Deletes all uploaded files, should be called after the e-mail was sent.
 	 */
 	private void deleteUploadFiles(List<File> listFiles) {
-		if (listFiles != null && !listFiles.isEmpty()) {
-			for (File aFile : listFiles) {
-				if (!aFile.delete()) {
-					log.debug("Cannot remove file: {}", aFile);
-				}
+		if (listFiles == null) return;
+		for (File aFile : listFiles) {
+			if (!aFile.delete()) {
+				log.debug("Cannot remove file: {}", aFile);
 			}
 		}
 	}
