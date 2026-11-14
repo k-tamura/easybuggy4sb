@@ -65,9 +65,7 @@ public class DefaultLoginController extends AbstractController {
         String password = StringUtils.trim(req.getParameter("password"));
 
         HttpSession session = req.getSession(true);
-        if (isAccountLocked(userid)) {
-            session.setAttribute("authNMsg", msg.getMessage("msg.authentication.fail", null, locale));
-        } else if (authUser(userid, password)) {
+        if (!isAccountLocked(userid) && authUser(userid, password)) {
             /* if authentication succeeded, then reset account lock */
             resetAccountLock(userid);
             session = recreateSession(req, session);
