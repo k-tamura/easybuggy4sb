@@ -92,7 +92,7 @@ public class ClickJackingController extends AbstractController {
 
 	/**
 	 * Retrieves the specified user's email address from LDAP.
-	 * @param userid: The user ID retrieved from the session.
+	 * @param userid The user ID retrieved from the session.
 	 * @return The retrieved email address. If not found, returns null.
 	 */
 	private String getCurrentMail(String userid) {
