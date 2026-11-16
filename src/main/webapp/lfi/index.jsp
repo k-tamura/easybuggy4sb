@@ -55,10 +55,12 @@
     </p></li>
 </ul>
 <br>
+<c:if test="${not hideHints}">
 <div class="alert alert-info" role="alert">
     <span class="glyphicon glyphicon-info-sign"></span>&nbsp;
     <fmt:message key="msg.note.local.file.inclusion" />
 </div>
+</c:if>
 <hr>
 <footer>
     <img src="/images/easybuggyL.png">Copyright &copy; 2016-2026 T246 OSS Lab, all rights reserved.

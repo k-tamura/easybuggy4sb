@@ -8,7 +8,7 @@
 		<textarea rows="10" cols="50" name="string"></textarea><br />
 			<br /> <input type="submit" th:value="#{label.submit}" /><br />
 		<span style="font-family: monospace; white-space: pre;"><p th:utext="${msg}" /></span><br />
-		<div class="alert alert-info" role="alert">
+		<div th:if="${hideHints == null or !hideHints}" class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign"></span>
 			<th:block th:utext="${note}"></th:block>
 		</div>

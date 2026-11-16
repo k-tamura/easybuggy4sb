@@ -28,7 +28,7 @@
 		<span class="glyphicon glyphicon-warning-sign"></span>
 		<th:block th:text="${errmsg}"></th:block>
 	</div>
-	<div class="alert alert-info" role="alert">
+	<div th:if="${hideHints == null or !hideHints}" class="alert alert-info" role="alert">
 		<span class="glyphicon glyphicon-info-sign"></span>
 		<th:block th:utext="#{msg.note.cssinjection}"></th:block>
 	</div>

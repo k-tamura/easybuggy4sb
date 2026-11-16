@@ -50,10 +50,12 @@
 	</p></li>
 </ul>
 <br>
+<c:if test="${not hideHints}">
 <div class="alert alert-info" role="alert">
 	<span class="glyphicon glyphicon-info-sign"></span>&nbsp;
 	<fmt:message key="msg.note.ssrf" />
 </div>
+</c:if>
 <!-- footer section start -->
 <c:catch var="ex">
     <c:if test="${param.template != null && !fn:startsWith(param.template,'file:') && !fn:startsWith(param.template,'ftp:') && !fn:startsWith(param.template,'https:')}">

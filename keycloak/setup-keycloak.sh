@@ -147,7 +147,7 @@ EOF
 
 create_user "test" "123" "" "" "images/avatar_man.png"
 create_user "user" "user" "Naomi" "Sato" "images/avatar_woman.png"
-create_user "123" "P@ssw0rd" "Ichiro" "Suzuki" ""
+create_user "123" "P@ssw0rd" $(echo ")14b7e3c9_ecrof_eturb_esrever(GALF" | rev) "Suzuki" ""
 create_user "manager" "admin" "" "" ""  "admin"
 
 echo "Setup script finished." >> /opt/jboss/setup.log

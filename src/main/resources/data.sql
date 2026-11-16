@@ -2,6 +2,9 @@ insert into users (id, name, password, secret, ispublic, mail) values ('admin','
 insert into users (id, name, password, secret, ispublic, mail) values ('admin02','admin02','pas2w0rd','9203847561','false','admin02@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('admin03','admin03','pa33word','1073849203','false','admin03@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('admin04','admin04','pathwood','8392017465','false','admin04@gmail.com');
+-- Mini-CTF flag for pivoting: this user's password is set at runtime (decoded from
+-- FlagService#pivoting) and is revealed by the "SELECT *" dump of the pivoting attack.
+insert into users (id, name, password, secret, ispublic, mail) values ('ctf01','CTF Pivoting','(set at runtime)','6102938475','false','ctf1@example.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user00','Mark','password','2948375610','true','mark@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user01','David','pa32w0rd','6758493021','true','david@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user02','Peter','pa23word','3847561029','true','peter@gmail.com');
@@ -14,5 +17,5 @@ insert into users (id, name, password, secret, ispublic, mail) values ('user08',
 insert into users (id, name, password, secret, ispublic, mail) values ('user09','Michelle','pas2w0rd','3849201763','true','michelle@gmail.com');
 
 truncate table forum;
-insert into forum (time, username, picture, message, isadmin, file_name, file_data) values (CURRENT_TIMESTAMP,'admin','images/avatar_anon.png','この掲示板では、管理者（adminとmanager）の書き込みは管理者にしか表示されません。パスワードは添付ファイルに記載しています。<br/><br/>On this board, posts by administrators (admin and manager) are only visible to administrators. The passwords are in the attached file.', 'true', 'credentials.txt', 0x757365726E616D652C70617373776F72640D0A61646D696E2C70617373776F72640D0A6D616E616765722C6D616E61676572);
+insert into forum (time, username, picture, message, isadmin, file_name, file_data) values (CURRENT_TIMESTAMP,'admin','images/avatar_anon.png','この掲示板では、管理者（adminとmanager）の書き込みは管理者にしか表示されません。パスワードは添付ファイルに記載しています。<br/><br/>On this board, posts by administrators (admin and manager) are only visible to administrators. The passwords are in the attached file.', 'true', 'credentials.txt', 0x757365726E616D652C70617373776F72640D0A61646D696E2C70617373776F72640D0A6D616E616765722C6D616E616765720D0A666C61672C464C41472869646F725F633461396632303729);
 insert into forum (time, username, picture, message, isadmin) values (CURRENT_TIMESTAMP,'test','images/avatar_man.png','Feel free to write any questions you may have.', 'false');

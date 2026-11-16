@@ -1,0 +1,58 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}"
+      th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+<div th:replace="header"></div>
+
+<p th:utext="#{description.flags}"></p>
+
+<p>
+    <strong th:text="#{label.flag.progress}"></strong>
+    <span th:text="${capturedCount} + ' / ' + ${totalCount}"></span>
+</p>
+
+<div th:if="${complete}" class="alert alert-success" role="alert">
+    <span class="glyphicon glyphicon-star"></span>
+    <th:block th:text="#{msg.flag.congrats}"></th:block>
+</div>
+
+<form method="post" action="/flags" style="margin-bottom: 15px;">
+    <input type="text" name="flag" size="48" th:placeholder="#{msg.flag.placeholder}" />
+    <button type="submit" th:text="#{label.flag.submit}"></button>
+</form>
+
+<form method="post" action="/flags/reset" style="margin-bottom: 15px;">
+    <button type="submit" th:text="#{label.flag.reset}"></button>
+</form>
+
+<form method="post" action="/flags/mode" style="margin-bottom: 15px;">
+    <strong th:text="#{label.flag.hardmode}"></strong>
+    <span th:text="${hideHints} ? #{label.flag.hardmode.active} : #{label.flag.hardmode.inactive}"></span>&nbsp;
+    <button type="submit" th:text="#{label.flag.hardmode.toggle}"></button>
+    <br/>
+    <small th:text="#{label.flag.hardmode.desc}" style="color: #777;"></small>
+</form>
+
+<div th:replace="messages"></div>
+
+<table class="table table-striped" style="width: auto;">
+    <thead>
+        <tr>
+            <th th:text="#{label.flag.status}"></th>
+            <th th:text="#{label.flag.name}"></th>
+            <th th:text="#{label.flag.value}"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="f : ${flags}">
+            <td th:text="${f.captured} ? #{label.flag.captured} : #{label.flag.locked}"></td>
+            <td th:text="${f.title}"></td>
+            <td style="font-family: monospace;"
+                th:text="${f.captured} ? ${f.value} : '????????'"></td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

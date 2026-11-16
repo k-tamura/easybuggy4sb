@@ -9,7 +9,7 @@
 			<input type="text" name="string" size="100" maxlength="100" /><br />
 			<br /> <input type="submit" th:value="#{label.reverse}" /><br /><br />
 			<p th:utext="${msg}" /><br />
-		<div class="alert alert-info" role="alert">
+		<div th:if="${hideHints == null or !hideHints}" class="alert alert-info" role="alert">
 			<span class="glyphicon glyphicon-info-sign"></span>
             <th:block th:utext="#{msg.note.xss}"></th:block>
 		</div>

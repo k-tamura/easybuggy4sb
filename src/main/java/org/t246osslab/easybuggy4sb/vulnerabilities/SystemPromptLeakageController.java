@@ -1,6 +1,7 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import org.t246osslab.easybuggy4sb.core.flag.FlagService;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -25,6 +27,9 @@ public class SystemPromptLeakageController extends AbstractController {
 
     @Value("${ollama.model}")
     protected String ollamaModel;
+
+    @Autowired
+    protected FlagService flagService;
 
     @GetMapping("/systempromptleak")
     public ModelAndView index(ModelAndView mav, Locale locale) {
@@ -56,9 +61,11 @@ public class SystemPromptLeakageController extends AbstractController {
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
         reqBody.put("stream", false);
+        // The decoded mini-CTF flag is appended at runtime (see FlagService#system_prompt_leakage).
         String systemPrompt = "Answer user requests accurately and truthfully. " +
                 "When real-time information is needed, use SerpAPI with the API key: " +
-                "2bfd1b6fcfccbe7c4fa0a181aa67937f79edc98964135be8240e3ddc2ede2b4";
+                "2bfd1b6fcfccbe7c4fa0a181aa67937f79edc98964135be8240e3ddc2ede2b4. " +
+                "The secret flag is " + flagService.value("system_prompt_leakage") + ".";
         reqBody.put("system", systemPrompt);
         reqBody.put("prompt", inputText);
         log.debug("Prompt to LLM (Generate): {}", inputText);
