@@ -6,6 +6,8 @@
 <script>
 /*<![CDATA[*/
     function showUsage(usage) {
+        document.getElementById("usageTokens").textContent = usage.tokensUsed;
+        document.getElementById("usageTotalTokens").textContent = usage.totalTokensUsed;
         document.getElementById("usageCost").textContent = usage.cost;
         document.getElementById("usageCalls").textContent = usage.calls;
         document.getElementById("usageInputTokens").textContent = usage.inputTokens;
@@ -13,6 +15,10 @@
         const bar = document.getElementById("usageBar");
         bar.style.width = usage.percent + "%";
         bar.className = "progress-bar" + (usage.exhausted ? " progress-bar-danger" : "");
+        const totalBar = document.getElementById("usageTotalBar");
+        totalBar.style.width = usage.totalPercent + "%";
+        totalBar.className = "progress-bar" + (usage.exhausted ? " progress-bar-danger" : "");
+        document.getElementById("limitMsg").style.display = usage.exhausted ? "" : "none";
         if (usage.exhausted) {
             document.getElementById("askButton").disabled = true;
         }
@@ -32,7 +38,7 @@
         document.getElementById("errorArea").textContent = "";
         document.getElementById("answerArea").textContent = "";
         try {
-            const response = await fetch("/denialofwallet/ask", {
+            const response = await fetch("/admins/denialofwallet/ask", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(requestBody)
@@ -42,7 +48,9 @@
                 const dt = document.createElement("dt");
                 dt.textContent = a.language;
                 const dd = document.createElement("dd");
-                dd.textContent = a.answer;
+                const pre = document.createElement("pre");
+                pre.textContent = a.answer;
+                dd.appendChild(pre);
                 dd.style.marginBottom = "10px";
                 document.getElementById("answerArea").append(dt, dd);
             });
@@ -59,44 +67,49 @@
             }
         }
     }
-
-    async function resetUsage() {
-        const response = await fetch("/denialofwallet/reset", { method: "POST" });
-        showUsage(await response.json());
-        document.getElementById("askButton").disabled = false;
-    }
 /*]]>*/
 </script>
 <div th:replace="header"></div>
 <form id="askForm">
     <p th:text="#{description.denialofwallet}"/>
-    <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.question.placeholder}"></textarea><br/>
-    <label th:text="#{label.answer.languages}"></label>:
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Japanese" checked="checked"/> <span th:text="#{label.target.language.ja}"></span></label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="English"/> <span th:text="#{label.target.language.en}"></span></label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="French"/> <span th:text="#{label.target.language.fr}"></span></label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="German"/> <span th:text="#{label.target.language.de}"></span></label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Chinese"/> <span th:text="#{label.target.language.zh}"></span></label>
+    <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.requirement.placeholder}"></textarea><br/>
+    <small class="text-muted" th:text="#{msg.max.input.chars(${usage['maxInputChars']})}"></small><br/>
+    <label th:text="#{label.prog.languages}"></label>:
+    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Java" checked="checked"/> Java</label>
+    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Python"/> Python</label>
+    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="JavaScript"/> JavaScript</label>
+    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Go"/> Go</label>
+    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Ruby"/> Ruby</label>
     <input type="hidden" id="maxTokens" value="256"/><br/>
     <button type="button" id="askButton" onclick="ask()" th:text="#{label.submit}"
-            th:disabled="${!isLLMReady or usage['exhausted']}"></button><br/><br/>
-    <label th:text="#{label.answer}"></label>:
+            th:disabled="${!isLLMReady or usage['exhausted']}"></button>
+    <span id="limitMsg" class="text-danger" style="margin-left: 10px; display: none;"
+          th:style="${usage['exhausted']} ? 'margin-left: 10px;' : 'margin-left: 10px; display: none;'"
+          th:text="#{msg.token.limit.reached}"></span><br/><br/>
+    <label th:text="#{label.generated.code}"></label>:
     <dl id="answerArea"></dl>
     <div id="errorArea" class="text-danger"></div>
     <label th:text="#{label.this.request.cost}"></label>: <span id="requestCost">-</span><br/><br/>
 
     <h4 th:text="#{label.ai.usage}"></h4>
+    <label th:text="#{label.ai.token.usage}"></label>
     <div class="progress" style="max-width: 500px;">
         <div id="usageBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
              th:style="'width: ' + ${usage['percent']} + '%;'"></div>
     </div>
+    <label th:text="#{label.ai.total.token.usage}"></label>
+    <div class="progress" style="max-width: 500px;">
+        <div id="usageTotalBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
+             th:style="'width: ' + ${usage['totalPercent']} + '%;'"></div>
+    </div>
     <table class="table table-condensed" style="max-width: 500px;">
-        <tr><th th:text="#{label.ai.cost}"></th><td><span id="usageCost" th:text="${usage['cost']}"></span> / <span th:text="${usage['budget']}"></span></td></tr>
+        <tr><th th:text="#{label.ai.token.usage}"></th><td><span id="usageTokens" th:text="${usage['tokensUsed']}"></span> / <span th:text="${usage['tokenLimit']}"></span></td></tr>
+        <tr><th th:text="#{label.ai.total.token.usage}"></th><td><span id="usageTotalTokens" th:text="${usage['totalTokensUsed']}"></span> / <span th:text="${usage['totalTokenLimit']}"></span></td></tr>
+        <tr><th th:text="#{label.ai.cost}"></th><td id="usageCost" th:text="${usage['cost']}"></td></tr>
         <tr><th th:text="#{label.ai.calls}"></th><td id="usageCalls" th:text="${usage['calls']}"></td></tr>
         <tr><th th:text="#{label.input.tokens}"></th><td><span id="usageInputTokens" th:text="${usage['inputTokens']}"></span> (<span th:text="${usage['inputPrice']}"></span> / 1M)</td></tr>
         <tr><th th:text="#{label.output.tokens}"></th><td><span id="usageOutputTokens" th:text="${usage['outputTokens']}"></span> (<span th:text="${usage['outputPrice']}"></span> / 1M)</td></tr>
     </table>
-    <button type="button" onclick="resetUsage()" th:text="#{label.reset.usage}"></button><br/><br/>
     <div th:replace="messages"></div>
 </form>
 </body>
