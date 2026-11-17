@@ -35,7 +35,8 @@
         };
         const button = document.getElementById("askButton");
         button.disabled = true;
-        document.getElementById("errorArea").textContent = "";
+        document.getElementById("errorText").textContent = "";
+        document.getElementById("errorArea").style.display = "none";
         document.getElementById("answerArea").textContent = "";
         try {
             const response = await fetch("/admins/denialofwallet/ask", {
@@ -58,7 +59,8 @@
                 document.getElementById("requestCost").textContent = data.requestCost;
             }
             if (data.error) {
-                document.getElementById("errorArea").textContent = data.error;
+                document.getElementById("errorText").textContent = data.error;
+                document.getElementById("errorArea").style.display = "";
             }
             showUsage(data.usage);
         } finally {
@@ -88,27 +90,44 @@
           th:text="#{msg.token.limit.reached}"></span><br/><br/>
     <label th:text="#{label.generated.code}"></label>:
     <dl id="answerArea"></dl>
-    <div id="errorArea" class="text-danger"></div>
+    <div id="errorArea" class="alert alert-danger" role="alert" style="display: none;">
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <span id="errorText"></span>
+    </div>
     <label th:text="#{label.this.request.cost}"></label>: <span id="requestCost">-</span><br/><br/>
 
     <h4 th:text="#{label.ai.usage}"></h4>
-    <label th:text="#{label.ai.token.usage}"></label>
-    <div class="progress" style="max-width: 500px;">
-        <div id="usageBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
-             th:style="'width: ' + ${usage['percent']} + '%;'"></div>
-    </div>
-    <label th:text="#{label.ai.total.token.usage}"></label>
-    <div class="progress" style="max-width: 500px;">
-        <div id="usageTotalBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
-             th:style="'width: ' + ${usage['totalPercent']} + '%;'"></div>
-    </div>
-    <table class="table table-condensed" style="max-width: 500px;">
-        <tr><th th:text="#{label.ai.token.usage}"></th><td><span id="usageTokens" th:text="${usage['tokensUsed']}"></span> / <span th:text="${usage['tokenLimit']}"></span></td></tr>
-        <tr><th th:text="#{label.ai.total.token.usage}"></th><td><span id="usageTotalTokens" th:text="${usage['totalTokensUsed']}"></span> / <span th:text="${usage['totalTokenLimit']}"></span></td></tr>
-        <tr><th th:text="#{label.ai.cost}"></th><td id="usageCost" th:text="${usage['cost']}"></td></tr>
-        <tr><th th:text="#{label.ai.calls}"></th><td id="usageCalls" th:text="${usage['calls']}"></td></tr>
-        <tr><th th:text="#{label.input.tokens}"></th><td><span id="usageInputTokens" th:text="${usage['inputTokens']}"></span> (<span th:text="${usage['inputPrice']}"></span> / 1M)</td></tr>
-        <tr><th th:text="#{label.output.tokens}"></th><td><span id="usageOutputTokens" th:text="${usage['outputTokens']}"></span> (<span th:text="${usage['outputPrice']}"></span> / 1M)</td></tr>
+    <table class="table table-condensed" style="max-width: 700px;">
+        <tr>
+            <td colspan="2">
+                <div style="overflow: hidden;">
+                    <label th:text="#{label.ai.token.usage}"></label>
+                    <span style="float: right;"><span id="usageTokens" th:text="${usage['tokensUsed']}"></span> / <span th:text="${usage['tokenLimit']}"></span></span>
+                </div>
+                <div class="progress" style="margin: 4px 0 0 0;">
+                    <div id="usageBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
+                         th:style="'width: ' + ${usage['percent']} + '%;'"></div>
+                </div>
+            </td>
+            <td colspan="2">
+                <div style="overflow: hidden;">
+                    <label th:text="#{label.ai.total.token.usage}"></label>
+                    <span style="float: right;"><span id="usageTotalTokens" th:text="${usage['totalTokensUsed']}"></span> / <span th:text="${usage['totalTokenLimit']}"></span></span>
+                </div>
+                <div class="progress" style="margin: 4px 0 0 0;">
+                    <div id="usageTotalBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
+                         th:style="'width: ' + ${usage['totalPercent']} + '%;'"></div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th th:text="#{label.ai.cost}"></th><td id="usageCost" th:text="${usage['cost']}"></td>
+            <th th:text="#{label.ai.calls}"></th><td id="usageCalls" th:text="${usage['calls']}"></td>
+        </tr>
+        <tr>
+            <th th:text="#{label.input.tokens}"></th><td><span id="usageInputTokens" th:text="${usage['inputTokens']}"></span> (<span th:text="${usage['inputPrice']}"></span> / 1M)</td>
+            <th th:text="#{label.output.tokens}"></th><td><span id="usageOutputTokens" th:text="${usage['outputTokens']}"></span> (<span th:text="${usage['outputPrice']}"></span> / 1M)</td>
+        </tr>
     </table>
     <div th:replace="messages"></div>
 </form>
