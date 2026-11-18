@@ -2,7 +2,7 @@ package org.t246osslab.easybuggy4sb.troubles;
 
 import java.util.Locale;
 
-import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

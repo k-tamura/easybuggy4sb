@@ -12,4 +12,4 @@ public class MissingResourceExceptionController {
 	public void process() {
 	    ResourceBundle.getBundle("");
 	}
-}
+}

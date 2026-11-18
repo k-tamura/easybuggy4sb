@@ -12,4 +12,4 @@ public class PingController {
 		mav.setViewName("ping");
 		return mav;
 	}
-}
+}

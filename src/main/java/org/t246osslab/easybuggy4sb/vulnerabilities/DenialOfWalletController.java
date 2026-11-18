@@ -1,10 +1,8 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +12,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
+import org.t246osslab.easybuggy4sb.core.utils.OllamaSupport;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -83,7 +82,7 @@ public class DenialOfWalletController extends AbstractController {
 
     @GetMapping("/admins/denialofwallet")
     public ModelAndView index(ModelAndView mav, HttpSession session, Locale locale) {
-        boolean isLLMReady = isOllamaRunning();
+        boolean isLLMReady = OllamaSupport.isRunning(ollamaUrl);
         setViewAndCommonObjects(mav, locale, "denialofwallet");
         Usage usage = usageFor(session);
         if (!isLLMReady) {
@@ -142,7 +141,7 @@ public class DenialOfWalletController extends AbstractController {
             return result;
         }
 
-        RestTemplate restTemplate = createRestTemplate();
+        RestTemplate restTemplate = OllamaSupport.createRestTemplate();
         List<Map<String, String>> answers = new ArrayList<>();
         long requestCost = 0;
         for (Object language : languageList) {
@@ -231,25 +230,6 @@ public class DenialOfWalletController extends AbstractController {
         m.put("inputPrice", String.format(Locale.ROOT, "$%.2f", inputPricePerMTok));
         m.put("outputPrice", String.format(Locale.ROOT, "$%.2f", outputPricePerMTok));
         return m;
-    }
-
-    private boolean isOllamaRunning() {
-        try {
-            ResponseEntity<String> response = createRestTemplate().getForEntity(ollamaUrl, String.class);
-            return HttpStatus.SC_OK == response.getStatusCode().value() && "Ollama is running".equals(response.getBody());
-        } catch (Exception e) {
-            log.info("Ollama is not running: {}", e.getMessage());
-            log.debug("Exception occurs: ", e);
-            return false;
-        }
-    }
-
-    /* Timeouts keep a single LLM call from blocking forever (e.g. when maxTokens is -1). */
-    private static RestTemplate createRestTemplate() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(5_000);
-        factory.setReadTimeout(180_000);
-        return new RestTemplate(factory);
     }
 
     private static String formatDollars(long microDollars) {

@@ -1,6 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.NamingException;
 import org.springframework.ldap.core.AttributesMapper;

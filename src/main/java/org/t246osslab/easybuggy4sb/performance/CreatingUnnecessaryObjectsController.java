@@ -73,4 +73,4 @@ public class CreatingUnnecessaryObjectsController extends AbstractController {
         return (long) number * (number + 1) / 2;
 	}
 	 */
-}
+}

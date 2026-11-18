@@ -32,4 +32,4 @@ class InitializerErrorThrower {
     private InitializerErrorThrower(){
         // this constructor is added to suppress sonar advice
     }
-}
+}

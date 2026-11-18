@@ -12,4 +12,4 @@ public class RedirectLoopController {
     public String process() throws IOException {
         return "redirect:redirectloop";
     }
-}
+}

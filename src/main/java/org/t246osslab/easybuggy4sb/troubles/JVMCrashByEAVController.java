@@ -24,4 +24,4 @@ public class JVMCrashByEAVController {
         singleoneInstanceField.setAccessible(true);
         return (Unsafe) singleoneInstanceField.get(null);
     }
-}
+}

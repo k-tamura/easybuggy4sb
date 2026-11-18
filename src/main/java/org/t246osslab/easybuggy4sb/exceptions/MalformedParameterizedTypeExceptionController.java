@@ -15,4 +15,4 @@ public class MalformedParameterizedTypeExceptionController {
 	public void process() {
         ParameterizedTypeImpl.make(List.class, new Type[]{}, null);
 	}
-}
+}
