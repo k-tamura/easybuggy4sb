@@ -12,7 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -323,7 +323,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			if (username == null) username = (String) userInfo.get("preferred_username");
 			String picture = StringUtils.defaultIfEmpty((String) userInfo.get("picture"), "images/avatar_anon.png");
 			//if (username.equals("admin")) picture = "images/avatar_woman.png";
-			message =  StringEscapeUtils.escapeHtml(message);
+			message =  StringEscapeUtils.escapeHtml4(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");
 			insertMessage(username, picture, message, mav, locale, isAdmin, file);
@@ -610,7 +610,9 @@ public class VulnerableOIDCRPController extends AbstractController {
 	private boolean isAdmin(String accessToken) {
 
 		if (accessToken == null) return false;
-		String payloadBase64Url = accessToken.split("\\.")[1];
+		String[] parts = accessToken.split("\\.");
+		if (parts.length < 2) return false;
+		String payloadBase64Url = parts[1];
 		byte[] decodedBytes = Base64.decodeBase64(payloadBase64Url);
 		String decodedPayload = new String(decodedBytes, StandardCharsets.UTF_8);
 

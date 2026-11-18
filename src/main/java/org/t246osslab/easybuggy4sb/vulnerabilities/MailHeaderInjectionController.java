@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -125,10 +125,22 @@ public class MailHeaderInjectionController extends AbstractController {
 	 */
 	private String extractFileName(Part part) {
 		String contentDisp = part.getHeader("content-disposition");
-		String[] items = contentDisp.split(";");
-		for (String s : items) {
-			if (s.trim().startsWith("filename")) {
-				return s.substring(s.indexOf('=') + 2, s.length() - 1);
+		if (contentDisp == null) {
+			return null;
+		}
+		for (String s : contentDisp.split(";")) {
+			s = s.trim();
+			if (s.startsWith("filename")) {
+				int eq = s.indexOf('=');
+				if (eq < 0) {
+					return null;
+				}
+				String value = s.substring(eq + 1).trim();
+				// Strip surrounding quotes if the filename is quoted.
+				if (value.length() >= 2 && value.startsWith("\"") && value.endsWith("\"")) {
+					value = value.substring(1, value.length() - 1);
+				}
+				return value.isEmpty() ? null : value;
 			}
 		}
 		return null;

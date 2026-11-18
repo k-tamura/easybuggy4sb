@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,6 +71,14 @@ public class CommandInjectionController extends AbstractController {
         pb.redirectErrorStream(true);
         if (directory != null) pb.directory(new File(directory));
         Process process = pb.start();
+        /* Drain the merged stdout/stderr first, otherwise a chatty command (e.g. git clone)
+         * can fill the OS pipe buffer and block forever on waitFor(). */
+        try (InputStream is = process.getInputStream()) {
+            byte[] buf = new byte[4096];
+            while (is.read(buf) != -1) {
+                // discard
+            }
+        }
         process.waitFor();
     }
 
