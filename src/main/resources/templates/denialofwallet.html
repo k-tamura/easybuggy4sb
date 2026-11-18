@@ -85,7 +85,7 @@
     <input type="hidden" id="maxTokens" value="256"/><br/>
     <button type="button" id="askButton" onclick="ask()" th:text="#{label.submit}"
             th:disabled="${!isLLMReady or usage['exhausted']}"></button>
-    <span id="limitMsg" class="text-danger" style="margin-left: 10px; display: none;"
+    <span id="limitMsg" class="text-danger"
           th:style="${usage['exhausted']} ? 'margin-left: 10px;' : 'margin-left: 10px; display: none;'"
           th:text="#{msg.token.limit.reached}"></span><br/><br/>
     <label th:text="#{label.generated.code}"></label>:
