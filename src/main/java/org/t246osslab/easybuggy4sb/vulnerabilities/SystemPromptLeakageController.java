@@ -2,7 +2,6 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,12 +63,8 @@ public class SystemPromptLeakageController extends AbstractController {
         log.debug("Prompt to LLM (Generate): {}", inputText);
         String output = null;
         try {
-            ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
-            Map<?, ?> resBody = response.getBody();
-            if (resBody != null && resBody.get("response") instanceof String) {
-                output = (String) resBody.get("response");
-                log.debug("Output from LLM: {}", output);
-            }
+            output = OllamaSupport.generate(restTemplate, ollamaUrl, reqBody);
+            log.debug("Output from LLM: {}", output);
         } catch (RestClientException e) {
             log.warn("LLM request failed: {}", e.getMessage());
             log.debug("Exception occurs: ", e);
