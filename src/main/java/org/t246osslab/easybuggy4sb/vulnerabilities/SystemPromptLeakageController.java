@@ -1,6 +1,5 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.flag.FlagService;
+import org.t246osslab.easybuggy4sb.core.utils.OllamaSupport;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -33,17 +33,10 @@ public class SystemPromptLeakageController extends AbstractController {
 
     @GetMapping("/systempromptleak")
     public ModelAndView index(ModelAndView mav, Locale locale) {
-        RestTemplate restTemplate = new RestTemplate();
-        try {
-            ResponseEntity<String> response = restTemplate.getForEntity(ollamaUrl, String.class);
-            if (HttpStatus.SC_OK == response.getStatusCode().value() && "Ollama is running".equals(response.getBody())) {
-                setViewAndCommonObjects(mav, locale, "systempromptleak");
-                mav.addObject("isLLMReady", true);
-                return mav;
-            }
-        } catch (Exception e) {
-            log.info("Ollama is not running: {}", e.getMessage());
-            log.debug("Exception occurs: ", e);
+        if (OllamaSupport.isRunning(ollamaUrl)) {
+            setViewAndCommonObjects(mav, locale, "systempromptleak");
+            mav.addObject("isLLMReady", true);
+            return mav;
         }
         mav.setViewName("systempromptleak");
         mav.addObject("title", msg.getMessage("title.systempromptleak.page", null, locale));
@@ -57,7 +50,7 @@ public class SystemPromptLeakageController extends AbstractController {
     public Map<String, String> respond(@RequestBody Map<String, String> body, Locale locale) {
         String inputText = body.get("text");
         Map<String, String> result = new HashMap<>();
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = OllamaSupport.createRestTemplate();
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
         reqBody.put("stream", false);
