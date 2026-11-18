@@ -19,19 +19,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * AI coding assistant with a Denial of Wallet (unbounded consumption) vulnerability.
- * It generates source code in the requested programming languages (one LLM call per language).
- *
- * There is a monthly per-user token limit and a monthly total token limit shared by all users,
- * and the input length is validated on the server side. However, the token limits are checked
- * only once, OUTSIDE the per-language loop, and the number of programming languages in the
- * request is not limited. An attacker who spoofs the language count on the client side (for
- * example 1000 languages) therefore exceeds the limits in a single request, even when the input
- * text is short.
- *
- * The LLM runs locally, so the billing is simulated from the token counts that Ollama returns.
- */
 @Controller
 public class DenialOfWalletController extends AbstractController {
 
@@ -123,13 +110,6 @@ public class DenialOfWalletController extends AbstractController {
             return result;
         }
 
-        /*
-         * Vulnerable: the monthly token limits are checked only once here, OUTSIDE the loop, and the
-         * number of programming languages in the request is not limited. Because one LLM call is made
-         * per language, a single request with many (client-spoofed) languages runs the whole loop and
-         * blows far past the limits, even when the input text is short. The checks belong inside the
-         * loop, and the number of languages should be capped on the server side.
-         */
         if (isTotalLimitExceeded()) {
             result.put("error", msg.getMessage("msg.total.token.limit.exceeded", null, locale));
             result.put("usage", getUsage(usage));

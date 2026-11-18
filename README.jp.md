@@ -12,13 +12,13 @@ EasyBuggy Bootは、Spring Bootで開発されたEasyBuggyのクローンです�
 -
 Keycloak、MySQL、攻撃者のアプリと連携して起動する場合
 
-    $ echo HOST=192.168.1.17 > .env # EasyBuggy Bootを実行するサーバーのIPアドレスを指定してください
+    $ echo HOST=192.168.1.35 > .env # EasyBuggy Bootを実行するサーバーのIPアドレスを指定してください
     $ echo TZ=Asia/Tokyo >> .env # コンテナーの時刻のずれを無くすために追加してください
     $ docker compose up
 
 以下にアクセス
 
-    http://192.168.1.17
+    http://192.168.1.35
 
 :clock4: クイックスタート
 -

@@ -11,13 +11,13 @@ This is a clone of EasyBuggy built on Spring Boot. [EasyBuggy](https://github.co
 -
 When running EasyBuggy Boot with Keycloak, MySQL, and an attacker's application
 
-    $ echo HOST=192.168.1.17 > .env # Set the IP address of the server on which to run EasyBuggy Boot
+    $ echo HOST=192.168.1.35 > .env # Set the IP address of the server on which to run EasyBuggy Boot
     $ echo TZ=America/New_York >> .env # Add your time zone to eliminate container time skew
     $ docker compose up
 
 Access to
 
-    http://192.168.1.17
+    http://192.168.1.35
 
 :clock4: Quick Start
 -

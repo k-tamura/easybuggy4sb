@@ -102,7 +102,7 @@
                                 </div>
                             </div>
                             <div id="kc-form-buttons" class="form-group">
-                                <input type="hidden" id="callback-url" name="callback-url" value="http://<%=request.getServerName()%>/callback?ctf=<%=ctf%>&<%=request.getQueryString()%>">
+                                <input type="hidden" id="callback-url" name="callback-url" value="https://<%=request.getServerName()%>/callback?ctf=<%=ctf%>&<%=request.getQueryString()%>">
                                 <input type="hidden" id="id-hidden-input" name="credentialId">
                                 <input tabindex="4" class="pf-c-button pf-m-primary pf-m-block btn-lg" name="login"
                                        id="kc-login" type="submit" value="Sign In">
