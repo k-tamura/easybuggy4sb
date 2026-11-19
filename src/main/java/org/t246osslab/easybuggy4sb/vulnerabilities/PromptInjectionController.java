@@ -1,5 +1,6 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,9 +24,12 @@ public class PromptInjectionController extends AbstractController {
     @Value("${ollama.model}")
     protected String ollamaModel;
 
+    @Autowired
+    protected OllamaSupport ollamaSupport;
+
     @GetMapping("/promptinjection")
     public ModelAndView index(ModelAndView mav, Locale locale) {
-        if (OllamaSupport.isRunning(ollamaUrl)) {
+        if (ollamaSupport.isRunning(ollamaUrl)) {
             setViewAndCommonObjects(mav, locale, "promptinjection");
             mav.addObject("isLLMReady", true);
             return mav;
@@ -43,7 +47,7 @@ public class PromptInjectionController extends AbstractController {
         String inputText = body.get("text");
         String targetLanguage = body.get("targetLanguage");
         Map<String, String> result = new HashMap<>();
-        RestTemplate restTemplate = OllamaSupport.createRestTemplate();
+        RestTemplate restTemplate = ollamaSupport.createRestTemplate();
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
         String prompt = "Translate the following text into " + targetLanguage + ": " + inputText;
@@ -52,7 +56,7 @@ public class PromptInjectionController extends AbstractController {
         log.debug("Prompt to LLM: {}", prompt);
         String output = null;
         try {
-            output = OllamaSupport.generate(restTemplate, ollamaUrl, reqBody);
+            output = ollamaSupport.generate(restTemplate, ollamaUrl, reqBody);
         } catch (RestClientException e) {
             log.warn("LLM request failed: {}", e.getMessage());
             log.debug("Exception occurs: ", e);

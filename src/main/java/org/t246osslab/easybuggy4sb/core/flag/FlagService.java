@@ -68,6 +68,7 @@ public class FlagService {
         m.put("file_disclosure",       "Iy0yPkoTDgscOgUaCgEZCBQMFwQsQANHBVAaUVda");         // 2.12
         m.put("pivoting",              "Iy0yPkoFDhEWEQgdHj1GA1AcXANDS0s=");                 // 2.13
         m.put("system_prompt_leakage", "Iy0yPkoGHhQNAAwsCRAaChcNOg0WGAkUAAImUgdDGFYXVV5Q"); // 2.16
+        m.put("denial_of_wallet",      "Iy0yPkoRAgkQBA0sFgQqEAYVCQQHJlBFXl8cVVgVUA=="); // Denial of Wallet
         m.put("reverse_brute_force",   "Iy0yPkoHAhEcFxIWJgAHEhMcOgccCwEQOF4aVgREG1ZETg=="); // 3.11
         m.put("open_redirect",         "Iy0yPkoaFwIXOhMWHQsHAgQNOlhKH1IRBFMYTA==");         // 3.13
         m.put("idor",                  "Iy0yPkocAwgLOgJHGFsTVVdOTA==");                     // 3.18

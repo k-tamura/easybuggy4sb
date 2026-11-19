@@ -28,11 +28,14 @@ public class SystemPromptLeakageController extends AbstractController {
     protected String ollamaModel;
 
     @Autowired
+    protected OllamaSupport ollamaSupport;
+
+    @Autowired
     protected FlagService flagService;
 
     @GetMapping("/systempromptleak")
     public ModelAndView index(ModelAndView mav, Locale locale) {
-        if (OllamaSupport.isRunning(ollamaUrl)) {
+        if (ollamaSupport.isRunning(ollamaUrl)) {
             setViewAndCommonObjects(mav, locale, "systempromptleak");
             mav.addObject("isLLMReady", true);
             return mav;
@@ -49,7 +52,7 @@ public class SystemPromptLeakageController extends AbstractController {
     public Map<String, String> respond(@RequestBody Map<String, String> body, Locale locale) {
         String inputText = body.get("text");
         Map<String, String> result = new HashMap<>();
-        RestTemplate restTemplate = OllamaSupport.createRestTemplate();
+        RestTemplate restTemplate = ollamaSupport.createRestTemplate();
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", ollamaModel);
         reqBody.put("stream", false);
@@ -63,7 +66,7 @@ public class SystemPromptLeakageController extends AbstractController {
         log.debug("Prompt to LLM (Generate): {}", inputText);
         String output = null;
         try {
-            output = OllamaSupport.generate(restTemplate, ollamaUrl, reqBody);
+            output = ollamaSupport.generate(restTemplate, ollamaUrl, reqBody);
             log.debug("Output from LLM: {}", output);
         } catch (RestClientException e) {
             log.warn("LLM request failed: {}", e.getMessage());

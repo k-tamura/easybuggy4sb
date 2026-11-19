@@ -14,11 +14,21 @@
         document.getElementById("usageOutputTokens").textContent = usage.outputTokens;
         const bar = document.getElementById("usageBar");
         bar.style.width = usage.percent + "%";
-        bar.className = "progress-bar" + (usage.exhausted ? " progress-bar-danger" : "");
-        const totalBar = document.getElementById("usageTotalBar");
-        totalBar.style.width = usage.totalPercent + "%";
-        totalBar.className = "progress-bar" + (usage.exhausted ? " progress-bar-danger" : "");
-        document.getElementById("limitMsg").style.display = usage.exhausted ? "" : "none";
+        bar.className = "progress-bar" + (usage.userExceeded ? " progress-bar-danger" : "");
+        const freeBar = document.getElementById("usageFreeBar");
+        freeBar.style.width = usage.freeBarPercent + "%";
+        const overageBar = document.getElementById("usageOverageBar");
+        overageBar.style.width = usage.overageBarPercent + "%";
+        overageBar.className = "progress-bar " + (usage.totalExceeded ? "progress-bar-danger" : "progress-bar-warning");
+        document.getElementById("freeTierWarning").style.display =
+            (usage.overFreeTier && !usage.totalExceeded) ? "" : "none";
+        const flagBox = document.getElementById("dowFlagBox");
+        if (usage.billed && usage.flag) {
+            document.getElementById("dowFlag").textContent = usage.flag;
+            flagBox.style.display = "";
+        } else {
+            flagBox.style.display = "none";
+        }
         if (usage.exhausted) {
             document.getElementById("askButton").disabled = true;
         }
@@ -38,6 +48,7 @@
         document.getElementById("errorText").textContent = "";
         document.getElementById("errorArea").style.display = "none";
         document.getElementById("answerArea").textContent = "";
+        let exhausted = false;
         try {
             const response = await fetch("/admins/denialofwallet/ask", {
                 method: "POST",
@@ -63,31 +74,25 @@
                 document.getElementById("errorArea").style.display = "";
             }
             showUsage(data.usage);
+            exhausted = !!(data.usage && data.usage.exhausted);
         } finally {
-            if (!document.getElementById("usageBar").className.includes("danger")) {
-                button.disabled = false;
-            }
+            button.disabled = exhausted;
         }
     }
 /*]]>*/
 </script>
 <div th:replace="header"></div>
 <form id="askForm">
-    <p th:text="#{description.denialofwallet}"/>
+    <p th:text="#{description.denialofwallet(${usage['freeTokenLimit']},${usage['tokenLimit']})}"/>
     <textarea id="inputText" rows="5" cols="60" th:placeholder="#{msg.requirement.placeholder}"></textarea><br/>
     <small class="text-muted" th:text="#{msg.max.input.chars(${usage['maxInputChars']})}"></small><br/>
     <label th:text="#{label.prog.languages}"></label>:
     <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Java" checked="checked"/> Java</label>
     <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Python"/> Python</label>
     <label style="font-weight: normal;"><input type="checkbox" name="languages" value="JavaScript"/> JavaScript</label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Go"/> Go</label>
-    <label style="font-weight: normal;"><input type="checkbox" name="languages" value="Ruby"/> Ruby</label>
-    <input type="hidden" id="maxTokens" value="256"/><br/>
+    <input type="hidden" id="maxTokens" value="256"/>
     <button type="button" id="askButton" onclick="ask()" th:text="#{label.submit}"
-            th:disabled="${!isLLMReady or usage['exhausted']}"></button>
-    <span id="limitMsg" class="text-danger"
-          th:style="${usage['exhausted']} ? 'margin-left: 10px;' : 'margin-left: 10px; display: none;'"
-          th:text="#{msg.token.limit.reached}"></span><br/><br/>
+            th:disabled="${!isLLMReady or usage['exhausted']}" style="margin-left: 12px;"></button><br/><br/>
     <label th:text="#{label.generated.code}"></label>:
     <dl id="answerArea"></dl>
     <div id="errorArea" class="alert alert-danger" role="alert" style="display: none;">
@@ -96,39 +101,69 @@
     </div>
     <label th:text="#{label.this.request.cost}"></label>: <span id="requestCost">-</span><br/><br/>
 
-    <h4 th:text="#{label.ai.usage}"></h4>
-    <table class="table table-condensed" style="max-width: 700px;">
-        <tr>
-            <td colspan="2">
-                <div style="overflow: hidden;">
-                    <label th:text="#{label.ai.token.usage}"></label>
-                    <span style="float: right;"><span id="usageTokens" th:text="${usage['tokensUsed']}"></span> / <span th:text="${usage['tokenLimit']}"></span></span>
-                </div>
-                <div class="progress" style="margin: 4px 0 0 0;">
-                    <div id="usageBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
-                         th:style="'width: ' + ${usage['percent']} + '%;'"></div>
-                </div>
-            </td>
-            <td colspan="2">
-                <div style="overflow: hidden;">
-                    <label th:text="#{label.ai.total.token.usage}"></label>
-                    <span style="float: right;"><span id="usageTotalTokens" th:text="${usage['totalTokensUsed']}"></span> / <span th:text="${usage['totalTokenLimit']}"></span></span>
-                </div>
-                <div class="progress" style="margin: 4px 0 0 0;">
-                    <div id="usageTotalBar" th:class="${usage['exhausted']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
-                         th:style="'width: ' + ${usage['totalPercent']} + '%;'"></div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <th th:text="#{label.ai.cost}"></th><td id="usageCost" th:text="${usage['cost']}"></td>
-            <th th:text="#{label.ai.calls}"></th><td id="usageCalls" th:text="${usage['calls']}"></td>
-        </tr>
-        <tr>
-            <th th:text="#{label.input.tokens}"></th><td><span id="usageInputTokens" th:text="${usage['inputTokens']}"></span> (<span th:text="${usage['inputPrice']}"></span> / 1M)</td>
-            <th th:text="#{label.output.tokens}"></th><td><span id="usageOutputTokens" th:text="${usage['outputTokens']}"></span> (<span th:text="${usage['outputPrice']}"></span> / 1M)</td>
-        </tr>
-    </table>
+    <div id="freeTierWarning" class="alert alert-warning" role="alert" style="display: none;"
+         th:style="${usage['overFreeTier'] and !usage['totalExceeded']} ? '' : 'display: none;'">
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <span th:text="#{msg.free.tier.exceeded}"></span>
+    </div>
+
+    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 12px 16px; max-width: 784px; margin-bottom: 20px;">
+    <h4 th:text="#{label.ai.usage}" style="margin-top: 0; margin-bottom: 8px;"></h4>
+    <div class="row" style="margin-left: 0; margin-right: 0;">
+        <div class="col-sm-6" style="padding-left: 0;">
+            <strong th:text="#{label.ai.usage.user}"></strong>
+            <div style="overflow: hidden; margin-top: 4px;">
+                <label th:text="#{label.ai.token.usage}" style="margin-bottom: 0;"></label>
+                <span style="float: right;"><span id="usageTokens" th:text="${usage['tokensUsed']}"></span> / <span th:text="${usage['tokenLimit']}"></span></span>
+            </div>
+            <div class="progress" style="margin: 4px 0 0 0;">
+                <div id="usageBar" th:class="${usage['userExceeded']} ? 'progress-bar progress-bar-danger' : 'progress-bar'"
+                     th:style="'width: ' + ${usage['percent']} + '%;'"></div>
+            </div>
+            <table class="table table-condensed" style="margin: 6px 0 0 0;">
+                <tr>
+                    <th th:text="#{label.input.tokens}"></th>
+                    <td><span id="usageInputTokens" th:text="${usage['inputTokens']}"></span> (<span th:text="${usage['inputPrice']}"></span> / 1M)</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.output.tokens}"></th>
+                    <td><span id="usageOutputTokens" th:text="${usage['outputTokens']}"></span> (<span th:text="${usage['outputPrice']}"></span> / 1M)</td>
+                </tr>
+                <tr>
+                    <th th:text="#{label.ai.calls}"></th>
+                    <td id="usageCalls" th:text="${usage['calls']}"></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-sm-6">
+            <strong th:text="#{label.ai.usage.system}"></strong>
+            <div style="overflow: hidden; margin-top: 4px;">
+                <label th:text="#{label.ai.total.token.usage}" style="margin-bottom: 0;"></label>
+                <span style="float: right;"><span id="usageTotalTokens" th:text="${usage['totalTokensUsed']}"></span> / <span th:text="${usage['totalTokenLimit']}"></span></span>
+            </div>
+            <div class="progress" style="margin: 4px 0 0 0;">
+                <div id="usageFreeBar" class="progress-bar progress-bar-success"
+                     th:style="'width: ' + ${usage['freeBarPercent']} + '%;'"></div>
+                <div id="usageOverageBar"
+                     th:class="${usage['totalExceeded']} ? 'progress-bar progress-bar-danger' : 'progress-bar progress-bar-warning'"
+                     th:style="'width: ' + ${usage['overageBarPercent']} + '%;'"></div>
+            </div>
+            <small class="text-muted" th:text="#{msg.free.tier.caption(${usage['freeTokenLimit']},${usage['totalTokenLimit']})}"></small>
+            <table class="table table-condensed" style="margin: 6px 0 0 0;">
+                <tr>
+                    <th th:text="#{label.ai.cost}"></th>
+                    <td id="usageCost" th:text="${usage['cost']}"></td>
+                </tr>
+            </table>
+            <div id="dowFlagBox"
+                 th:style="${usage['billed']} ? 'margin: 8px 0 0 0;' : 'display: none;'"
+                 style="margin: 8px 0 0 0; display: none;">
+                <small class="text-muted" th:text="#{msg.dow.flag.captured}"></small>
+                <code id="dowFlag" th:text="${usage['flag']}"></code>
+            </div>
+        </div>
+    </div>
+    </div>
     <div th:replace="messages"></div>
 </form>
 </body>
