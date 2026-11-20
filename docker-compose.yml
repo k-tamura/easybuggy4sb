@@ -3,6 +3,8 @@ volumes:
     driver: local
   easybuggy_data:
     driver: local
+  maven_repo:
+    driver: local
 
 services:
   db:
@@ -88,6 +90,9 @@ services:
     volumes:
       # Persist mini-CTF flag progress across container rebuild/recreate
       - easybuggy_data:/opt/easybuggy4sb/data
+      # Persist the Maven local repository so already-downloaded jars are
+      # not re-downloaded on each container rebuild/recreate
+      - maven_repo:/root/.m2
   attacker-app:
     build: ./attacker-app
     image: tamura246/easybuggy4sb-attacker-app:2.0

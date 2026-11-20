@@ -1,0 +1,20 @@
+# Keep the Docker build context small and stable. The easybuggy image only
+# needs pom.xml, src/, catalina.policy and init.sql (see Dockerfile), so
+# exclude everything heavy or irrelevant: --build then sends far less to the
+# daemon and unrelated file changes no longer invalidate the build cache.
+.git
+.gitignore
+target
+logs
+*.log
+# These services build from their own contexts, not this one:
+attacker-app
+keycloak
+ollama
+# Docs, local env, runtime data and editor files:
+*.md
+.env
+data
+.idea
+.vscode
+.DS_Store

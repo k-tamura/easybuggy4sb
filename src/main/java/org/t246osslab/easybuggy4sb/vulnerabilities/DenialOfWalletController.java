@@ -102,6 +102,21 @@ public class DenialOfWalletController extends AbstractController {
         return mav;
     }
 
+    /* Clears the in-memory AI usage (per-user and all-users totals) so the monthly figures start over.
+     * The usage is kept only in memory, so without this it survives until the process is restarted.
+     * This is an operator/teaching control: the button is shown only inside the (hint) info box. */
+    @PostMapping("/admins/denialofwallet/reset")
+    @ResponseBody
+    public Map<String, Object> reset() {
+        usageByUser.clear();
+        totalTokensUsed.set(0);
+        totalMicroDollars.set(0);
+        log.info("Denial of Wallet: AI usage has been reset");
+        Map<String, Object> result = new HashMap<>();
+        result.put("status", "ok");
+        return result;
+    }
+
     @PostMapping("/admins/denialofwallet/ask")
     @ResponseBody
     public Map<String, Object> ask(@RequestBody Map<String, Object> body, HttpSession session, Locale locale) {

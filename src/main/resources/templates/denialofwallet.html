@@ -79,6 +79,11 @@
             button.disabled = exhausted;
         }
     }
+
+    async function resetUsage() {
+        await fetch("/admins/denialofwallet/reset", { method: "POST" });
+        location.reload();
+    }
 /*]]>*/
 </script>
 <div th:replace="header"></div>
@@ -164,7 +169,23 @@
         </div>
     </div>
     </div>
-    <div th:replace="messages"></div>
+    <div th:if="${msg != null}">
+        <th:block th:text="${msg}"></th:block><br/><br/>
+    </div>
+    <div th:if="${errmsg != null}" class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-warning-sign"></span>
+        <th:block th:text="${errmsg}"></th:block><br/>
+        <span style="font-family: monospace; white-space: pre;"><th:block th:text="${detailmsg}"></th:block></span>
+    </div>
+    <div th:if="${note != null and (hideHints == null or !hideHints)}" class="alert alert-info" role="alert">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        <th:block th:utext="${note}"></th:block>
+        <div style="margin-top: 10px;">
+            <span th:text="#{msg.dow.usage.reset.hint}"></span>
+            <button type="button" class="btn btn-default btn-xs" onclick="resetUsage()"
+                    th:text="#{label.dow.usage.reset}" style="margin-left: 8px;"></button>
+        </div>
+    </div>
 </form>
 </body>
 </html>

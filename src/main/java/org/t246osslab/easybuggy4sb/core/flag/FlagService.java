@@ -1,6 +1,7 @@
 package org.t246osslab.easybuggy4sb.core.flag;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -34,7 +35,7 @@ import org.springframework.stereotype.Service;
  * quick glance at (or {@code grep} of) the source tree.</p>
  *
  * <p>The decoded value is placed at each exploit's goal at runtime (see
- * {@code FlagInitializer} and the EL system property set below), so the plain
+ * {@code FlagInitializer} and the EL environment variable set below), so the plain
  * flag text does not appear in the repository.</p>
  *
  * <p>The captured set is persisted to a plain text file so that progress
@@ -49,8 +50,8 @@ public class FlagService {
     /** Key for the (deliberately simple) XOR obfuscation of flag values. */
     private static final byte[] KEY = "easybuggy".getBytes(StandardCharsets.UTF_8);
 
-    /** System property that exposes the EL-injection flag (read via @System@getProperties()). */
-    public static final String EL_FLAG_PROPERTY = "ctf.flag";
+    /** Environment variable that exposes the EL-injection flag (read via @System@getenv()). */
+    public static final String EL_FLAG_ENV = "CTF_FLAG";
 
     /** id -&gt; obfuscated value (Base64 of XOR). Insertion order is the display order. */
     private final Map<String, String> encoded;
@@ -84,13 +85,13 @@ public class FlagService {
         return new String(out, StandardCharsets.UTF_8);
     }
 
-    /** Loads captured flags and publishes the EL flag as a system property. */
+    /** Loads captured flags and publishes the EL flag as an environment variable. */
     @PostConstruct
     void init() {
-        // Expose the EL-injection flag so it can be reached via @System@getProperties().
+        // Expose the EL-injection flag as an environment variable so it can be reached via @System@getenv().
         String el = value("el_injection");
         if (el != null) {
-            System.setProperty(EL_FLAG_PROPERTY, el);
+            injectEnv(EL_FLAG_ENV, el);
         }
         // Load previously captured flags.
         Path p = Paths.get(progressFile);
@@ -107,6 +108,24 @@ public class FlagService {
             log.info("Loaded {} captured flag(s) from {}", captured.size(), p.toAbsolutePath());
         } catch (IOException e) {
             log.warn("Could not read flag progress file ({}): {}", p.toAbsolutePath(), e.getMessage());
+        }
+    }
+
+    /* Injects an environment variable into the live process so that {@code System.getenv()} (and thus
+     * the OGNL expression {@code @System@getenv()}) returns it. The JVM has no public API to change its
+     * own environment, so we modify the map that backs {@code System.getenv()} by reflection. This is
+     * best-effort: on failure the flag just cannot be captured, which is logged rather than fatal. */
+    @SuppressWarnings("unchecked")
+    private void injectEnv(String key, String flag) {
+        try {
+            Map<String, String> env = System.getenv();
+            Field m = env.getClass().getDeclaredField("m"); // Collections$UnmodifiableMap.m
+            m.setAccessible(true);
+            ((Map<String, String>) m.get(env)).put(key, flag);
+            log.info("Mini-CTF: exposed EL-injection flag via environment variable {}", key);
+        } catch (Exception e) {
+            log.warn("Mini-CTF: could not expose EL-injection flag via environment: {}", e.getMessage());
+            log.debug("Exception occurs: ", e);
         }
     }
 

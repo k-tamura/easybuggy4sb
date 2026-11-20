@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  *   <li>pivoting (2.13): sets the {@code password} of the hidden user {@code ctf01}</li>
  * </ul>
  *
- * The EL-injection flag (2.5) is published as a system property by
+ * The EL-injection flag (2.5) is published as an environment variable by
  * {@link FlagService}, and the IDOR flag (3.18) is stored as a (hex) BLOB in
  * {@code data.sql}, so neither is handled here. Each step is best-effort: a
  * failure only makes that one flag uncapturable and is logged, not fatal.

@@ -29,7 +29,7 @@ mail: admin2@gmail.com
 cn: Bob Hamilton
 sn: Hamilton
 uid: admin2
-userPassword: pas2w0rd
+userPassword: password
 
 dn: uid=admin3,ou=people,dc=t246osslab,dc=org
 objectclass: top
@@ -40,7 +40,7 @@ mail: admin3@gmail.com
 cn: Joe Smeth
 sn: Smeth
 uid: admin3
-userPassword: pa33word
+userPassword: password
 
 dn: uid=admin4,ou=people,dc=t246osslab,dc=org
 objectclass: top
@@ -48,7 +48,18 @@ objectclass: person
 objectclass: organizationalPerson
 objectclass: inetOrgPerson
 mail: admin4@gmail.com
-cn: Mouse, Jerry
+cn: Mouse Jerry
 sn: Mouse
 uid: admin4
-userPassword: pathwood
+userPassword: password
+
+dn: uid=ichiro,ou=people,dc=t246osslab,dc=org
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+mail: ichiro@gmail.com
+cn: Ichiro Suzuki
+sn: Suzuki
+uid: ichiro
+userPassword: password
