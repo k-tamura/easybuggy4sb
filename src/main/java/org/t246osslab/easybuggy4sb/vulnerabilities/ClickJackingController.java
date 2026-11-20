@@ -35,7 +35,10 @@ public class ClickJackingController extends AbstractController {
 			res.sendRedirect("/");
 			return null;
 		}
-		mav.addObject("currentMail", getCurrentMail(userid));
+		String currentMail = getCurrentMail(userid);
+		mav.addObject("currentMail", currentMail);
+		String mailParam = req.getParameter("mail");
+		mav.addObject("newMail", mailParam != null ? mailParam : currentMail);
 		setViewAndCommonObjects(mav, locale, "clickjacking");
 		mav.addObject("note", msg.getMessage("msg.note.clickjacking", new Object[]{req.getServerName()}, locale));
 		return mav;
