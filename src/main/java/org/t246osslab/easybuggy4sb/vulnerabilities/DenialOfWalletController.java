@@ -3,7 +3,6 @@ package org.t246osslab.easybuggy4sb.vulnerabilities;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,12 +25,6 @@ public class DenialOfWalletController extends AbstractController {
 
     /* Default maximum number of output tokens. The browser sends this value and the server trusts it. */
     private static final int DEFAULT_MAX_TOKENS = 256;
-
-    @Value("${ollama.url}")
-    protected String ollamaUrl;
-
-    @Value("${ollama.model}")
-    protected String ollamaModel;
 
     @Autowired
     protected OllamaSupport ollamaSupport;
@@ -87,7 +80,7 @@ public class DenialOfWalletController extends AbstractController {
 
     @GetMapping("/admins/denialofwallet")
     public ModelAndView index(ModelAndView mav, HttpSession session, Locale locale) {
-        boolean isLLMReady = ollamaSupport.isRunning(ollamaUrl);
+        boolean isLLMReady = ollamaSupport.isRunning();
         setViewAndCommonObjects(mav, locale, "denialofwallet");
         Usage usage = usageFor(session);
         if (!isLLMReady) {
@@ -194,17 +187,13 @@ public class DenialOfWalletController extends AbstractController {
         Map<String, Object> options = new HashMap<>();
         options.put("num_ctx", 8192);
         options.put("num_predict", numPredict);
-        Map<String, Object> reqBody = new HashMap<>();
-        reqBody.put("model", ollamaModel);
+        Map<String, Object> reqBody = ollamaSupport.newRequest();
         reqBody.put("system", "You are a coding assistant for EasyBuggy Boot, "
                 + "a deliberately vulnerable web application for learning about bugs and vulnerabilities.");
         reqBody.put("prompt", "Write source code in " + language
                 + " that performs the following. Output only the source code.\n\n" + requirement);
         reqBody.put("options", options);
-        reqBody.put("stream", false);
-        ResponseEntity<Map> response = restTemplate.postForEntity(ollamaUrl + "/api/generate", reqBody, Map.class);
-        Map<?, ?> responseBody = response.getBody();
-        return responseBody != null ? responseBody : Collections.emptyMap();
+        return ollamaSupport.generate(restTemplate, reqBody);
     }
 
     /* Adds one LLM call to the user's usage and the shared total, and returns its simulated cost.

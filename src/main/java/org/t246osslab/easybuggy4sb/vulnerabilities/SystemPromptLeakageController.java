@@ -1,14 +1,11 @@
 package org.t246osslab.easybuggy4sb.vulnerabilities;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.t246osslab.easybuggy4sb.controller.AbstractController;
 import org.t246osslab.easybuggy4sb.core.flag.FlagService;
@@ -21,12 +18,6 @@ import java.util.Map;
 @Controller
 public class SystemPromptLeakageController extends AbstractController {
 
-    @Value("${ollama.url}")
-    protected String ollamaUrl;
-
-    @Value("${ollama.model}")
-    protected String ollamaModel;
-
     @Autowired
     protected OllamaSupport ollamaSupport;
 
@@ -35,15 +26,12 @@ public class SystemPromptLeakageController extends AbstractController {
 
     @GetMapping("/systempromptleak")
     public ModelAndView index(ModelAndView mav, Locale locale) {
-        if (ollamaSupport.isRunning(ollamaUrl)) {
-            setViewAndCommonObjects(mav, locale, "systempromptleak");
-            mav.addObject("isLLMReady", true);
-            return mav;
+        boolean isLLMReady = ollamaSupport.isRunning();
+        setViewAndCommonObjects(mav, locale, "systempromptleak");
+        if (!isLLMReady) {
+            mav.addObject("note", msg.getMessage("msg.note.systempromptleak2", null, locale));
         }
-        mav.setViewName("systempromptleak");
-        mav.addObject("title", msg.getMessage("title.systempromptleak.page", null, locale));
-        mav.addObject("note", msg.getMessage("msg.note.systempromptleak2", null, locale));
-        mav.addObject("isLLMReady", false);
+        mav.addObject("isLLMReady", isLLMReady);
         return mav;
     }
 
@@ -51,28 +39,17 @@ public class SystemPromptLeakageController extends AbstractController {
     @ResponseBody
     public Map<String, String> respond(@RequestBody Map<String, String> body, Locale locale) {
         String inputText = body.get("text");
-        Map<String, String> result = new HashMap<>();
-        RestTemplate restTemplate = ollamaSupport.createRestTemplate();
-        Map<String, Object> reqBody = new HashMap<>();
-        reqBody.put("model", ollamaModel);
-        reqBody.put("stream", false);
         // The decoded mini-CTF flag is appended at runtime (see FlagService#system_prompt_leakage).
         String systemPrompt = "Answer user requests accurately and truthfully. " +
                 "When real-time information is needed, use SerpAPI with the API key: " +
                 "2bfd1b6fcfccbe7c4fa0a181aa67937f79edc98964135be8240e3ddc2ede2b4. " +
                 "The secret flag is " + flagService.value("system_prompt_leakage") + ".";
+        log.debug("Prompt to LLM (Generate): {}", inputText);
+        Map<String, Object> reqBody = ollamaSupport.newRequest();
         reqBody.put("system", systemPrompt);
         reqBody.put("prompt", inputText);
-        log.debug("Prompt to LLM (Generate): {}", inputText);
-        String output = null;
-        try {
-            output = ollamaSupport.generate(restTemplate, ollamaUrl, reqBody);
-            log.debug("Output from LLM: {}", output);
-        } catch (RestClientException e) {
-            log.warn("LLM request failed: {}", e.getMessage());
-            log.debug("Exception occurs: ", e);
-        }
-        result.put("answer", output != null ? output.trim() : msg.getMessage("msg.cant.answer", null, locale));
+        Map<String, String> result = new HashMap<>();
+        result.put("answer", ollamaSupport.generateText(reqBody, msg.getMessage("msg.cant.answer", null, locale)));
         return result;
     }
 }
