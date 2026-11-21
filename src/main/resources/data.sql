@@ -12,7 +12,7 @@ insert into users (id, name, password, secret, ispublic, mail) values ('user03',
 insert into users (id, name, password, secret, ispublic, mail) values ('user04','Benjamin','password','7362910845','true','benjamin@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user05','Eric','pas2w0rd','5029384716','true','eric@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user06','Sharon','pa3world','8493027165', 'true','sharon@gmail.com');
-insert into users (id, name, password, secret, ispublic, mail) values ('user07','Pamela','pathwood','6273849102','true''pamela@gmail.com');
+insert into users (id, name, password, secret, ispublic, mail) values ('user07','Pamela','pathwood','6273849102','true','pamela@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user08','Jacqueline','password','1938472650','true','jacqueline@gmail.com');
 insert into users (id, name, password, secret, ispublic, mail) values ('user09','Michelle','pas2w0rd','3849201763','true','michelle@gmail.com');
 
