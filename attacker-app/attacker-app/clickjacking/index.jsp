@@ -60,10 +60,6 @@
         <td>
           <h2><span class="glyphicon glyphicon-globe"></span> <span><fmt:message key="click.jacking.page.title" /></span></h2>
         </td>
-        <td align="right">
-          <p>Login user ID: admin</p>
-          <a href="http://<%=request.getServerName()%>/logout">Logout</a>
-        </td>
       </tr>
     </table>
     <hr style="margin-top: 0px" />
