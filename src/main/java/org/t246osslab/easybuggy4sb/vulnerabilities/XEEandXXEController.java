@@ -39,7 +39,7 @@ public class XEEandXXEController extends AbstractController {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	@Value("${attacker.app.url}")
+	@Value("${attacker.app.http.url}")
 	protected String attackerAppUrl;
 
 	@GetMapping(value = { "/xee", "/xxe" })
