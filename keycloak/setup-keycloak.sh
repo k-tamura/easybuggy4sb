@@ -21,7 +21,7 @@ MAX_RETRIES=100
 INTERVAL=5 # seconds
 
 # Keycloak takes at least 15 seconds to start up
-sleep  10
+sleep 10
 
 # Retry loop
 for ((i=1; i<=MAX_RETRIES; i++)); do
@@ -122,7 +122,7 @@ EOF
     if [ -z "$ROLE_ID" ]; then
       echo "Error: Failed to get role ID for ${ROLE_NAME}." >> /opt/jboss/setup.log
     fi
-    echo "Role ID obtained: ${ROLE_ID}"
+    echo "Role ID obtained: ${ROLE_ID}" >> /opt/jboss/setup.log
 
     ROLE_DATA=$(cat <<EOF
 [
@@ -133,7 +133,7 @@ EOF
 ]
 EOF
 )
-    echo "Assigning '${ROLE_NAME}' role to ${USERNAME}..."
+    echo "Assigning '${ROLE_NAME}' role to ${USERNAME}..." >> /opt/jboss/setup.log
     curl -s -X POST "${KEYCLOAK_URL}/admin/realms/${REALM_NAME}/users/${USER_ID}/role-mappings/realm" \
       -H "Authorization: Bearer ${ADMIN_TOKEN}" \
       -H "Content-Type: application/json" \
