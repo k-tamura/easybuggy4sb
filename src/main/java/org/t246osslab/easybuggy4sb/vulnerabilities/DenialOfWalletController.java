@@ -23,9 +23,6 @@ import java.util.concurrent.atomic.AtomicLong;
 @Controller
 public class DenialOfWalletController extends AbstractController {
 
-    /* Default maximum number of output tokens. The browser sends this value and the server trusts it. */
-    private static final int DEFAULT_MAX_TOKENS = 256;
-
     @Autowired
     protected OllamaSupport ollamaSupport;
 
@@ -116,10 +113,8 @@ public class DenialOfWalletController extends AbstractController {
         Map<String, Object> result = new HashMap<>();
         Object text = body.get("text");
         Object languages = body.get("languages");
-        Object maxTokens = body.get("maxTokens");
         String requirement = text instanceof String ? (String) text : null;
         List<?> languageList = languages instanceof List ? (List<?>) languages : Collections.emptyList();
-        int numPredict = maxTokens instanceof Number ? ((Number) maxTokens).intValue() : DEFAULT_MAX_TOKENS;
 
         Usage usage = usageFor(session);
 
@@ -136,46 +131,44 @@ public class DenialOfWalletController extends AbstractController {
             return result;
         }
 
-        //synchronized (usage) {
-            if (isTotalLimitExceeded()) {
-                result.put("error", msg.getMessage("msg.total.token.limit.exceeded", null, locale));
-                result.put("usage", getUsage(usage));
-                return result;
-            }
-            if (isUserLimitExceeded(usage)) {
-                result.put("error", msg.getMessage("msg.user.token.limit.exceeded", null, locale));
-                result.put("usage", getUsage(usage));
-                return result;
-            }
-
-            RestTemplate restTemplate = ollamaSupport.createRestTemplate();
-            List<Map<String, String>> answers = new ArrayList<>();
-            long requestCost = 0;
-            for (Object language : languageList) {
-                try {
-                    Map<?, ?> res = generate(restTemplate, requirement, String.valueOf(language), numPredict);
-                    requestCost += charge(usage, toLong(res.get("prompt_eval_count")), toLong(res.get("eval_count")));
-                    Object output = res.get("response");
-                    Map<String, String> answer = new HashMap<>();
-                    answer.put("language", String.valueOf(language));
-                    answer.put("answer", output instanceof String ? ((String) output).trim()
-                            : msg.getMessage("msg.cannot.answer", null, locale));
-                    answers.add(answer);
-                } catch (RestClientException e) {
-                    log.warn("LLM request failed: {}", e.getMessage());
-                    log.debug("Exception occurs: ", e);
-                    result.put("error", msg.getMessage("msg.cannot.answer", null, locale));
-                    break;
-                }
-            }
-            log.info("Denial of Wallet: {} LLM call(s), {} token(s) by this user (limit {}), {} total (limit {})",
-                    answers.size(), usage.totalTokens(), userMonthlyTokenLimit,
-                    totalTokensUsed.get(), totalMonthlyTokenLimit);
-            result.put("answers", answers);
-            result.put("requestCost", formatDollars(requestCost));
+        if (isTotalLimitExceeded()) {
+            result.put("error", msg.getMessage("msg.total.token.limit.exceeded", null, locale));
             result.put("usage", getUsage(usage));
             return result;
-        //}
+        }
+        if (isUserLimitExceeded(usage)) {
+            result.put("error", msg.getMessage("msg.user.token.limit.exceeded", null, locale));
+            result.put("usage", getUsage(usage));
+            return result;
+        }
+
+        RestTemplate restTemplate = ollamaSupport.createRestTemplate();
+        List<Map<String, String>> answers = new ArrayList<>();
+        long requestCost = 0;
+        for (Object language : languageList) {
+            try {
+                Map<?, ?> res = generate(restTemplate, requirement, String.valueOf(language));
+                requestCost += charge(usage, toLong(res.get("prompt_eval_count")), toLong(res.get("eval_count")));
+                Object output = res.get("response");
+                Map<String, String> answer = new HashMap<>();
+                answer.put("language", String.valueOf(language));
+                answer.put("answer", output instanceof String ? ((String) output).trim()
+                        : msg.getMessage("msg.cannot.answer", null, locale));
+                answers.add(answer);
+            } catch (RestClientException e) {
+                log.warn("LLM request failed: {}", e.getMessage());
+                log.debug("Exception occurs: ", e);
+                result.put("error", msg.getMessage("msg.cannot.answer", null, locale));
+                break;
+            }
+        }
+        log.info("Denial of Wallet: {} LLM call(s), {} token(s) by this user (limit {}), {} total (limit {})",
+                answers.size(), usage.totalTokens(), userMonthlyTokenLimit,
+                totalTokensUsed.get(), totalMonthlyTokenLimit);
+        result.put("answers", answers);
+        result.put("requestCost", formatDollars(requestCost));
+        result.put("usage", getUsage(usage));
+        return result;
     }
 
     private Usage usageFor(HttpSession session) {
@@ -183,10 +176,12 @@ public class DenialOfWalletController extends AbstractController {
         return usageByUser.computeIfAbsent(userId == null ? "" : String.valueOf(userId), k -> new Usage());
     }
 
-    private Map<?, ?> generate(RestTemplate restTemplate, String requirement, String language, int numPredict) {
+    private Map<?, ?> generate(RestTemplate restTemplate, String requirement, String language) {
         Map<String, Object> options = new HashMap<>();
         options.put("num_ctx", 8192);
-        options.put("num_predict", numPredict);
+        /* The MONTHLY per-user limit is mistakenly used as the per-call output limit. It is far too large for
+         * this use case (a short code snippet needs a few hundred tokens), so crafted input can inflate the cost. */
+        options.put("num_predict", userMonthlyTokenLimit);
         Map<String, Object> reqBody = ollamaSupport.newRequest();
         reqBody.put("system", "You are a coding assistant for EasyBuggy Boot, "
                 + "a deliberately vulnerable web application for learning about bugs and vulnerabilities.");
