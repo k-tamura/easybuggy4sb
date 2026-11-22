@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MissingResourceExceptionController {
 
- 	@RequestMapping(value = "/mre")
+	@RequestMapping(value = "/mre")
 	public void process() {
 	    ResourceBundle.getBundle("");
 	}

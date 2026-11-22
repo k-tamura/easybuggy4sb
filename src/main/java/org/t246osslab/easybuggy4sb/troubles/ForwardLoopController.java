@@ -12,6 +12,6 @@ public class ForwardLoopController {
 
     @RequestMapping(value = "/forwardloop")
     public String process() throws IOException, ServletException {
-    	return "forward:forwardloop";
+        return "forward:forwardloop";
     }
 }

@@ -322,7 +322,6 @@ public class VulnerableOIDCRPController extends AbstractController {
 			String username = (String) userInfo.get("name");
 			if (username == null) username = (String) userInfo.get("preferred_username");
 			String picture = StringUtils.defaultIfEmpty((String) userInfo.get("picture"), "images/avatar_anon.png");
-			//if (username.equals("admin")) picture = "images/avatar_woman.png";
 			message =  StringEscapeUtils.escapeHtml4(message);
 			message = message.replaceAll("\r\n", " <br>");
 			message = message.replaceAll("\\b(https?\\:\\/\\/[\\w\\d:#@%/;$()~_?!+-=.,&]+)", "<a href=\"$0\">$0</a>");

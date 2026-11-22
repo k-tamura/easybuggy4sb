@@ -37,19 +37,19 @@ public class CodeInjectionController extends AbstractController {
 				.replace("\r", "\\r");
         try {
             /* Parse the input string as JSON */
-        	ScriptEngineManager manager = new ScriptEngineManager();
-        	ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
-        	scriptEngine.eval("JSON.parse('" + escapedJsonString + "')");
-        	mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
+            ScriptEngineManager manager = new ScriptEngineManager();
+            ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
+            scriptEngine.eval("JSON.parse('" + escapedJsonString + "')");
+            mav.addObject("msg", msg.getMessage("msg.valid.json", null, locale));
         } catch (ScriptException e) {
 			mav.addObject("errmsg", msg.getMessage("msg.invalid.json", null, locale));
 			mav.addObject("detailmsg", e.getMessage()
 					.replaceAll(":([0-9]+):([0-9]+)", " at line number $1, column number $2.")
 					.replaceAll(" in <eval> at line number 1.*", ""));
         } catch (Exception e) {
-        	log.error("Exception occurs: ", e);
-        	mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
-        			new String[] { e.getMessage() }, null, locale));
+            log.error("Exception occurs: ", e);
+            mav.addObject("errmsg", msg.getMessage("msg.invalid.json",
+                    new String[] { e.getMessage() }, null, locale));
         }
     }
 }

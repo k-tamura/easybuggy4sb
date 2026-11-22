@@ -47,7 +47,6 @@
       padding: 5px;
       background-color: #EEEEEE;
       border: 1px solid;
-      #color: white;
       font-size: 14px;
       cursor: pointer;
       pointer-events: none; /* Disable click events on the fake button to pass clicks to the iframe */

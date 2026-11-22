@@ -15,7 +15,7 @@ public class MojibakeController extends AbstractController {
 
     @RequestMapping(value = "/mojibake")
     public ModelAndView process(@RequestParam(value = "string", required = false) String string, ModelAndView mav,
-    		Locale locale) {
+            Locale locale) {
         setViewAndCommonObjects(mav, locale, "mojibake");
         if (StringUtils.isNotBlank(string)) {
             // Capitalize the given string

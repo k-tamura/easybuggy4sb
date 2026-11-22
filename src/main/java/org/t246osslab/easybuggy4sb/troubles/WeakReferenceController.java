@@ -24,7 +24,7 @@ public class WeakReferenceController extends AbstractController {
     @GetMapping(value = "/weakreference")
     public ModelAndView doGet(ModelAndView mav, @ModelAttribute("logLevel") String logLevel, Locale locale) {
 		
-    	setViewAndCommonObjects(mav, locale, "weakreference");
+		setViewAndCommonObjects(mav, locale, "weakreference");
 		
 		Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 		logger.info("Information Level Message Test");
@@ -41,7 +41,7 @@ public class WeakReferenceController extends AbstractController {
     @PostMapping(value = "/weakreference")
 	public String process(@RequestParam(value = "logLevel", required = false) String logLevel,
 			RedirectAttributes redirectAttributes) throws IOException {
-    	
+
 		Logger logger = Logger.getLogger(this.getClass().getCanonicalName());
 		logger.setLevel(Level.parse(logLevel));
 		Handler handler = new ConsoleHandler();
