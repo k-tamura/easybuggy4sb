@@ -80,7 +80,7 @@
                 <elementProp name="state" elementType="HTTPArgument">
                   <boolProp name="HTTPArgument.always_encode">false</boolProp>
                   <stringProp name="Argument.name">state</stringProp>
-                  <stringProp name="Argument.value">0/2fc3f237-5877-435d-b48c-998e2ac297eb</stringProp>
+                  <stringProp name="Argument.value">0/${__UUID()}</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                   <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 </elementProp>
