@@ -12,11 +12,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -34,10 +35,10 @@ import org.t246osslab.easybuggy4sb.core.model.Forum;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.PublicKey;
@@ -341,14 +342,47 @@ public class VulnerableOIDCRPController extends AbstractController {
 		if (userInfo == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		File file = searchFile(mav, locale, id);
-		if (file == null || !file.exists()) {
+		Attachment attachment = searchFile(mav, locale, id);
+		if (attachment == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
 		return ResponseEntity.ok()
-				.header("Content-Disposition", "attachment; filename=\"" + file.getName() + "\"")
-				.header("Content-Type", "application/pdf")
-				.body(new FileSystemResource(file));
+				.header("Content-Disposition", contentDisposition(attachment.getFileName()))
+				.header("Content-Type", "application/octet-stream")
+				.body(new ByteArrayResource(attachment.getData()));
+	}
+
+	/* Builds the Content-Disposition header value. The file name was supplied by the client at upload time,
+	 * so only its last path element is used, and it is escaped so that it cannot break the header. */
+	private static String contentDisposition(String fileName) {
+		String name = StringUtils.defaultIfEmpty(FilenameUtils.getName(fileName), "download");
+		String asciiName = name.replaceAll("[^\\x20-\\x7E]|[\"\\\\]", "_");
+		String encodedName;
+		try {
+			encodedName = URLEncoder.encode(name, "UTF-8").replace("+", "%20");
+		} catch (UnsupportedEncodingException e) {
+			encodedName = asciiName;
+		}
+		return "attachment; filename=\"" + asciiName + "\"; filename*=UTF-8''" + encodedName;
+	}
+
+	/* An attached file read from the database. It is returned as is, without being written to a temporary file. */
+	private static class Attachment {
+		private final String fileName;
+		private final byte[] data;
+
+		Attachment(String fileName, byte[] data) {
+			this.fileName = fileName;
+			this.data = data;
+		}
+
+		String getFileName() {
+			return fileName;
+		}
+
+		byte[] getData() {
+			return data;
+		}
 	}
 
 
@@ -526,23 +560,15 @@ public class VulnerableOIDCRPController extends AbstractController {
 		}
 	}
 
-	private File searchFile(ModelAndView mav, Locale locale, int id) {
-		File file = null;
+	private Attachment searchFile(ModelAndView mav, Locale locale, int id) {
+		Attachment attachment = null;
 		try {
 			String sql = "select file_name, file_data from forum where id = ?";
-			file = jdbcTemplate.query(sql, new Object[]{id}, rs -> {
+			attachment = jdbcTemplate.query(sql, new Object[]{id}, rs -> {
 				if (rs.next()) {
-					String fileName = rs.getString("file_name");
 					byte[] bytes = rs.getBytes("file_data");
 					if (bytes != null) {
-						String tmpDir = System.getProperty("java.io.tmpdir");
-						File tempFile = new File(tmpDir, fileName);
-                        try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-							fos.write(bytes);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        return tempFile;
+						return new Attachment(rs.getString("file_name"), bytes);
 					}
 				}
 				return null;
@@ -556,7 +582,7 @@ public class VulnerableOIDCRPController extends AbstractController {
 			mav.addObject("detailmsg", e.getMessage());
 			log.error("Exception occurs: ", e);
 		}
-		return file;
+		return attachment;
 	}
 
 	private void insertMessage(String username, String picture, String message, ModelAndView mav, Locale locale,
