@@ -12,8 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.Semaphore;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,7 +25,9 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class ThreadStarvationController extends AbstractController {
 
 	private static final String HISTORY_CSV_FILE_NAME = "history.csv";
-	final Lock lock = new ReentrantLock();
+	// Semaphore is not reentrant (unlike ReentrantLock), so even the thread that failed to release it cannot
+	// acquire it again
+	final Semaphore lock = new Semaphore(1);
 
 	@RequestMapping(value = "/threadstarvation")
 	public ModelAndView process(HttpServletRequest req, ModelAndView mav, Locale locale) throws IOException {
@@ -34,7 +35,7 @@ public class ThreadStarvationController extends AbstractController {
 		setViewAndCommonObjects(mav, locale, "threadstarvation");
 
 		try {
-			lock.lock();
+			lock.acquireUninterruptibly();
 			String tempDir = req.getServletContext().getAttribute("javax.servlet.context.tempdir").toString();
 			Path path = Paths.get(tempDir, HISTORY_CSV_FILE_NAME);
 			mav.addObject("note", msg.getMessage("msg.note.threadstarvation",
@@ -62,7 +63,7 @@ public class ThreadStarvationController extends AbstractController {
 			}
 
 			mav.addObject("history", aggregationMap.values());
-			lock.unlock();
+			lock.release();
 
 		} catch (Exception e) {
 			log.error("Exception occurs: ", e);

@@ -22,7 +22,8 @@ public class NetworkSocketLeakController extends AbstractController {
         String pingURL = req.getParameter("pingurl");
         try {
             if (pingURL == null) {
-                pingURL = req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort() + "/ping";
+                // Use HTTP: the JVM does not trust the self-signed certificate used for HTTPS
+                pingURL = "http://localhost/ping";
             }
             url = new URL(pingURL);
             long start = System.currentTimeMillis();

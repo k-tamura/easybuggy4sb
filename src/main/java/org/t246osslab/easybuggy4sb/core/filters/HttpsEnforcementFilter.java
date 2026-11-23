@@ -27,8 +27,9 @@ public class HttpsEnforcementFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = req.getRequestURI();
 
-        // Allow HTTP access for /stat
-        if (uri.startsWith("/stat")) {
+        // Allow HTTP access for /stat and /ping (/ping is called over HTTP by the network socket leak feature,
+        // because the JVM does not trust the self-signed certificate of EasyBuggy Boot)
+        if (uri.startsWith("/stat") || "/ping".equals(uri)) {
             chain.doFilter(request, response);
             return;
         }

@@ -24,7 +24,8 @@ public class MemoryLeakController3 extends AbstractController {
         String inputString = "inputString";
         byte[] input = inputString.getBytes();
         byte[] output = new byte[100];
-        for (int i = 0; i < 1000; i++) {
+        // Each Deflater allocates native memory (zlib), so this leaks up to several MB per request
+        for (int i = 0; i < 100; i++) {
             Deflater compresser = new Deflater();
             compresser.setInput(input);
             compresser.deflate(output);

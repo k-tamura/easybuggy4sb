@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +20,8 @@ import org.t246osslab.easybuggy4sb.controller.AbstractController;
 public class FileDescriptorLeakController extends AbstractController {
 
     private static final int MAX_DISPLAY_COUNT = 15;
-    private long count = 0;
+    // Do not share the file with ThreadStarvationController (history.csv)
+    private static final String HISTORY_FILE_NAME = "fdleak_history.csv";
 
     @RequestMapping(value = "/filedescriptorleak")
     public ModelAndView process(HttpServletRequest req, ModelAndView mav, Locale locale) {
@@ -28,25 +29,26 @@ public class FileDescriptorLeakController extends AbstractController {
         setViewAndCommonObjects(mav, locale, "filedescriptorleak");
         try {
             File file = new File(req.getServletContext().getAttribute("javax.servlet.context.tempdir").toString(),
-                    "history.csv");
+                    HISTORY_FILE_NAME);
             FileOutputStream fos = new FileOutputStream(file, true);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             osw.write(new Date() + ",");
             osw.write(req.getRemoteAddr() + ",");
-            osw.write(req.getRequestedSessionId());
+            // The session ID is null if the browser has not sent a session cookie yet
+            String sessionId = req.getRequestedSessionId();
+            osw.write(sessionId != null ? sessionId : "-");
             osw.write(System.getProperty("line.separator"));
             osw.flush();
-            count++;
 
-            ArrayList<String[]> history = new ArrayList<>();
+            LinkedList<String[]> history = new LinkedList<>();
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-            long currentLineNum = 0;
             while ((line = br.readLine()) != null) {
-                if (count - currentLineNum <= MAX_DISPLAY_COUNT) {
-                    history.add(0, line.split(","));
+                // Keep only the latest records, the newest first
+                history.addFirst(line.split(","));
+                if (history.size() > MAX_DISPLAY_COUNT) {
+                    history.removeLast();
                 }
-                currentLineNum++;
             }
             mav.addObject("history", history);
 
