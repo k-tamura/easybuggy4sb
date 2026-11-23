@@ -118,9 +118,17 @@
 	</h2>
 	<p th:text="#{description.errors}"></p>
 	<ul>
+		<li><p><a href="ame" target="_blank">AbstractMethodError</a>: <span th:text="#{function.description.throwable(${'AbstractMethodError'})}"></span></p></li>
 		<li><p><a href="asserr" target="_blank">AssertionError</a>: <span th:text="#{function.description.throwable(${'AssertionError'})}"></span></p></li>
+		<li><p><a href="cfe" target="_blank">ClassFormatError</a>: <span th:text="#{function.description.throwable(${'ClassFormatError'})}"></span></p></li>
 		<li><p><a href="eie" target="_blank">ExceptionInInitializerError / NoClassDefFoundError</a>: <span th:text="#{function.description.ei.error}"></span></p></li>
 		<li><p><a href="fce" target="_blank">FactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'FactoryConfigurationError'})}"></span></p></li>
+		<li><p><a href="icce" target="_blank">IncompatibleClassChangeError</a>: <span th:text="#{function.description.throwable(${'IncompatibleClassChangeError'})}"></span></p></li>
+		<li><p><a href="interr" target="_blank">InternalError</a>: <span th:text="#{function.description.throwable(${'InternalError'})}"></span></p></li>
+		<li><p><a href="le" target="_blank">LinkageError</a>: <span th:text="#{function.description.throwable(${'LinkageError'})}"></span></p></li>
+		<li><p><a href="ncdfe" target="_blank">NoClassDefFoundError</a>: <span th:text="#{function.description.throwable(${'NoClassDefFoundError'})}"></span></p></li>
+		<li><p><a href="nsfe" target="_blank">NoSuchFieldError</a>: <span th:text="#{function.description.throwable(${'NoSuchFieldError'})}"></span></p></li>
+		<li><p><a href="nsme" target="_blank">NoSuchMethodError</a>: <span th:text="#{function.description.throwable(${'NoSuchMethodError'})}"></span></p></li>
 		<li><p><a href="oome" target="_blank">OutOfMemoryError (Java heap space)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome2" target="_blank">OutOfMemoryError (Requested array size exceeds VM limit)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
 		<li><p><a href="oome3" target="_blank">OutOfMemoryError (unable to create new native thread)</a>: <span th:text="#{function.description.throwable(${'OutOfMemoryError'})}"></span></p></li>
@@ -130,6 +138,7 @@
 		<li><p><a href="sofe" target="_blank">StackOverflowError</a>: <span th:text="#{function.description.throwable(${'StackOverflowError'})}"></span></p></li>
 		<li><p><a href="tfce" target="_blank">TransformerFactoryConfigurationError</a>: <span th:text="#{function.description.throwable(${'TransformerFactoryConfigurationError'})}"></span></p></li>
 		<li><p><a href="jnicall" target="_blank">UnsatisfiedLinkError</a>: <span th:text="#{function.description.throwable(${'UnsatisfiedLinkError'})}"></span></p></li>
+		<li><p><a href="ve" target="_blank">VerifyError</a>: <span th:text="#{function.description.throwable(${'VerifyError'})}"></span></p></li>
 		<li><p><a href="ze" target="_blank">ZipError</a>: <span th:text="#{function.description.throwable(${'ZipError'})}"></span></p></li>
 	</ul>
 	<!--

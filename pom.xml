@@ -189,7 +189,7 @@
 						${jvm.args}
 						-Xmx256m
 						-XX:MaxDirectMemorySize=90m
-						-XX:+UseSerialGC
+						-XX:+UseParallelGC
 						-XX:GCTimeLimit=15
 						-XX:GCHeapFreeLimit=50
 						-XX:+HeapDumpOnOutOfMemoryError
