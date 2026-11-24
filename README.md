@@ -15,9 +15,11 @@ When running EasyBuggy Boot with Keycloak, MySQL, and an attacker's application
     $ echo TZ=America/New_York >> .env # Add your time zone to eliminate container time skew
     $ docker compose up
 
-Access to
+Access
 
-    http://192.168.1.35
+    https://192.168.1.35
+
+(A self-signed certificate is used, so your browser will show a security warning. HTTP access is redirected to HTTPS.)
 
 :clock4: Quick Start
 -
@@ -25,13 +27,13 @@ When running EasyBuggy Boot alone (fewer vulnerabilities than `docker compose up
 
     $ mvn spring-boot:run
 
-( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148). )
+( or ``` java -jar ROOT.war ``` or deploy ROOT.war on your servlet container with [the JVM options](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L188-L223). )
 
 :warning: **Java 8 is needed. Doesn't work with Java 9 or later.**
 
-Access to
+Access
 
-    http://localhost
+    https://localhost
 
 #### To stop:
 

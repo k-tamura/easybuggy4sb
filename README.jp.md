@@ -18,7 +18,9 @@ Keycloak、MySQL、攻撃者のアプリと連携して起動する場合
 
 以下にアクセス
 
-    http://192.168.1.35
+    https://192.168.1.35
+
+（自己署名証明書を使用しているため、ブラウザーにセキュリティ警告が表示されます。HTTPでアクセスするとHTTPSにリダイレクトされます。）
 
 :clock4: クイックスタート
 -
@@ -26,17 +28,17 @@ EasyBuggy Boot単独で起動する場合（`docker compose up`より攻撃で�
 
     $ mvn spring-boot:run
 
-( または[JVMオプション](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L148)付きで ``` java -jar ROOT.war ``` か任意のサーブレットコンテナに ROOT.war をデプロイ。 )
+( または[JVMオプション](https://github.com/k-tamura/easybuggy4sb/blob/master/pom.xml#L188-L223)付きで ``` java -jar ROOT.war ``` か任意のサーブレットコンテナに ROOT.war をデプロイ。 )
 
 :warning: **Java 8が必要です。Java 9以降では動作しません。**
 
 以下にアクセス
 
-    http://localhost
+    https://localhost
   
 停止するには:
 
-  <kbd>CTRL</kbd>+<kbd>C</kbd>をクリック
+  <kbd>CTRL</kbd>+<kbd>C</kbd>を押してください
   
 
 :clock4: 詳細は
@@ -49,4 +51,4 @@ EasyBuggy Boot単独で起動する場合（`docker compose up`より攻撃で�
 
 Docker Composeで起動すると、以下のコンテナーが起動します。
 
-<img width="1139" height="945" alt="スクリーンショット 2025-12-03 164604" src="https://github.com/user-attachments/assets/a7e8968e-7019-47bf-a43e-6f4335e90fa4" />
+<img width="1139" height="945" alt="Env_ja" src="https://github.com/user-attachments/assets/a7e8968e-7019-47bf-a43e-6f4335e90fa4" />
