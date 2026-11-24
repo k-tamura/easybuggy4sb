@@ -147,7 +147,9 @@ EOF
 
 create_user "test" "123" "" "" "images/avatar_man.png"
 create_user "user" "user" "Naomi" "Sato" "images/avatar_woman.png"
-create_user "123" "P@ssw0rd" $(echo ")14b7e3c9_ecrof_eturb_esrever(GALF" | rev) "Suzuki" ""
+_flag_src=")14b7e3c9_ecrof_eturb_esrever(GALF"; _flag=""
+for (( _i=${#_flag_src}-1; _i>=0; _i-- )); do _flag+="${_flag_src:_i:1}"; done
+create_user "123" "P@ssw0rd" "Ichiro" "Suzuki" "$_flag"
 create_user "manager" "admin" "" "" ""  "admin"
 
 echo "Setup script finished." >> /opt/jboss/setup.log
