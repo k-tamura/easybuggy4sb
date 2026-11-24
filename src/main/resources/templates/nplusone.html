@@ -1,0 +1,27 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<div th:replace="head"></div>
+<body style="margin-left: 20px; margin-right: 20px;">
+	<div th:replace="header"></div>
+	<form action="nplusone" method="post">
+		<label th:text="#{label.number.of.orders}"></label><span>: </span>
+		<input type="text" name="number" size="5" maxlength="5" th:value="${number}" />
+		<input type="submit" th:value="#{label.submit}" /><br /><br />
+		<div th:replace="messages"></div>
+	</form>
+	<table th:if="${orders != null}" class="table table-striped table-bordered table-hover" style="font-size: small;">
+		<tr>
+			<th th:text="#{label.order.id}"></th>
+			<th th:text="#{label.customer.name}"></th>
+			<th th:text="#{label.product}"></th>
+			<th th:text="#{label.amount}"></th>
+		</tr>
+		<tr th:each="order : ${orders}">
+			<td th:text="${order.id}"></td>
+			<td th:text="${order.customerName}"></td>
+			<td th:text="${order.product}"></td>
+			<td th:text="${order.amount}"></td>
+		</tr>
+	</table>
+</body>
+</html>
